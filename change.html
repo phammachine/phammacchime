@@ -1,0 +1,795 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🌿</text></svg>">
+    <title>&#127807; ฟาร์มไข่ผำอัตโนมัติ</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Helvetica Neue', Arial, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 16px;
+        }
+
+        .container {
+            max-width: 480px;
+            margin: 0 auto;
+        }
+
+        /* Header */
+        .header {
+            background: linear-gradient(135deg, #2E7D32 0%, #4CAF50 100%);
+            color: white;
+            padding: 24px;
+            border-radius: 20px;
+            margin-bottom: 16px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+        }
+
+        .header-title {
+            font-size: 24px;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 8px;
+        }
+
+        .header-status {
+            font-size: 13px;
+            opacity: 0.95;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .status-dot {
+            width: 10px;
+            height: 10px;
+            background: #81C784;
+            border-radius: 50%;
+            animation: pulse 2s infinite;
+            box-shadow: 0 0 12px rgba(129, 199, 132, 0.8);
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; transform: scale(1); }
+            50% { opacity: 0.6; transform: scale(0.9); }
+        }
+
+        /* Card */
+        .card {
+            background: white;
+            border-radius: 20px;
+            padding: 20px;
+            margin-bottom: 16px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+        }
+
+        .card-header {
+            font-size: 16px;
+            font-weight: 700;
+            color: #333;
+            margin-bottom: 16px;
+            padding-bottom: 12px;
+            border-bottom: 3px solid #f0f0f0;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        /* Temperature Grid */
+        .temp-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 12px;
+        }
+
+        .temp-item {
+            background: linear-gradient(135deg, #66BB6A 0%, #4CAF50 100%);
+            color: white;
+            padding: 20px 12px;
+            border-radius: 16px;
+            text-align: center;
+            box-shadow: 0 6px 20px rgba(76, 175, 80, 0.35);
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        .temp-item:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 8px 24px rgba(76, 175, 80, 0.45);
+        }
+
+        .temp-label {
+            font-size: 12px;
+            opacity: 0.95;
+            margin-bottom: 12px;
+            font-weight: 600;
+        }
+
+        .temp-value {
+            font-size: 32px;
+            font-weight: 800;
+            line-height: 1;
+            margin-bottom: 4px;
+        }
+
+        .temp-unit {
+            font-size: 14px;
+            opacity: 0.9;
+            font-weight: 600;
+        }
+
+        .temp-pin {
+            font-size: 10px;
+            opacity: 0.75;
+            margin-top: 8px;
+            background: rgba(255, 255, 255, 0.2);
+            padding: 2px 8px;
+            border-radius: 8px;
+            display: inline-block;
+        }
+
+        /* LED Indicator */
+        .led-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 16px;
+            background: linear-gradient(135deg, #FAFAFA 0%, #F5F5F5 100%);
+            border-radius: 12px;
+            margin-bottom: 10px;
+            border: 2px solid #E8E8E8;
+            transition: all 0.3s;
+        }
+
+        .led-item:hover {
+            border-color: #4CAF50;
+            transform: translateX(4px);
+        }
+
+        .led-left {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .led-circle {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: #4CAF50;
+            box-shadow: 0 0 20px rgba(76, 175, 80, 0.6), inset 0 2px 8px rgba(255, 255, 255, 0.3);
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .led-circle.off {
+            background: #E0E0E0;
+            box-shadow: 0 0 0 rgba(0, 0, 0, 0.1), inset 0 2px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .led-circle::after {
+            content: '';
+            width: 20px;
+            height: 20px;
+            background: radial-gradient(circle, rgba(255, 255, 255, 0.8) 0%, transparent 70%);
+            border-radius: 50%;
+            animation: glow 2s infinite;
+        }
+
+        .led-circle.off::after {
+            animation: none;
+            opacity: 0.3;
+        }
+
+        @keyframes glow {
+            0%, 100% { opacity: 0.8; }
+            50% { opacity: 0.4; }
+        }
+
+        .led-info {
+            flex: 1;
+        }
+
+        .led-label {
+            font-size: 15px;
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 4px;
+        }
+
+        .led-pin {
+            font-size: 11px;
+            color: #999;
+            font-family: 'Courier New', monospace;
+        }
+
+        .led-status {
+            font-size: 14px;
+            font-weight: 700;
+            color: #4CAF50;
+            padding: 4px 12px;
+            background: #E8F5E9;
+            border-radius: 12px;
+        }
+
+        .led-status.off {
+            color: #F44336;
+            background: #FFEBEE;
+        }
+
+        /* Switch */
+        .switch-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 18px;
+            background: linear-gradient(135deg, #FFF8E1 0%, #FFECB3 100%);
+            border-radius: 16px;
+            margin-bottom: 12px;
+            border: 2px solid #FFE082;
+            transition: all 0.3s;
+        }
+
+        .switch-item:hover {
+            transform: translateX(4px);
+            box-shadow: 0 4px 16px rgba(255, 193, 7, 0.3);
+        }
+
+        .switch-item.oxygen {
+            background: linear-gradient(135deg, #E3F2FD 0%, #BBDEFB 100%);
+            border-color: #90CAF9;
+        }
+
+        .switch-item.pump {
+            background: linear-gradient(135deg, #E1F5FE 0%, #B3E5FC 100%);
+            border-color: #81D4FA;
+        }
+
+        .switch-left {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            flex: 1;
+        }
+
+        .switch-icon {
+            font-size: 32px;
+            filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.1));
+        }
+
+        .switch-info {
+            flex: 1;
+        }
+
+        .switch-label {
+            font-size: 16px;
+            font-weight: 700;
+            color: #333;
+            margin-bottom: 4px;
+        }
+
+        .switch-pin {
+            font-size: 11px;
+            color: #666;
+            font-family: 'Courier New', monospace;
+        }
+
+        /* Toggle Switch */
+        .toggle {
+            position: relative;
+            width: 64px;
+            height: 36px;
+            background: #BDBDBD;
+            border-radius: 18px;
+            cursor: pointer;
+            transition: all 0.3s;
+            box-shadow: inset 0 2px 8px rgba(0, 0, 0, 0.2);
+        }
+
+        .toggle.active {
+            background: #4CAF50;
+        }
+
+        .toggle.active.light {
+            background: #FDD835;
+        }
+
+        .toggle.active.pump {
+            background: #039BE5;
+        }
+
+        .toggle-thumb {
+            position: absolute;
+            top: 4px;
+            left: 4px;
+            width: 28px;
+            height: 28px;
+            background: white;
+            border-radius: 50%;
+            box-shadow: 0 3px 8px rgba(0, 0, 0, 0.3);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 16px;
+        }
+
+        .toggle.active .toggle-thumb {
+            transform: translateX(28px);
+        }
+
+        /* Info Box */
+        .info-box {
+            padding: 14px 16px;
+            background: linear-gradient(135deg, #FFF3E0 0%, #FFE0B2 100%);
+            border: 2px solid #FFB74D;
+            border-radius: 12px;
+            margin-top: 16px;
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+        }
+
+        .info-icon {
+            font-size: 20px;
+            flex-shrink: 0;
+        }
+
+        .info-text {
+            font-size: 13px;
+            color: #E65100;
+            line-height: 1.5;
+            font-weight: 500;
+        }
+
+        /* Loading */
+        .loading {
+            text-align: center;
+            padding: 40px;
+            color: white;
+            font-size: 16px;
+        }
+
+        .spinner {
+            border: 4px solid rgba(255, 255, 255, 0.3);
+            border-top: 4px solid white;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 16px;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        /* Config Panel */
+        .config-panel {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            padding: 24px;
+            margin-bottom: 16px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+        }
+
+        .config-title {
+            font-size: 18px;
+            font-weight: 700;
+            color: #333;
+            margin-bottom: 16px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .config-input {
+            width: 100%;
+            padding: 12px 16px;
+            border: 2px solid #E0E0E0;
+            border-radius: 12px;
+            font-size: 14px;
+            font-family: 'Courier New', monospace;
+            margin-bottom: 12px;
+            transition: border-color 0.3s;
+        }
+
+        .config-input:focus {
+            outline: none;
+            border-color: #4CAF50;
+        }
+
+        .config-button {
+            width: 100%;
+            padding: 14px;
+            background: linear-gradient(135deg, #4CAF50 0%, #66BB6A 100%);
+            color: white;
+            border: none;
+            border-radius: 12px;
+            font-size: 16px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s;
+            box-shadow: 0 4px 12px rgba(76, 175, 80, 0.3);
+        }
+
+        .config-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 16px rgba(76, 175, 80, 0.4);
+        }
+
+        .config-button:active {
+            transform: translateY(0);
+        }
+
+        .config-help {
+            font-size: 12px;
+            color: #666;
+            margin-top: 8px;
+            line-height: 1.8;
+        }
+
+        /* Responsive */
+        @media (max-width: 480px) {
+            .container {
+                padding: 0;
+            }
+
+            .temp-value {
+                font-size: 28px;
+            }
+
+            .switch-label {
+                font-size: 15px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div id="loading" class="loading">
+        <div class="spinner"></div>
+        กำลังเชื่อมต่อ Blynk...
+    </div>
+
+    <div id="config" class="container" style="display: none;">
+        <div class="config-panel">
+            <div class="config-title">
+                <span>&#9881;&#65039;</span>
+                <span>ตั้งค่า Blynk Auth Token</span>
+            </div>
+            <p style="color: #666; font-size: 14px; margin-bottom: 16px;">
+                กรุณากรอก Auth Token จากแอพ Blynk
+            </p>
+            <input 
+                type="text" 
+                id="auth-input" 
+                class="config-input" 
+                placeholder="4HB3ZavD44G28VPxLkuk8l5xyv-yEqrg"
+                maxlength="32"
+                value="4HB3ZavD44G28VPxLkuk8l5xyv-yEqrg"
+            />
+            <button class="config-button" onclick="saveAuthToken()">
+                &#128190; บันทึก Auth Token
+            </button>
+            <div class="config-help">
+                <strong>&#128241; วิธีหา Auth Token:</strong><br>
+                1. เปิดแอพ Blynk<br>
+                2. คลิก Device "ฟาร์มไข่ผำ"<br>
+                3. คลิก &#9881;&#65039; (Settings)<br>
+                4. คลิก "Device Info"<br>
+                5. คัดลอก Auth Token (32 ตัวอักษร)<br>
+                6. วางที่นี่แล้วกด "บันทึก"
+            </div>
+        </div>
+    </div>
+
+    <div id="app" class="container" style="display: none;">
+        <div class="header">
+            <div class="header-title">
+                <span>&#127807;</span>
+                <span>ฟาร์มไข่ผำอัตโนมัติ</span>
+            </div>
+            <div class="header-status">
+                <div class="status-dot"></div>
+                <span>Online &bull; <span id="current-time"></span></span>
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="card-header">
+                <span>&#127777;&#65039;</span>
+                <span>อุณหภูมิน้ำ</span>
+            </div>
+            <div class="temp-grid">
+                <div class="temp-item">
+                    <div class="temp-label">บ่อ 1</div>
+                    <div class="temp-value" id="temp1">--</div>
+                    <div class="temp-unit">&deg;C</div>
+                    <div class="temp-pin">V5</div>
+                </div>
+                <div class="temp-item">
+                    <div class="temp-label">บ่อ 2</div>
+                    <div class="temp-value" id="temp2">--</div>
+                    <div class="temp-unit">&deg;C</div>
+                    <div class="temp-pin">V6</div>
+                </div>
+                <div class="temp-item">
+                    <div class="temp-label">บ่อ 3</div>
+                    <div class="temp-value" id="temp3">--</div>
+                    <div class="temp-unit">&deg;C</div>
+                    <div class="temp-pin">V7</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="card-header">
+                <span>&#128167;</span>
+                <span>สถานะระดับน้ำ</span>
+            </div>
+            <div class="led-item" id="water1-item">
+                <div class="led-left">
+                    <div class="led-circle" id="water1-led"></div>
+                    <div class="led-info">
+                        <div class="led-label">บ่อ 1</div>
+                        <div class="led-pin">V17</div>
+                    </div>
+                </div>
+                <div class="led-status" id="water1-status">เต็ม</div>
+            </div>
+            <div class="led-item" id="water2-item">
+                <div class="led-left">
+                    <div class="led-circle" id="water2-led"></div>
+                    <div class="led-info">
+                        <div class="led-label">บ่อ 2</div>
+                        <div class="led-pin">V16</div>
+                    </div>
+                </div>
+                <div class="led-status" id="water2-status">เต็ม</div>
+            </div>
+            <div class="led-item" id="water3-item">
+                <div class="led-left">
+                    <div class="led-circle" id="water3-led"></div>
+                    <div class="led-info">
+                        <div class="led-label">บ่อ 3</div>
+                        <div class="led-pin">V15</div>
+                    </div>
+                </div>
+                <div class="led-status" id="water3-status">เต็ม</div>
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="card-header">
+                <span>&#9889;</span>
+                <span>การควบคุม</span>
+            </div>
+            
+            <div class="switch-item">
+                <div class="switch-left">
+                    <div class="switch-icon">&#128161;</div>
+                    <div class="switch-info">
+                        <div class="switch-label">ไฟ</div>
+                        <div class="switch-pin">V24 &bull; <span id="light-mode">Auto</span></div>
+                    </div>
+                </div>
+                <div class="toggle light" id="light-toggle" onclick="toggleLight()">
+                    <div class="toggle-thumb"></div>
+                </div>
+            </div>
+
+            <div class="switch-item oxygen">
+                <div class="switch-left">
+                    <div class="switch-icon">&#128168;</div>
+                    <div class="switch-info">
+                        <div class="switch-label">ออกซิเจน</div>
+                        <div class="switch-pin">V25 &bull; <span id="oxygen-mode">Auto</span></div>
+                    </div>
+                </div>
+                <div class="toggle active" id="oxygen-toggle" onclick="toggleOxygen()">
+                    <div class="toggle-thumb">&#10003;</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="card-header">
+                <span>&#128688;</span>
+                <span>ควบคุมปั๊มแบบ Manual</span>
+            </div>
+
+            <div class="switch-item pump">
+                <div class="switch-left">
+                    <div class="switch-icon">&#128167;</div>
+                    <div class="switch-info">
+                        <div class="switch-label">ปั๊มบ่อ 1</div>
+                        <div class="switch-pin">V12 &bull; <span id="pump1-mode">Auto</span></div>
+                    </div>
+                </div>
+                <div class="toggle pump" id="pump1-toggle" onclick="togglePump(1)">
+                    <div class="toggle-thumb"></div>
+                </div>
+            </div>
+
+            <div class="switch-item pump">
+                <div class="switch-left">
+                    <div class="switch-icon">&#128167;</div>
+                    <div class="switch-info">
+                        <div class="switch-label">ปั๊มบ่อ 2</div>
+                        <div class="switch-pin">V11 &bull; <span id="pump2-mode">Auto</span></div>
+                    </div>
+                </div>
+                <div class="toggle pump" id="pump2-toggle" onclick="togglePump(2)">
+                    <div class="toggle-thumb"></div>
+                </div>
+            </div>
+
+            <div class="switch-item pump">
+                <div class="switch-left">
+                    <div class="switch-icon">&#128167;</div>
+                    <div class="switch-info">
+                        <div class="switch-label">ปั๊มบ่อ 3</div>
+                        <div class="switch-pin">V10 &bull; <span id="pump3-mode">Auto</span></div>
+                    </div>
+                </div>
+                <div class="toggle pump" id="pump3-toggle" onclick="togglePump(3)">
+                    <div class="toggle-thumb"></div>
+                </div>
+            </div>
+
+            <div class="info-box">
+                <div class="info-icon">&#8505;&#65039;</div>
+                <div class="info-text">สามารถกดได้เฉพาะเมื่อเซนเซอร์เจอน้ำ</div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const BLYNK_SERVER = 'https://blynk.cloud';
+        let BLYNK_AUTH = localStorage.getItem('blynk_auth_token') || '';
+
+        function saveAuthToken() {
+            const input = document.getElementById('auth-input');
+            const token = input.value.trim();
+            
+            if (token.length !== 32) {
+                alert('Auth Token ต้องมี 32 ตัวอักษร!\n\nกรุณาตรวจสอบอีกครั้ง');
+                return;
+            }
+            
+            localStorage.setItem('blynk_auth_token', token);
+            BLYNK_AUTH = token;
+            
+            alert('บันทึก Auth Token สำเร็จ!\n\nกำลังเชื่อมต่อ Blynk...');
+            
+            document.getElementById('config').style.display = 'none';
+            document.getElementById('loading').style.display = 'block';
+            
+            setTimeout(() => {
+                fetchBlynkData();
+            }, 1000);
+        }
+
+        function updateTime() {
+            const now = new Date();
+            const hours = String(now.getHours()).padStart(2, '0');
+            const minutes = String(now.getMinutes()).padStart(2, '0');
+            const timeEl = document.getElementById('current-time');
+            if (timeEl) {
+                timeEl.textContent = `${hours}:${minutes}`;
+            }
+        }
+
+        async function fetchBlynkData() {
+            if (!BLYNK_AUTH) {
+                document.getElementById('loading').style.display = 'none';
+                document.getElementById('config').style.display = 'block';
+                return;
+            }
+            
+            try {
+                const pins = ['V5', 'V6', 'V7', 'V15', 'V16', 'V17', 'V24', 'V25', 'V10', 'V11', 'V12'];
+                const response = await fetch(
+                    `${BLYNK_SERVER}/external/api/get?token=${BLYNK_AUTH}&${pins.join('&')}`
+                );
+                
+                if (!response.ok) {
+                    if (response.status === 400 || response.status === 401) {
+                        throw new Error('Invalid Auth Token');
+                    }
+                    throw new Error('Failed to fetch');
+                }
+                
+                const data = await response.json();
+                
+                document.getElementById('temp1').textContent = data.V5 !== undefined ? parseFloat(data.V5).toFixed(1) : '--';
+                document.getElementById('temp2').textContent = data.V6 !== undefined ? parseFloat(data.V6).toFixed(1) : '--';
+                document.getElementById('temp3').textContent = data.V7 !== undefined ? parseFloat(data.V7).toFixed(1) : '--';
+                
+                updateWaterStatus(1, data.V17);
+                updateWaterStatus(2, data.V16);
+                updateWaterStatus(3, data.V15);
+                
+                document.getElementById('loading').style.display = 'none';
+                document.getElementById('app').style.display = 'block';
+                
+            } catch (error) {
+                console.error('Error fetching Blynk data:', error);
+                
+                if (error.message === 'Invalid Auth Token') {
+                    localStorage.removeItem('blynk_auth_token');
+                    BLYNK_AUTH = '';
+                    document.getElementById('loading').style.display = 'none';
+                    document.getElementById('config').style.display = 'block';
+                    alert('Auth Token ไม่ถูกต้อง!\n\nกรุณากรอก Auth Token ใหม่');
+                } else {
+                    document.getElementById('loading').innerHTML = 
+                        '<div class="spinner"></div>ไม่สามารถเชื่อมต่อ Blynk<br><small>กำลังลองใหม่...</small>';
+                }
+            }
+        }
+
+        function updateWaterStatus(pondNum, value) {
+            const hasWater = value == 1;
+            const led = document.getElementById(`water${pondNum}-led`);
+            const status = document.getElementById(`water${pondNum}-status`);
+            
+            if (hasWater) {
+                led.classList.remove('off');
+                status.classList.remove('off');
+                status.textContent = 'เต็ม';
+            } else {
+                led.classList.add('off');
+                status.classList.add('off');
+                status.textContent = 'ไม่เต็ม';
+            }
+        }
+
+        async function sendToBlynk(pin, value) {
+            try {
+                const response = await fetch(
+                    `${BLYNK_SERVER}/external/api/update?token=${BLYNK_AUTH}&${pin}=${value}`,
+                    { method: 'GET' }
+                );
+                return response.ok;
+            } catch (error) {
+                console.error('Error sending to Blynk:', error);
+                return false;
+            }
+        }
+
+        function toggleLight() {
+            const toggle = document.getElementById('light-toggle');
+            const mode = document.getElementById('light-mode');
+            const isActive = toggle.classList.toggle('active');
+            
+            mode.textContent = isActive ? 'Manual' : 'Auto';
+            toggle.querySelector('.toggle-thumb').textContent = isActive ? '✓' : '';
+            
+            sendToBlynk('V24', isActive ? 1 : 0);
+        }
+
+        function toggleOxygen() {
+            const toggle = document.getElementById('oxygen-toggle');
+            const mode = document.getElementById('oxygen-mode');
+            const isActive = toggle.classList.toggle('active');
+            
+            mode.textContent = isActive ? 'Auto' : 'ปิด';
+            toggle.querySelector('.toggle-thumb').textContent = isActive ? '✓' : '';
+            
+            sendToBlynk('V25', isActive ? 0 : 1);
+        }
