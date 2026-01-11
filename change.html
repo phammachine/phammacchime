@@ -328,8 +328,8 @@
         }
 
         .timer-grid {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
+            display: flex;
+            flex-direction: column;
             gap: 12px;
         }
 
@@ -337,8 +337,11 @@
             background: linear-gradient(135deg, #E8F5E9 0%, #C8E6C9 100%);
             padding: 16px;
             border-radius: 12px;
-            text-align: center;
+            text-align: left;
             border: 2px solid #81C784;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
         }
 
         .timer-item.inactive {
@@ -347,22 +350,32 @@
         }
 
         .timer-label {
-            font-size: 12px;
-            font-weight: 600;
+            font-size: 14px;
+            font-weight: 700;
             color: #2E7D32;
-            margin-bottom: 8px;
+            margin-bottom: 0;
         }
 
         .timer-item.inactive .timer-label {
             color: #757575;
         }
 
+        .timer-info {
+            flex: 1;
+        }
+
+        .timer-display {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
         .timer-value {
-            font-size: 24px;
+            font-size: 20px;
             font-weight: 800;
             color: #1B5E20;
-            margin-bottom: 4px;
-            line-height: 1.4;
+            margin-bottom: 0;
+            line-height: 1;
         }
 
         .timer-item.inactive .timer-value {
@@ -370,7 +383,7 @@
         }
 
         .timer-unit {
-            font-size: 11px;
+            font-size: 10px;
             color: #558B2F;
             font-weight: 600;
         }
@@ -380,12 +393,13 @@
         }
 
         .timer-status {
-            font-size: 10px;
-            margin-top: 6px;
-            padding: 4px 8px;
+            font-size: 11px;
+            margin-top: 4px;
+            padding: 4px 10px;
             background: rgba(255, 255, 255, 0.5);
             border-radius: 8px;
             font-weight: 600;
+            white-space: nowrap;
         }
 
         .notification-badge {
