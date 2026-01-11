@@ -15,9 +15,14 @@
 
         body {
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Helvetica Neue', Arial, sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: 
+                linear-gradient(135deg, rgba(102, 126, 234, 0.8) 0%, rgba(118, 75, 162, 0.8) 100%),
+                url('https://i.ibb.co/MkmmJcxW/your-image.jpg') center/cover fixed;
+            background-blend-mode: overlay;
             min-height: 100vh;
             padding: 16px;
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
         }
 
         .hamburger-btn {
@@ -26,11 +31,13 @@
             left: 20px;
             width: 50px;
             height: 50px;
-            background: white;
-            border: none;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.3);
             border-radius: 12px;
             cursor: pointer;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
             z-index: 1001;
             display: flex;
             flex-direction: column;
@@ -71,8 +78,11 @@
             left: -400px;
             width: 400px;
             height: 100vh;
-            background: white;
+            background: rgba(255, 255, 255, 0.98);
+            backdrop-filter: blur(30px);
+            -webkit-backdrop-filter: blur(30px);
             box-shadow: 4px 0 20px rgba(0, 0, 0, 0.2);
+            border-right: 1px solid rgba(255, 255, 255, 0.3);
             z-index: 1000;
             transition: left 0.3s;
             overflow-y: auto;
@@ -171,6 +181,35 @@
             border-left: 4px solid #4CAF50;
         }
 
+        .fertilizer-item {
+            padding: 12px;
+            background: linear-gradient(135deg, #FFF3E0 0%, #FFE0B2 100%);
+            border-radius: 12px;
+            margin-bottom: 10px;
+            border-left: 4px solid #FF9800;
+        }
+
+        .fertilizer-pond {
+            font-size: 14px;
+            font-weight: 700;
+            color: #E65100;
+            margin-bottom: 4px;
+        }
+
+        .fertilizer-date {
+            font-size: 12px;
+            color: #F57C00;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .fertilizer-time {
+            font-size: 11px;
+            color: #FB8C00;
+            margin-top: 2px;
+        }
+
         .history-pond {
             font-size: 14px;
             font-weight: 700;
@@ -242,15 +281,15 @@
         .emergency-btn {
             width: 100%;
             padding: 16px;
-            background: linear-gradient(135deg, #F44336 0%, #D32F2F 100%);
+            background: linear-gradient(135deg, #00E676 0%, #00C853 100%);
             color: white;
             border: none;
             border-radius: 16px;
-            font-size: 18px;
+            font-size: 16px;
             font-weight: 700;
             cursor: pointer;
-            margin-bottom: 16px;
-            box-shadow: 0 4px 20px rgba(244, 67, 54, 0.4);
+            margin-bottom: 12px;
+            box-shadow: 0 4px 20px rgba(0, 230, 118, 0.4);
             transition: all 0.3s;
             display: flex;
             align-items: center;
@@ -260,26 +299,228 @@
 
         .emergency-btn:hover {
             transform: translateY(-2px);
-            box-shadow: 0 6px 24px rgba(244, 67, 54, 0.5);
+            box-shadow: 0 6px 24px rgba(0, 230, 118, 0.5);
         }
 
         .emergency-btn:active {
             transform: translateY(0);
         }
 
-        .emergency-btn.active {
-            background: linear-gradient(135deg, #9E9E9E 0%, #616161 100%);
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+        .emergency-btn.growing {
+            background: linear-gradient(135deg, #FFC107 0%, #FFA000 100%);
+            box-shadow: 0 4px 20px rgba(255, 193, 7, 0.4);
+            animation: pulse-grow 2s infinite;
+        }
+
+        @keyframes pulse-grow {
+            0%, 100% { box-shadow: 0 4px 20px rgba(255, 193, 7, 0.4); }
+            50% { box-shadow: 0 4px 28px rgba(255, 193, 7, 0.6); }
+        }
+
+        .grow-buttons {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 12px;
+            margin-bottom: 16px;
+        }
+
+        .grow-btn {
+            padding: 14px 8px;
+            background: linear-gradient(135deg, #00E676 0%, #00C853 100%);
+            color: white;
+            border: none;
+            border-radius: 12px;
+            font-size: 13px;
+            font-weight: 700;
+            cursor: pointer;
+            box-shadow: 0 4px 16px rgba(0, 230, 118, 0.4);
+            transition: all 0.3s;
+            text-align: center;
+        }
+
+        .grow-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(0, 230, 118, 0.5);
+        }
+
+        .grow-btn.growing {
+            background: linear-gradient(135deg, #FFC107 0%, #FFA000 100%);
+            box-shadow: 0 4px 16px rgba(255, 193, 7, 0.4);
+        }
+
+        .grow-status {
+            font-size: 11px;
+            opacity: 0.95;
+            margin-top: 4px;
+        }
+
+        .timer-card {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border-radius: 20px;
+            padding: 20px;
+            margin-bottom: 16px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.15);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+        }
+
+        .timer-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 12px;
+        }
+
+        .timer-item {
+            background: linear-gradient(135deg, #E8F5E9 0%, #C8E6C9 100%);
+            padding: 16px;
+            border-radius: 12px;
+            text-align: center;
+            border: 2px solid #81C784;
+        }
+
+        .timer-item.inactive {
+            background: linear-gradient(135deg, #F5F5F5 0%, #E0E0E0 100%);
+            border-color: #BDBDBD;
+        }
+
+        .timer-label {
+            font-size: 12px;
+            font-weight: 600;
+            color: #2E7D32;
+            margin-bottom: 8px;
+        }
+
+        .timer-item.inactive .timer-label {
+            color: #757575;
+        }
+
+        .timer-value {
+            font-size: 24px;
+            font-weight: 800;
+            color: #1B5E20;
+            margin-bottom: 4px;
+            line-height: 1.4;
+        }
+
+        .timer-item.inactive .timer-value {
+            color: #9E9E9E;
+        }
+
+        .timer-unit {
+            font-size: 11px;
+            color: #558B2F;
+            font-weight: 600;
+        }
+
+        .timer-item.inactive .timer-unit {
+            color: #9E9E9E;
+        }
+
+        .timer-status {
+            font-size: 10px;
+            margin-top: 6px;
+            padding: 4px 8px;
+            background: rgba(255, 255, 255, 0.5);
+            border-radius: 8px;
+            font-weight: 600;
+        }
+
+        .notification-badge {
+            position: absolute;
+            top: -8px;
+            right: -8px;
+            background: #F44336;
+            color: white;
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
+            font-weight: 700;
+            box-shadow: 0 2px 8px rgba(244, 67, 54, 0.4);
+            animation: pulse-notification 2s infinite;
+        }
+
+        @keyframes pulse-notification {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+        }
+
+        .alert-banner {
+            background: linear-gradient(135deg, #FFF3E0 0%, #FFE0B2 100%);
+            border: 2px solid #FF9800;
+            border-radius: 12px;
+            padding: 12px 16px;
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            animation: slideIn 0.3s;
+        }
+
+        .alert-banner.harvest {
+            background: linear-gradient(135deg, #E8F5E9 0%, #C8E6C9 100%);
+            border-color: #4CAF50;
+        }
+
+        @keyframes slideIn {
+            from { transform: translateY(-20px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+
+        .alert-icon {
+            font-size: 24px;
+        }
+
+        .alert-content {
+            flex: 1;
+        }
+
+        .alert-title {
+            font-size: 14px;
+            font-weight: 700;
+            color: #E65100;
+            margin-bottom: 4px;
+        }
+
+        .alert-banner.harvest .alert-title {
+            color: #2E7D32;
+        }
+
+        .alert-text {
+            font-size: 12px;
+            color: #F57C00;
+        }
+
+        .alert-banner.harvest .alert-text {
+            color: #558B2F;
+        }
+
+        .alert-close {
+            background: none;
+            border: none;
+            font-size: 20px;
+            cursor: pointer;
+            color: #666;
+            padding: 0;
+            width: 24px;
+            height: 24px;
         }
 
         .header {
-            background: linear-gradient(135deg, rgba(46, 125, 50, 0.6) 0%, rgba(76, 175, 80, 0.6) 100%), 
+            background: linear-gradient(135deg, rgba(46, 125, 50, 0.85) 0%, rgba(76, 175, 80, 0.85) 100%), 
                         url('https://i.ibb.co/MkmmJcxW/your-image.jpg') 0% center/cover no-repeat;
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
             color: white;
             padding: 24px;
             border-radius: 20px;
             margin-bottom: 16px;
-            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.25);
+            border: 1px solid rgba(255, 255, 255, 0.2);
             position: relative;
             overflow: hidden;
             min-height: 120px;
@@ -323,11 +564,14 @@
         }
 
         .card {
-            background: white;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
             border-radius: 20px;
             padding: 20px;
             margin-bottom: 16px;
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.15);
+            border: 1px solid rgba(255, 255, 255, 0.3);
         }
 
         .card-header {
@@ -423,22 +667,22 @@
             box-shadow: 0 0 0 rgba(0, 0, 0, 0.1), inset 0 2px 8px rgba(0, 0, 0, 0.1);
         }
 
-        #light-led {
+        #light-led-menu {
             background: #FDD835;
-            box-shadow: 0 0 20px rgba(253, 216, 53, 0.6), inset 0 2px 8px rgba(255, 255, 255, 0.3);
+            box-shadow: 0 0 20px rgba(253, 216, 53, 0.8), inset 0 2px 8px rgba(255, 255, 255, 0.3);
         }
 
-        #light-led.off {
+        #light-led-menu.off {
             background: #E0E0E0;
             box-shadow: 0 0 0 rgba(0, 0, 0, 0.1), inset 0 2px 8px rgba(0, 0, 0, 0.1);
         }
 
-        #oxygen-led {
+        #oxygen-led-menu {
             background: #4CAF50;
-            box-shadow: 0 0 20px rgba(76, 175, 80, 0.6), inset 0 2px 8px rgba(255, 255, 255, 0.3);
+            box-shadow: 0 0 20px rgba(76, 175, 80, 0.8), inset 0 2px 8px rgba(255, 255, 255, 0.3);
         }
 
-        #oxygen-led.off {
+        #oxygen-led-menu.off {
             background: #E0E0E0;
             box-shadow: 0 0 0 rgba(0, 0, 0, 0.1), inset 0 2px 8px rgba(0, 0, 0, 0.1);
         }
@@ -669,6 +913,11 @@
                     <span>📋</span>
                     <span>ประวัติการเก็บ</span>
                 </li>
+                <li class="sidebar-menu-item" onclick="showSection('fertilizer')" style="position: relative;">
+                    <span>🌾</span>
+                    <span>ประวัติการใส่ปุ๋ย</span>
+                    <div class="notification-badge" id="fertilizer-badge" style="display: none;">0</div>
+                </li>
                 <li class="sidebar-menu-item" onclick="showSection('control')">
                     <span>🎮</span>
                     <span>การควบคุม</span>
@@ -685,6 +934,21 @@
                     <div class="no-history">ยังไม่มีประวัติการเก็บ</div>
                 </div>
                 <button class="clear-history-btn" onclick="clearHistory()">
+                    <span>🗑️</span>
+                    <span>เคลียร์ประวัติทั้งหมด</span>
+                </button>
+            </div>
+
+            <!-- ประวัติการใส่ปุ๋ย -->
+            <div class="sidebar-section" id="section-fertilizer">
+                <div class="sidebar-header">
+                    <span>🌾</span>
+                    <span>ประวัติการใส่ปุ๋ย</span>
+                </div>
+                <div id="fertilizer-list">
+                    <div class="no-history">ยังไม่มีประวัติการใส่ปุ๋ย</div>
+                </div>
+                <button class="clear-history-btn" onclick="clearFertilizerHistory()">
                     <span>🗑️</span>
                     <span>เคลียร์ประวัติทั้งหมด</span>
                 </button>
@@ -738,11 +1002,6 @@
     </div>
 
     <div id="app" class="container" style="display: none;">
-        <button class="emergency-btn" id="emergency-btn" onclick="toggleEmergency()">
-            <span>🛑</span>
-            <span id="emergency-text">ตัดการทำงานทั้งหมด</span>
-        </button>
-
         <div class="header">
             <div class="header-title">
                 <span>🌱</span>
@@ -751,6 +1010,57 @@
             <div class="header-status">
                 <div class="status-dot"></div>
                 <span>Online &bull; <span id="current-time"></span></span>
+            </div>
+        </div>
+
+        <div id="alert-container"></div>
+        
+        <div class="card">
+            <div class="card-header">
+                <span>🌱</span>
+                <span>เริ่มการปลูก</span>
+            </div>
+            
+            <div class="grow-buttons">
+                <button class="grow-btn" id="grow-btn-1" onclick="toggleGrowing(1)">
+                    <div>🌱 กระบะ 1</div>
+                    <div class="grow-status" id="grow-status-1">เริ่มปลูก</div>
+                </button>
+                <button class="grow-btn" id="grow-btn-2" onclick="toggleGrowing(2)">
+                    <div>🌱 กระบะ 2</div>
+                    <div class="grow-status" id="grow-status-2">เริ่มปลูก</div>
+                </button>
+                <button class="grow-btn" id="grow-btn-3" onclick="toggleGrowing(3)">
+                    <div>🌱 กระบะ 3</div>
+                    <div class="grow-status" id="grow-status-3">เริ่มปลูก</div>
+                </button>
+            </div>
+        </div>
+        
+        <div class="timer-card">
+            <div class="card-header">
+                <span>⏱️</span>
+                <span>ระยะเวลาการปลูกไข่ผำ</span>
+            </div>
+            <div class="timer-grid">
+                <div class="timer-item inactive" id="timer-item-1">
+                    <div class="timer-label">กระบะที่ 1</div>
+                    <div class="timer-value" id="timer-value-1">00:00:00</div>
+                    <div class="timer-unit">วัน:ชม.:นาที</div>
+                    <div class="timer-status" id="timer-status-1">ยังไม่เริ่ม</div>
+                </div>
+                <div class="timer-item inactive" id="timer-item-2">
+                    <div class="timer-label">กระบะที่ 2</div>
+                    <div class="timer-value" id="timer-value-2">00:00:00</div>
+                    <div class="timer-unit">วัน:ชม.:นาที</div>
+                    <div class="timer-status" id="timer-status-2">ยังไม่เริ่ม</div>
+                </div>
+                <div class="timer-item inactive" id="timer-item-3">
+                    <div class="timer-label">กระบะที่ 3</div>
+                    <div class="timer-value" id="timer-value-3">00:00:00</div>
+                    <div class="timer-unit">วัน:ชม.:นาที</div>
+                    <div class="timer-status" id="timer-status-3">ยังไม่เริ่ม</div>
+                </div>
             </div>
         </div>
 
@@ -867,10 +1177,277 @@
     <script>
         const BLYNK_SERVER = 'https://blynk.cloud';
         const BLYNK_AUTH = '4HB3ZavD44G28VPxLkuk8l5xyv-yEqrg';
+        
         let emergencyStop = false;
         let harvestHistory = [];
+        let fertilizerHistory = [];
         let demoMode = false;
-        let waterStatus = { 1: false, 2: false, 3: false }; // เก็บสถานะน้ำแต่ละกระบะ
+        let waterStatus = { 1: false, 2: false, 3: false };
+        let growingStatus = { 
+            1: { active: false, startTime: null, minutes: 0, harvestTime: null },
+            2: { active: false, startTime: null, minutes: 0, harvestTime: null },
+            3: { active: false, startTime: null, minutes: 0, harvestTime: null }
+        };
+        let notifications = {
+            harvest: [],
+            fertilizer: []
+        };
+
+        // แสดงการแจ้งเตือน
+        function showAlert(type, pondNum, message) {
+            const container = document.getElementById('alert-container');
+            const alertId = `alert-${type}-${pondNum}-${Date.now()}`;
+            
+            const alertHtml = `
+                <div class="alert-banner ${type}" id="${alertId}">
+                    <div class="alert-icon">${type === 'harvest' ? '🌱' : '🌾'}</div>
+                    <div class="alert-content">
+                        <div class="alert-title">${type === 'harvest' ? 'ถึงเวลาเก็บเกี่ยว!' : 'ถึงเวลาใส่ปุ๋ย!'}</div>
+                        <div class="alert-text">${message}</div>
+                    </div>
+                    <button class="alert-close" onclick="closeAlert('${alertId}', '${type}', ${pondNum})">×</button>
+                </div>
+            `;
+            
+            container.insertAdjacentHTML('beforeend', alertHtml);
+            
+            // เพิ่มในรายการแจ้งเตือน
+            if (type === 'fertilizer') {
+                notifications.fertilizer.push({ pondNum, time: Date.now() });
+                updateFertilizerBadge();
+            }
+        }
+
+        function closeAlert(alertId, type, pondNum) {
+            const alert = document.getElementById(alertId);
+            if (alert) {
+                alert.style.animation = 'slideIn 0.3s reverse';
+                setTimeout(() => alert.remove(), 300);
+            }
+            
+            // ถ้าเป็นการแจ้งเตือนปุ๋ย ให้บันทึกประวัติ
+            if (type === 'fertilizer') {
+                addFertilizerRecord(pondNum);
+                // ลบการแจ้งเตือนนี้
+                notifications.fertilizer = notifications.fertilizer.filter(n => n.pondNum !== pondNum);
+                updateFertilizerBadge();
+            }
+        }
+
+        function updateFertilizerBadge() {
+            const badge = document.getElementById('fertilizer-badge');
+            const count = notifications.fertilizer.length;
+            if (count > 0) {
+                badge.textContent = count;
+                badge.style.display = 'flex';
+            } else {
+                badge.style.display = 'none';
+            }
+        }
+
+        // ตรวจสอบการแจ้งเตือน
+        function checkNotifications() {
+            const now = Date.now();
+            
+            for (let i = 1; i <= 3; i++) {
+                const status = growingStatus[i];
+                
+                // ตรวจสอบการแจ้งเตือนเก็บเกี่ยว (7 วัน)
+                if (status.active && status.startTime) {
+                    const minutesPassed = Math.floor((now - status.startTime) / (1000 * 60));
+                    const daysPassed = Math.floor(minutesPassed / (60 * 24));
+                    
+                    if (daysPassed >= 7 && !notifications.harvest.includes(i)) {
+                        showAlert('harvest', i, `กระบะที่ ${i} ปลูกครบ ${daysPassed} วันแล้ว`);
+                        notifications.harvest.push(i);
+                    }
+                }
+                
+                // ตรวจสอบการแจ้งเตือนใส่ปุ๋ย (7 วัน 2 ชั่วโมง = 10200 นาที)
+                if (status.harvestTime) {
+                    const minutesPassed = Math.floor((now - status.harvestTime) / (1000 * 60));
+                    const totalMinutesRequired = (7 * 24 * 60) + (2 * 60); // 7 วัน 2 ชั่วโมง = 10200 นาที
+                    
+                    if (minutesPassed >= totalMinutesRequired && !notifications.fertilizer.some(n => n.pondNum === i)) {
+                        const days = Math.floor(minutesPassed / (60 * 24));
+                        const hours = Math.floor((minutesPassed % (60 * 24)) / 60);
+                        showAlert('fertilizer', i, `กระบะที่ ${i} เก็บเกี่ยวมา ${days} วัน ${hours} ชั่วโมงแล้ว`);
+                    }
+                }
+            }
+        }
+
+        // บันทึกประวัติการใส่ปุ๋ย
+        function addFertilizerRecord(pondNum) {
+            const now = new Date();
+            const months = ['ม.ค.', 'ก.พ.', 'มี.ค.', 'เม.ย.', 'พ.ค.', 'มิ.ย.', 'ก.ค.', 'ส.ค.', 'ก.ย.', 'ต.ค.', 'พ.ย.', 'ธ.ค.'];
+            
+            const record = {
+                pond: pondNum,
+                date: `${now.getDate()} ${months[now.getMonth()]} ${now.getFullYear() + 543}`,
+                time: `${String(now.getHours()).padStart(2, '0')}:${String(now.getMinutes()).padStart(2, '0')} น.`,
+                timestamp: now.getTime()
+            };
+            
+            fertilizerHistory.unshift(record);
+            if (fertilizerHistory.length > 20) fertilizerHistory.pop();
+            
+            saveFertilizerHistory();
+            displayFertilizerHistory();
+            
+            // ล้างเวลาเก็บเกี่ยว
+            growingStatus[pondNum].harvestTime = null;
+            saveGrowingData();
+        }
+
+        // แสดงประวัติการใส่ปุ๋ย
+        function displayFertilizerHistory() {
+            const fertilizerList = document.getElementById('fertilizer-list');
+            
+            if (fertilizerHistory.length === 0) {
+                fertilizerList.innerHTML = '<div class="no-history">ยังไม่มีประวัติการใส่ปุ๋ย</div>';
+                return;
+            }
+            
+            fertilizerList.innerHTML = fertilizerHistory.map(record => `
+                <div class="fertilizer-item">
+                    <div class="fertilizer-pond">🌾 กระบะที่ ${record.pond}</div>
+                    <div class="fertilizer-date">📅 ${record.date}</div>
+                    <div class="fertilizer-time">🕐 ${record.time}</div>
+                </div>
+            `).join('');
+        }
+
+        // โหลดประวัติปุ๋ย
+        function loadFertilizerHistory() {
+            const saved = localStorage.getItem('fertilizerHistory');
+            if (saved) {
+                fertilizerHistory = JSON.parse(saved);
+                displayFertilizerHistory();
+            }
+        }
+
+        // บันทึกประวัติปุ๋ย
+        function saveFertilizerHistory() {
+            localStorage.setItem('fertilizerHistory', JSON.stringify(fertilizerHistory));
+        }
+
+        // เคลียร์ประวัติปุ๋ย
+        function clearFertilizerHistory() {
+            if (confirm('คุณต้องการเคลียร์ประวัติการใส่ปุ๋ยทั้งหมดใช่หรือไม่?')) {
+                fertilizerHistory = [];
+                saveFertilizerHistory();
+                displayFertilizerHistory();
+            }
+        }
+
+        // โหลดข้อมูลการปลูก
+        function loadGrowingData() {
+            const saved = localStorage.getItem('growingStatus');
+            if (saved) {
+                growingStatus = JSON.parse(saved);
+                // อัพเดท UI
+                for (let i = 1; i <= 3; i++) {
+                    if (growingStatus[i].active) {
+                        updateGrowingUI(i, true);
+                    }
+                }
+            }
+        }
+
+        // บันทึกข้อมูลการปลูก
+        function saveGrowingData() {
+            localStorage.setItem('growingStatus', JSON.stringify(growingStatus));
+        }
+
+        // สลับสถานะการปลูก
+        function toggleGrowing(pondNum) {
+            const status = growingStatus[pondNum];
+            
+            if (!status.active) {
+                // เริ่มปลูก
+                status.active = true;
+                status.startTime = Date.now();
+                status.minutes = 0;
+                updateGrowingUI(pondNum, true);
+                
+                // เปิดออกซิเจนอัตโนมัติเมื่อเริ่มปลูก
+                const oxygenToggle = document.getElementById('oxygen-toggle-menu');
+                const oxygenLed = document.getElementById('oxygen-led-menu');
+                const oxygenMode = document.getElementById('oxygen-mode-menu');
+                
+                if (!oxygenToggle.classList.contains('active')) {
+                    oxygenToggle.classList.add('active');
+                    oxygenLed.classList.remove('off');
+                    oxygenMode.textContent = 'Auto';
+                    sendToBlynk('V25', 0); // ส่งคำสั่งเปิดออกซิเจน
+                }
+            } else {
+                // หยุดปลูก
+                if (confirm(`คุณต้องการหยุดการปลูกกระบะที่ ${pondNum} ใช่หรือไม่?`)) {
+                    status.active = false;
+                    status.startTime = null;
+                    status.minutes = 0;
+                    updateGrowingUI(pondNum, false);
+                    
+                    // ตรวจสอบว่ามีกระบะอื่นที่กำลังปลูกอยู่ไหม
+                    const anyPondActive = Object.values(growingStatus).some(s => s.active);
+                    
+                    // ถ้าไม่มีกระบะไหนปลูกแล้ว ปิดออกซิเจน
+                    if (!anyPondActive) {
+                        const oxygenToggle = document.getElementById('oxygen-toggle-menu');
+                        const oxygenLed = document.getElementById('oxygen-led-menu');
+                        const oxygenMode = document.getElementById('oxygen-mode-menu');
+                        
+                        oxygenToggle.classList.remove('active');
+                        oxygenLed.classList.add('off');
+                        oxygenMode.textContent = 'ปิด';
+                        sendToBlynk('V25', 1); // ส่งคำสั่งปิดออกซิเจน
+                    }
+                }
+            }
+            
+            saveGrowingData();
+        }
+
+        // อัพเดท UI การปลูก
+        function updateGrowingUI(pondNum, isGrowing) {
+            const btn = document.getElementById(`grow-btn-${pondNum}`);
+            const statusText = document.getElementById(`grow-status-${pondNum}`);
+            const timerItem = document.getElementById(`timer-item-${pondNum}`);
+            const timerStatus = document.getElementById(`timer-status-${pondNum}`);
+            
+            if (isGrowing) {
+                btn.classList.add('growing');
+                statusText.textContent = 'กำลังปลูก...';
+                timerItem.classList.remove('inactive');
+                timerStatus.textContent = '🌱 กำลังปลูก';
+            } else {
+                btn.classList.remove('growing');
+                statusText.textContent = 'เริ่มปลูก';
+                timerItem.classList.add('inactive');
+                timerStatus.textContent = 'ยังไม่เริ่ม';
+                document.getElementById(`timer-value-${pondNum}`).textContent = '00:00:00';
+            }
+        }
+
+        // คำนวณและอัพเดทเวลา
+        function updateGrowingTimers() {
+            for (let i = 1; i <= 3; i++) {
+                if (growingStatus[i].active && growingStatus[i].startTime) {
+                    const elapsed = Date.now() - growingStatus[i].startTime;
+                    const totalMinutes = Math.floor(elapsed / (1000 * 60));
+                    const days = Math.floor(totalMinutes / (60 * 24));
+                    const hours = Math.floor((totalMinutes % (60 * 24)) / 60);
+                    const minutes = totalMinutes % 60;
+                    
+                    growingStatus[i].minutes = totalMinutes;
+                    
+                    const valueEl = document.getElementById(`timer-value-${i}`);
+                    valueEl.textContent = `${String(days).padStart(2, '0')}:${String(hours).padStart(2, '0')}:${String(minutes).padStart(2, '0')}`;
+                }
+            }
+        } // เก็บสถานะน้ำแต่ละกระบะ
 
         function toggleSidebar() {
             const sidebar = document.getElementById('sidebar');
@@ -968,6 +1545,19 @@
             
             if (!isActive && success) {
                 addHarvestRecord(pumpNum);
+                
+                // รีเซ็ตการปลูกเมื่อเก็บเกี่ยว และตั้งเวลาสำหรับแจ้งเตือนปุ๋ย
+                if (growingStatus[pumpNum].active) {
+                    growingStatus[pumpNum].active = false;
+                    growingStatus[pumpNum].startTime = null;
+                    growingStatus[pumpNum].minutes = 0;
+                    growingStatus[pumpNum].harvestTime = Date.now(); // บันทึกเวลาเก็บเกี่ยว
+                    updateGrowingUI(pumpNum, false);
+                    saveGrowingData();
+                    
+                    // ลบการแจ้งเตือนเก็บเกี่ยวของกระบะนี้
+                    notifications.harvest = notifications.harvest.filter(n => n !== pumpNum);
+                }
             }
         }
 
@@ -1241,8 +1831,13 @@
         }
 
         loadHistory();
+        loadFertilizerHistory();
+        loadGrowingData();
         updateTime();
         setInterval(updateTime, 1000);
+        setInterval(updateGrowingTimers, 1000); // อัพเดททุก 1 วินาที
+        setInterval(checkNotifications, 60000); // ตรวจสอบการแจ้งเตือนทุก 1 นาที
+        checkNotifications(); // ตรวจสอบทันทีเมื่อเริ่มต้น
         
         fetchBlynkData();
         if (!demoMode) {
