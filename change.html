@@ -4,8 +4,8 @@
     <meta charset="UTF-8">
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🌿</text></svg>">
-    <title>&#127807; ฟาร์มไข่ผำอัตโนมัติ</title>
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🌱</text></svg>">
+    <title>BABY PHUM MACHINE</title>
     <style>
         * {
             margin: 0;
@@ -20,19 +20,271 @@
             padding: 16px;
         }
 
+        .hamburger-btn {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            width: 50px;
+            height: 50px;
+            background: white;
+            border: none;
+            border-radius: 12px;
+            cursor: pointer;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+            z-index: 1001;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 5px;
+            transition: all 0.3s;
+        }
+
+        .hamburger-btn:hover {
+            transform: scale(1.05);
+            box-shadow: 0 6px 16px rgba(0, 0, 0, 0.2);
+        }
+
+        .hamburger-line {
+            width: 24px;
+            height: 3px;
+            background: #667eea;
+            border-radius: 2px;
+            transition: all 0.3s;
+        }
+
+        .hamburger-btn.active .hamburger-line:nth-child(1) {
+            transform: translateY(8px) rotate(45deg);
+        }
+
+        .hamburger-btn.active .hamburger-line:nth-child(2) {
+            opacity: 0;
+        }
+
+        .hamburger-btn.active .hamburger-line:nth-child(3) {
+            transform: translateY(-8px) rotate(-45deg);
+        }
+
+        .sidebar {
+            position: fixed;
+            top: 0;
+            left: -400px;
+            width: 400px;
+            height: 100vh;
+            background: white;
+            box-shadow: 4px 0 20px rgba(0, 0, 0, 0.2);
+            z-index: 1000;
+            transition: left 0.3s;
+            overflow-y: auto;
+        }
+
+        .sidebar.open {
+            left: 0;
+        }
+
+        .sidebar-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 999;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s;
+        }
+
+        .sidebar-overlay.show {
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        .sidebar-content {
+            padding: 80px 20px 20px 20px;
+        }
+
+        .sidebar-menu {
+            list-style: none;
+            padding: 0;
+            margin: 0 0 20px 0;
+        }
+
+        .sidebar-menu-item {
+            padding: 16px;
+            margin-bottom: 8px;
+            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+            border-radius: 12px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-size: 16px;
+            font-weight: 600;
+            color: #333;
+            transition: all 0.3s;
+            border: 2px solid transparent;
+        }
+
+        .sidebar-menu-item:hover {
+            background: linear-gradient(135deg, #e3f2fd 0%, #bbdefb 100%);
+            border-color: #2196F3;
+            transform: translateX(4px);
+        }
+
+        .sidebar-menu-item.active {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+
+        .sidebar-section {
+            display: none;
+            animation: fadeIn 0.3s;
+        }
+
+        .sidebar-section.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .sidebar-header {
+            font-size: 18px;
+            font-weight: 700;
+            color: #333;
+            margin-bottom: 16px;
+            padding-bottom: 12px;
+            border-bottom: 3px solid #f0f0f0;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .history-item {
+            padding: 12px;
+            background: linear-gradient(135deg, #E8F5E9 0%, #C8E6C9 100%);
+            border-radius: 12px;
+            margin-bottom: 10px;
+            border-left: 4px solid #4CAF50;
+        }
+
+        .history-pond {
+            font-size: 14px;
+            font-weight: 700;
+            color: #2E7D32;
+            margin-bottom: 4px;
+        }
+
+        .history-date {
+            font-size: 12px;
+            color: #558B2F;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .history-time {
+            font-size: 11px;
+            color: #689F38;
+            margin-top: 2px;
+        }
+
+        .no-history {
+            text-align: center;
+            padding: 20px;
+            color: #999;
+            font-size: 13px;
+        }
+
+        .clear-history-btn {
+            width: 100%;
+            padding: 12px;
+            background: linear-gradient(135deg, #FF5252 0%, #F44336 100%);
+            color: white;
+            border: none;
+            border-radius: 12px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            margin-top: 12px;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+
+        .clear-history-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(244, 67, 54, 0.4);
+        }
+
+        .clear-history-btn:active {
+            transform: translateY(0);
+        }
+
+        .control-item {
+            margin-bottom: 16px;
+        }
+
+        .control-item .switch-item {
+            margin-bottom: 0;
+        }
+
         .container {
             max-width: 480px;
             margin: 0 auto;
         }
 
-        /* Header */
+        .emergency-btn {
+            width: 100%;
+            padding: 16px;
+            background: linear-gradient(135deg, #F44336 0%, #D32F2F 100%);
+            color: white;
+            border: none;
+            border-radius: 16px;
+            font-size: 18px;
+            font-weight: 700;
+            cursor: pointer;
+            margin-bottom: 16px;
+            box-shadow: 0 4px 20px rgba(244, 67, 54, 0.4);
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        .emergency-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 24px rgba(244, 67, 54, 0.5);
+        }
+
+        .emergency-btn:active {
+            transform: translateY(0);
+        }
+
+        .emergency-btn.active {
+            background: linear-gradient(135deg, #9E9E9E 0%, #616161 100%);
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+        }
+
         .header {
-            background: linear-gradient(135deg, #2E7D32 0%, #4CAF50 100%);
+            background: linear-gradient(135deg, rgba(46, 125, 50, 0.6) 0%, rgba(76, 175, 80, 0.6) 100%), 
+                        url('https://i.ibb.co/MkmmJcxW/your-image.jpg') 0% center/cover no-repeat;
             color: white;
             padding: 24px;
             border-radius: 20px;
             margin-bottom: 16px;
             box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+            position: relative;
+            overflow: hidden;
+            min-height: 120px;
+            background-size: cover;
+            background-position: 0% center;
         }
 
         .header-title {
@@ -42,6 +294,8 @@
             align-items: center;
             gap: 12px;
             margin-bottom: 8px;
+            position: relative;
+            z-index: 1;
         }
 
         .header-status {
@@ -50,6 +304,8 @@
             display: flex;
             align-items: center;
             gap: 8px;
+            position: relative;
+            z-index: 1;
         }
 
         .status-dot {
@@ -66,7 +322,6 @@
             50% { opacity: 0.6; transform: scale(0.9); }
         }
 
-        /* Card */
         .card {
             background: white;
             border-radius: 20px;
@@ -87,7 +342,6 @@
             gap: 8px;
         }
 
-        /* Temperature Grid */
         .temp-grid {
             display: grid;
             grid-template-columns: repeat(3, 1fr);
@@ -129,17 +383,6 @@
             font-weight: 600;
         }
 
-        .temp-pin {
-            font-size: 10px;
-            opacity: 0.75;
-            margin-top: 8px;
-            background: rgba(255, 255, 255, 0.2);
-            padding: 2px 8px;
-            border-radius: 8px;
-            display: inline-block;
-        }
-
-        /* LED Indicator */
         .led-item {
             display: flex;
             align-items: center;
@@ -153,7 +396,7 @@
         }
 
         .led-item:hover {
-            border-color: #4CAF50;
+            border-color: #03A9F4;
             transform: translateX(4px);
         }
 
@@ -167,8 +410,8 @@
             width: 40px;
             height: 40px;
             border-radius: 50%;
-            background: #4CAF50;
-            box-shadow: 0 0 20px rgba(76, 175, 80, 0.6), inset 0 2px 8px rgba(255, 255, 255, 0.3);
+            background: #03A9F4;
+            box-shadow: 0 0 20px rgba(3, 169, 244, 0.6), inset 0 2px 8px rgba(255, 255, 255, 0.3);
             position: relative;
             display: flex;
             align-items: center;
@@ -176,6 +419,26 @@
         }
 
         .led-circle.off {
+            background: #E0E0E0;
+            box-shadow: 0 0 0 rgba(0, 0, 0, 0.1), inset 0 2px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        #light-led {
+            background: #FDD835;
+            box-shadow: 0 0 20px rgba(253, 216, 53, 0.6), inset 0 2px 8px rgba(255, 255, 255, 0.3);
+        }
+
+        #light-led.off {
+            background: #E0E0E0;
+            box-shadow: 0 0 0 rgba(0, 0, 0, 0.1), inset 0 2px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        #oxygen-led {
+            background: #4CAF50;
+            box-shadow: 0 0 20px rgba(76, 175, 80, 0.6), inset 0 2px 8px rgba(255, 255, 255, 0.3);
+        }
+
+        #oxygen-led.off {
             background: #E0E0E0;
             box-shadow: 0 0 0 rgba(0, 0, 0, 0.1), inset 0 2px 8px rgba(0, 0, 0, 0.1);
         }
@@ -210,18 +473,12 @@
             margin-bottom: 4px;
         }
 
-        .led-pin {
-            font-size: 11px;
-            color: #999;
-            font-family: 'Courier New', monospace;
-        }
-
         .led-status {
             font-size: 14px;
             font-weight: 700;
-            color: #4CAF50;
+            color: #03A9F4;
             padding: 4px 12px;
-            background: #E8F5E9;
+            background: #E1F5FE;
             border-radius: 12px;
         }
 
@@ -230,7 +487,6 @@
             background: #FFEBEE;
         }
 
-        /* Switch */
         .switch-item {
             display: flex;
             align-items: center;
@@ -248,14 +504,31 @@
             box-shadow: 0 4px 16px rgba(255, 193, 7, 0.3);
         }
 
+        .switch-item.light {
+            background: linear-gradient(135deg, #FFF9C4 0%, #FFF59D 100%);
+            border-color: #FDD835;
+        }
+
         .switch-item.oxygen {
-            background: linear-gradient(135deg, #E3F2FD 0%, #BBDEFB 100%);
-            border-color: #90CAF9;
+            background: linear-gradient(135deg, #E8F5E9 0%, #C8E6C9 100%);
+            border-color: #81C784;
         }
 
         .switch-item.pump {
             background: linear-gradient(135deg, #E1F5FE 0%, #B3E5FC 100%);
             border-color: #81D4FA;
+        }
+
+        .switch-item.pump.disabled {
+            background: linear-gradient(135deg, #F5F5F5 0%, #E0E0E0 100%);
+            border-color: #BDBDBD;
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+
+        .switch-item.pump.disabled .toggle {
+            cursor: not-allowed;
+            opacity: 0.5;
         }
 
         .switch-left {
@@ -287,7 +560,6 @@
             font-family: 'Courier New', monospace;
         }
 
-        /* Toggle Switch */
         .toggle {
             position: relative;
             width: 64px;
@@ -305,6 +577,10 @@
 
         .toggle.active.light {
             background: #FDD835;
+        }
+
+        .toggle.active.oxygen {
+            background: #4CAF50;
         }
 
         .toggle.active.pump {
@@ -331,7 +607,6 @@
             transform: translateX(28px);
         }
 
-        /* Info Box */
         .info-box {
             padding: 14px 16px;
             background: linear-gradient(135deg, #FFF3E0 0%, #FFE0B2 100%);
@@ -355,7 +630,6 @@
             font-weight: 500;
         }
 
-        /* Loading */
         .loading {
             text-align: center;
             padding: 40px;
@@ -377,131 +651,102 @@
             0% { transform: rotate(0deg); }
             100% { transform: rotate(360deg); }
         }
-
-        /* Config Panel */
-        .config-panel {
-            background: rgba(255, 255, 255, 0.95);
-            border-radius: 20px;
-            padding: 24px;
-            margin-bottom: 16px;
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
-        }
-
-        .config-title {
-            font-size: 18px;
-            font-weight: 700;
-            color: #333;
-            margin-bottom: 16px;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-
-        .config-input {
-            width: 100%;
-            padding: 12px 16px;
-            border: 2px solid #E0E0E0;
-            border-radius: 12px;
-            font-size: 14px;
-            font-family: 'Courier New', monospace;
-            margin-bottom: 12px;
-            transition: border-color 0.3s;
-        }
-
-        .config-input:focus {
-            outline: none;
-            border-color: #4CAF50;
-        }
-
-        .config-button {
-            width: 100%;
-            padding: 14px;
-            background: linear-gradient(135deg, #4CAF50 0%, #66BB6A 100%);
-            color: white;
-            border: none;
-            border-radius: 12px;
-            font-size: 16px;
-            font-weight: 700;
-            cursor: pointer;
-            transition: all 0.3s;
-            box-shadow: 0 4px 12px rgba(76, 175, 80, 0.3);
-        }
-
-        .config-button:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 6px 16px rgba(76, 175, 80, 0.4);
-        }
-
-        .config-button:active {
-            transform: translateY(0);
-        }
-
-        .config-help {
-            font-size: 12px;
-            color: #666;
-            margin-top: 8px;
-            line-height: 1.8;
-        }
-
-        /* Responsive */
-        @media (max-width: 480px) {
-            .container {
-                padding: 0;
-            }
-
-            .temp-value {
-                font-size: 28px;
-            }
-
-            .switch-label {
-                font-size: 15px;
-            }
-        }
     </style>
 </head>
 <body>
+    <button class="hamburger-btn" id="hamburger-btn" onclick="toggleSidebar()">
+        <div class="hamburger-line"></div>
+        <div class="hamburger-line"></div>
+        <div class="hamburger-line"></div>
+    </button>
+
+    <div class="sidebar-overlay" id="sidebar-overlay" onclick="toggleSidebar()"></div>
+
+    <div class="sidebar" id="sidebar">
+        <div class="sidebar-content">
+            <ul class="sidebar-menu">
+                <li class="sidebar-menu-item active" onclick="showSection('history')">
+                    <span>📋</span>
+                    <span>ประวัติการเก็บ</span>
+                </li>
+                <li class="sidebar-menu-item" onclick="showSection('control')">
+                    <span>🎮</span>
+                    <span>การควบคุม</span>
+                </li>
+            </ul>
+
+            <!-- ประวัติการเก็บ -->
+            <div class="sidebar-section active" id="section-history">
+                <div class="sidebar-header">
+                    <span>📋</span>
+                    <span>ประวัติการเก็บ</span>
+                </div>
+                <div id="history-list">
+                    <div class="no-history">ยังไม่มีประวัติการเก็บ</div>
+                </div>
+                <button class="clear-history-btn" onclick="clearHistory()">
+                    <span>🗑️</span>
+                    <span>เคลียร์ประวัติทั้งหมด</span>
+                </button>
+            </div>
+
+            <!-- การควบคุม -->
+            <div class="sidebar-section" id="section-control">
+                <div class="sidebar-header">
+                    <span>🎮</span>
+                    <span>การควบคุม</span>
+                </div>
+                
+                <div class="control-item">
+                    <div class="switch-item light">
+                        <div class="switch-left">
+                            <div class="led-circle off" id="light-led-menu"></div>
+                            <div class="switch-icon">💡</div>
+                            <div class="switch-info">
+                                <div class="switch-label">ไฟ</div>
+                                <div class="switch-pin"><span id="light-mode-menu">Auto</span></div>
+                            </div>
+                        </div>
+                        <div class="toggle light" id="light-toggle-menu" onclick="toggleLightMenu()">
+                            <div class="toggle-thumb"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="control-item">
+                    <div class="switch-item oxygen">
+                        <div class="switch-left">
+                            <div class="led-circle" id="oxygen-led-menu"></div>
+                            <div class="switch-icon">💨</div>
+                            <div class="switch-info">
+                                <div class="switch-label">ออกซิเจน</div>
+                                <div class="switch-pin"><span id="oxygen-mode-menu">Auto</span></div>
+                            </div>
+                        </div>
+                        <div class="toggle active oxygen" id="oxygen-toggle-menu" onclick="toggleOxygenMenu()">
+                            <div class="toggle-thumb"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <div id="loading" class="loading">
         <div class="spinner"></div>
         กำลังเชื่อมต่อ Blynk...
     </div>
 
-    <div id="config" class="container" style="display: none;">
-        <div class="config-panel">
-            <div class="config-title">
-                <span>&#9881;&#65039;</span>
-                <span>ตั้งค่า Blynk Auth Token</span>
-            </div>
-            <p style="color: #666; font-size: 14px; margin-bottom: 16px;">
-                กรุณากรอก Auth Token จากแอพ Blynk
-            </p>
-            <input 
-                type="text" 
-                id="auth-input" 
-                class="config-input" 
-                placeholder="4HB3ZavD44G28VPxLkuk8l5xyv-yEqrg"
-                maxlength="32"
-                value="4HB3ZavD44G28VPxLkuk8l5xyv-yEqrg"
-            />
-            <button class="config-button" onclick="saveAuthToken()">
-                &#128190; บันทึก Auth Token
-            </button>
-            <div class="config-help">
-                <strong>&#128241; วิธีหา Auth Token:</strong><br>
-                1. เปิดแอพ Blynk<br>
-                2. คลิก Device "ฟาร์มไข่ผำ"<br>
-                3. คลิก &#9881;&#65039; (Settings)<br>
-                4. คลิก "Device Info"<br>
-                5. คัดลอก Auth Token (32 ตัวอักษร)<br>
-                6. วางที่นี่แล้วกด "บันทึก"
-            </div>
-        </div>
-    </div>
-
     <div id="app" class="container" style="display: none;">
+        <button class="emergency-btn" id="emergency-btn" onclick="toggleEmergency()">
+            <span>🛑</span>
+            <span id="emergency-text">ตัดการทำงานทั้งหมด</span>
+        </button>
+
         <div class="header">
             <div class="header-title">
-                <span>&#127807;</span>
-                <span>ฟาร์มไข่ผำอัตโนมัติ</span>
+                <span>🌱</span>
+                <span>BABY PHUM MACHINE</span>
             </div>
             <div class="header-status">
                 <div class="status-dot"></div>
@@ -511,113 +756,74 @@
 
         <div class="card">
             <div class="card-header">
-                <span>&#127777;&#65039;</span>
+                <span>🌡️</span>
                 <span>อุณหภูมิน้ำ</span>
             </div>
             <div class="temp-grid">
                 <div class="temp-item">
-                    <div class="temp-label">บ่อ 1</div>
+                    <div class="temp-label">กระบะที่ 1</div>
                     <div class="temp-value" id="temp1">--</div>
                     <div class="temp-unit">&deg;C</div>
-                    <div class="temp-pin">V5</div>
                 </div>
                 <div class="temp-item">
-                    <div class="temp-label">บ่อ 2</div>
+                    <div class="temp-label">กระบะที่ 2</div>
                     <div class="temp-value" id="temp2">--</div>
                     <div class="temp-unit">&deg;C</div>
-                    <div class="temp-pin">V6</div>
                 </div>
                 <div class="temp-item">
-                    <div class="temp-label">บ่อ 3</div>
+                    <div class="temp-label">กระบะที่ 3</div>
                     <div class="temp-value" id="temp3">--</div>
                     <div class="temp-unit">&deg;C</div>
-                    <div class="temp-pin">V7</div>
                 </div>
             </div>
         </div>
 
         <div class="card">
             <div class="card-header">
-                <span>&#128167;</span>
+                <span>💧</span>
                 <span>สถานะระดับน้ำ</span>
             </div>
-            <div class="led-item" id="water1-item">
+            <div class="led-item">
                 <div class="led-left">
                     <div class="led-circle" id="water1-led"></div>
                     <div class="led-info">
-                        <div class="led-label">บ่อ 1</div>
-                        <div class="led-pin">V17</div>
+                        <div class="led-label">กระบะที่ 1</div>
                     </div>
                 </div>
-                <div class="led-status" id="water1-status">เต็ม</div>
+                <div class="led-status" id="water1-status">น้ำเต็ม</div>
             </div>
-            <div class="led-item" id="water2-item">
+            <div class="led-item">
                 <div class="led-left">
                     <div class="led-circle" id="water2-led"></div>
                     <div class="led-info">
-                        <div class="led-label">บ่อ 2</div>
-                        <div class="led-pin">V16</div>
+                        <div class="led-label">กระบะที่ 2</div>
                     </div>
                 </div>
-                <div class="led-status" id="water2-status">เต็ม</div>
+                <div class="led-status" id="water2-status">น้ำเต็ม</div>
             </div>
-            <div class="led-item" id="water3-item">
+            <div class="led-item">
                 <div class="led-left">
                     <div class="led-circle" id="water3-led"></div>
                     <div class="led-info">
-                        <div class="led-label">บ่อ 3</div>
-                        <div class="led-pin">V15</div>
+                        <div class="led-label">กระบะที่ 3</div>
                     </div>
                 </div>
-                <div class="led-status" id="water3-status">เต็ม</div>
+                <div class="led-status" id="water3-status">น้ำเต็ม</div>
             </div>
         </div>
 
         <div class="card">
             <div class="card-header">
-                <span>&#9889;</span>
-                <span>การควบคุม</span>
-            </div>
-            
-            <div class="switch-item">
-                <div class="switch-left">
-                    <div class="switch-icon">&#128161;</div>
-                    <div class="switch-info">
-                        <div class="switch-label">ไฟ</div>
-                        <div class="switch-pin">V24 &bull; <span id="light-mode">Auto</span></div>
-                    </div>
-                </div>
-                <div class="toggle light" id="light-toggle" onclick="toggleLight()">
-                    <div class="toggle-thumb"></div>
-                </div>
-            </div>
-
-            <div class="switch-item oxygen">
-                <div class="switch-left">
-                    <div class="switch-icon">&#128168;</div>
-                    <div class="switch-info">
-                        <div class="switch-label">ออกซิเจน</div>
-                        <div class="switch-pin">V25 &bull; <span id="oxygen-mode">Auto</span></div>
-                    </div>
-                </div>
-                <div class="toggle active" id="oxygen-toggle" onclick="toggleOxygen()">
-                    <div class="toggle-thumb">&#10003;</div>
-                </div>
-            </div>
-        </div>
-
-        <div class="card">
-            <div class="card-header">
-                <span>&#128688;</span>
-                <span>ควบคุมปั๊มแบบ Manual</span>
+                <span>🚰</span>
+                <span>เก็บเกี่ยว</span>
             </div>
 
             <div class="switch-item pump">
                 <div class="switch-left">
-                    <div class="switch-icon">&#128167;</div>
+                    <div class="switch-icon">💧</div>
                     <div class="switch-info">
-                        <div class="switch-label">ปั๊มบ่อ 1</div>
-                        <div class="switch-pin">V12 &bull; <span id="pump1-mode">Auto</span></div>
+                        <div class="switch-label">กระบะที่ 1</div>
+                        <div class="switch-pin"><span id="pump1-mode">Auto</span></div>
                     </div>
                 </div>
                 <div class="toggle pump" id="pump1-toggle" onclick="togglePump(1)">
@@ -627,10 +833,10 @@
 
             <div class="switch-item pump">
                 <div class="switch-left">
-                    <div class="switch-icon">&#128167;</div>
+                    <div class="switch-icon">💧</div>
                     <div class="switch-info">
-                        <div class="switch-label">ปั๊มบ่อ 2</div>
-                        <div class="switch-pin">V11 &bull; <span id="pump2-mode">Auto</span></div>
+                        <div class="switch-label">กระบะที่ 2</div>
+                        <div class="switch-pin"><span id="pump2-mode">Auto</span></div>
                     </div>
                 </div>
                 <div class="toggle pump" id="pump2-toggle" onclick="togglePump(2)">
@@ -640,10 +846,10 @@
 
             <div class="switch-item pump">
                 <div class="switch-left">
-                    <div class="switch-icon">&#128167;</div>
+                    <div class="switch-icon">💧</div>
                     <div class="switch-info">
-                        <div class="switch-label">ปั๊มบ่อ 3</div>
-                        <div class="switch-pin">V10 &bull; <span id="pump3-mode">Auto</span></div>
+                        <div class="switch-label">กระบะที่ 3</div>
+                        <div class="switch-pin"><span id="pump3-mode">Auto</span></div>
                     </div>
                 </div>
                 <div class="toggle pump" id="pump3-toggle" onclick="togglePump(3)">
@@ -652,36 +858,222 @@
             </div>
 
             <div class="info-box">
-                <div class="info-icon">&#8505;&#65039;</div>
-                <div class="info-text">สามารถกดได้เฉพาะเมื่อเซนเซอร์เจอน้ำ</div>
+                <div class="info-icon">ℹ️</div>
+                <div class="info-text">สามารถกดได้เฉพาะเมื่อน้ำเต็มเท่านั้น</div>
             </div>
         </div>
     </div>
 
     <script>
         const BLYNK_SERVER = 'https://blynk.cloud';
-        let BLYNK_AUTH = localStorage.getItem('blynk_auth_token') || '';
+        const BLYNK_AUTH = '4HB3ZavD44G28VPxLkuk8l5xyv-yEqrg';
+        let emergencyStop = false;
+        let harvestHistory = [];
+        let demoMode = false;
+        let waterStatus = { 1: false, 2: false, 3: false }; // เก็บสถานะน้ำแต่ละกระบะ
 
-        function saveAuthToken() {
-            const input = document.getElementById('auth-input');
-            const token = input.value.trim();
+        function toggleSidebar() {
+            const sidebar = document.getElementById('sidebar');
+            const overlay = document.getElementById('sidebar-overlay');
+            const btn = document.getElementById('hamburger-btn');
             
-            if (token.length !== 32) {
-                alert('Auth Token ต้องมี 32 ตัวอักษร!\n\nกรุณาตรวจสอบอีกครั้ง');
+            sidebar.classList.toggle('open');
+            overlay.classList.toggle('show');
+            btn.classList.toggle('active');
+        }
+
+        function showSection(sectionName) {
+            // ซ่อนทุก section
+            document.querySelectorAll('.sidebar-section').forEach(section => {
+                section.classList.remove('active');
+            });
+            
+            // แสดง section ที่เลือก
+            document.getElementById(`section-${sectionName}`).classList.add('active');
+            
+            // อัพเดท menu item
+            document.querySelectorAll('.sidebar-menu-item').forEach(item => {
+                item.classList.remove('active');
+            });
+            event.target.closest('.sidebar-menu-item').classList.add('active');
+        }
+
+        function syncControls(source, isActive, type) {
+            if (type === 'light') {
+                const menuToggle = document.getElementById('light-toggle-menu');
+                const menuLed = document.getElementById('light-led-menu');
+                const menuMode = document.getElementById('light-mode-menu');
+                
+                menuToggle.classList.toggle('active', isActive);
+                menuMode.textContent = isActive ? 'Manual' : 'Auto';
+                
+                if (isActive) {
+                    menuLed.classList.remove('off');
+                } else {
+                    menuLed.classList.add('off');
+                }
+            } else if (type === 'oxygen') {
+                const menuToggle = document.getElementById('oxygen-toggle-menu');
+                const menuLed = document.getElementById('oxygen-led-menu');
+                const menuMode = document.getElementById('oxygen-mode-menu');
+                
+                menuToggle.classList.toggle('active', isActive);
+                menuMode.textContent = isActive ? 'Auto' : 'ปิด';
+                
+                if (isActive) {
+                    menuLed.classList.remove('off');
+                } else {
+                    menuLed.classList.add('off');
+                }
+            } else if (type.startsWith('pump')) {
+                const pumpNum = type.replace('pump', '');
+                const mainToggle = document.getElementById(`pump${pumpNum}-toggle`);
+                const mainMode = document.getElementById(`pump${pumpNum}-mode`);
+                
+                mainToggle.classList.toggle('active', isActive);
+                mainMode.textContent = isActive ? 'บังคับเปิด' : 'Auto';
+            }
+        }
+
+        function toggleLightMenu() {
+            if (emergencyStop) return;
+            
+            const toggle = document.getElementById('light-toggle-menu');
+            const isActive = toggle.classList.contains('active');
+            
+            syncControls('menu', !isActive, 'light');
+            sendToBlynk('V24', !isActive ? 1 : 0);
+        }
+
+        function toggleOxygenMenu() {
+            if (emergencyStop) return;
+            
+            const toggle = document.getElementById('oxygen-toggle-menu');
+            const isActive = toggle.classList.contains('active');
+            
+            syncControls('menu', !isActive, 'oxygen');
+            sendToBlynk('V25', !isActive ? 0 : 1);
+        }
+
+        async function togglePumpMenu(pumpNum) {
+            if (emergencyStop) return;
+            
+            const toggle = document.getElementById(`pump${pumpNum}-toggle-menu`);
+            const isActive = toggle.classList.contains('active');
+            
+            syncControls('menu', !isActive, `pump${pumpNum}`);
+            
+            const pins = { 1: 'V12', 2: 'V11', 3: 'V10' };
+            const success = await sendToBlynk(pins[pumpNum], !isActive ? 1 : 0);
+            
+            if (!isActive && success) {
+                addHarvestRecord(pumpNum);
+            }
+        }
+
+        // ข้อมูลจำลองสำหรับโหมดทดสอบ
+        const demoData = {
+            V5: 28.5,
+            V6: 29.2,
+            V7: 27.8,
+            V15: 1,
+            V16: 1,
+            V17: 0
+        };
+
+        // เคลียร์ประวัติ
+        function clearHistory() {
+            if (confirm('คุณต้องการเคลียร์ประวัติการเก็บทั้งหมดใช่หรือไม่?')) {
+                harvestHistory = [];
+                saveHistory();
+                displayHistory();
+            }
+        }
+
+        // โหลดประวัติจาก localStorage
+        function loadHistory() {
+            const saved = localStorage.getItem('harvestHistory');
+            if (saved) {
+                harvestHistory = JSON.parse(saved);
+                displayHistory();
+            }
+        }
+
+        // บันทึกประวัติ
+        function saveHistory() {
+            localStorage.setItem('harvestHistory', JSON.stringify(harvestHistory));
+        }
+
+        // เพิ่มประวัติการเก็บ
+        function addHarvestRecord(pondNum) {
+            const now = new Date();
+            const months = ['ม.ค.', 'ก.พ.', 'มี.ค.', 'เม.ย.', 'พ.ค.', 'มิ.ย.', 'ก.ค.', 'ส.ค.', 'ก.ย.', 'ต.ค.', 'พ.ย.', 'ธ.ค.'];
+            
+            const record = {
+                pond: pondNum,
+                date: `${now.getDate()} ${months[now.getMonth()]} ${now.getFullYear() + 543}`,
+                time: `${String(now.getHours()).padStart(2, '0')}:${String(now.getMinutes()).padStart(2, '0')} น.`,
+                timestamp: now.getTime()
+            };
+            
+            harvestHistory.unshift(record);
+            if (harvestHistory.length > 20) harvestHistory.pop();
+            
+            saveHistory();
+            displayHistory();
+        }
+
+        // แสดงประวัติ
+        function displayHistory() {
+            const historyList = document.getElementById('history-list');
+            
+            if (harvestHistory.length === 0) {
+                historyList.innerHTML = '<div class="no-history">ยังไม่มีประวัติการเก็บ</div>';
                 return;
             }
             
-            localStorage.setItem('blynk_auth_token', token);
-            BLYNK_AUTH = token;
+            historyList.innerHTML = harvestHistory.map(record => `
+                <div class="history-item">
+                    <div class="history-pond">🌱 กระบะที่ ${record.pond}</div>
+                    <div class="history-date">📅 ${record.date}</div>
+                    <div class="history-time">🕐 ${record.time}</div>
+                </div>
+            `).join('');
+        }
+
+        // ตัดการทำงานทั้งหมด
+        function toggleEmergency() {
+            emergencyStop = !emergencyStop;
+            const btn = document.getElementById('emergency-btn');
+            const text = document.getElementById('emergency-text');
             
-            alert('บันทึก Auth Token สำเร็จ!\n\nกำลังเชื่อมต่อ Blynk...');
-            
-            document.getElementById('config').style.display = 'none';
-            document.getElementById('loading').style.display = 'block';
-            
-            setTimeout(() => {
-                fetchBlynkData();
-            }, 1000);
+            if (emergencyStop) {
+                btn.classList.add('active');
+                text.textContent = 'กลับสู่การทำงานปกติ';
+                
+                // ปิดทุกอย่าง
+                const menuLightLed = document.getElementById('light-led-menu');
+                const menuOxygenLed = document.getElementById('oxygen-led-menu');
+                
+                document.getElementById('light-toggle-menu').classList.remove('active');
+                if (menuLightLed) menuLightLed.classList.add('off');
+                document.getElementById('oxygen-toggle-menu').classList.remove('active');
+                if (menuOxygenLed) menuOxygenLed.classList.add('off');
+                document.getElementById('pump1-toggle').classList.remove('active');
+                document.getElementById('pump2-toggle').classList.remove('active');
+                document.getElementById('pump3-toggle').classList.remove('active');
+                
+                if (!demoMode) {
+                    sendToBlynk('V24', 0);
+                    sendToBlynk('V25', 1);
+                    sendToBlynk('V10', 0);
+                    sendToBlynk('V11', 0);
+                    sendToBlynk('V12', 0);
+                }
+            } else {
+                btn.classList.remove('active');
+                text.textContent = 'ตัดการทำงานทั้งหมด';
+            }
         }
 
         function updateTime() {
@@ -695,71 +1087,111 @@
         }
 
         async function fetchBlynkData() {
-            if (!BLYNK_AUTH) {
-                document.getElementById('loading').style.display = 'none';
-                document.getElementById('config').style.display = 'block';
-                return;
-            }
-            
             try {
                 const pins = ['V5', 'V6', 'V7', 'V15', 'V16', 'V17', 'V24', 'V25', 'V10', 'V11', 'V12'];
                 const response = await fetch(
-                    `${BLYNK_SERVER}/external/api/get?token=${BLYNK_AUTH}&${pins.join('&')}`
+                    `${BLYNK_SERVER}/external/api/get?token=${BLYNK_AUTH}&${pins.join('&')}`,
+                    { method: 'GET', timeout: 5000 }
                 );
                 
-                if (!response.ok) {
-                    if (response.status === 400 || response.status === 401) {
-                        throw new Error('Invalid Auth Token');
-                    }
-                    throw new Error('Failed to fetch');
-                }
+                if (!response.ok) throw new Error('Failed to fetch');
                 
                 const data = await response.json();
-                
-                document.getElementById('temp1').textContent = data.V5 !== undefined ? parseFloat(data.V5).toFixed(1) : '--';
-                document.getElementById('temp2').textContent = data.V6 !== undefined ? parseFloat(data.V6).toFixed(1) : '--';
-                document.getElementById('temp3').textContent = data.V7 !== undefined ? parseFloat(data.V7).toFixed(1) : '--';
-                
-                updateWaterStatus(1, data.V17);
-                updateWaterStatus(2, data.V16);
-                updateWaterStatus(3, data.V15);
-                
-                document.getElementById('loading').style.display = 'none';
-                document.getElementById('app').style.display = 'block';
+                displayData(data);
                 
             } catch (error) {
                 console.error('Error fetching Blynk data:', error);
                 
-                if (error.message === 'Invalid Auth Token') {
-                    localStorage.removeItem('blynk_auth_token');
-                    BLYNK_AUTH = '';
-                    document.getElementById('loading').style.display = 'none';
-                    document.getElementById('config').style.display = 'block';
-                    alert('Auth Token ไม่ถูกต้อง!\n\nกรุณากรอก Auth Token ใหม่');
-                } else {
+                // เข้าสู่โหมดทดสอบอัตโนมัติ
+                if (!demoMode) {
+                    demoMode = true;
+                    console.log('เข้าสู่โหมดทดสอบ (Demo Mode)');
                     document.getElementById('loading').innerHTML = 
-                        '<div class="spinner"></div>ไม่สามารถเชื่อมต่อ Blynk<br><small>กำลังลองใหม่...</small>';
+                        '<div class="spinner"></div>ไม่สามารถเชื่อมต่อ Blynk<br><small>กำลังเข้าสู่โหมดทดสอบ...</small>';
+                    
+                    setTimeout(() => {
+                        displayData(demoData);
+                        // เปลี่ยนข้อมูลจำลองทุก 3 วินาที
+                        setInterval(() => {
+                            demoData.V5 = (27 + Math.random() * 3).toFixed(1);
+                            demoData.V6 = (27 + Math.random() * 3).toFixed(1);
+                            demoData.V7 = (27 + Math.random() * 3).toFixed(1);
+                            demoData.V15 = Math.random() > 0.5 ? 1 : 0;
+                            demoData.V16 = Math.random() > 0.5 ? 1 : 0;
+                            demoData.V17 = Math.random() > 0.5 ? 1 : 0;
+                            displayData(demoData);
+                        }, 3000);
+                    }, 2000);
                 }
+            }
+        }
+
+        function displayData(data) {
+            document.getElementById('temp1').textContent = data.V5 !== undefined ? parseFloat(data.V5).toFixed(1) : '--';
+            document.getElementById('temp2').textContent = data.V6 !== undefined ? parseFloat(data.V6).toFixed(1) : '--';
+            document.getElementById('temp3').textContent = data.V7 !== undefined ? parseFloat(data.V7).toFixed(1) : '--';
+            
+            updateWaterStatus(1, data.V17);
+            updateWaterStatus(2, data.V16);
+            updateWaterStatus(3, data.V15);
+            
+            document.getElementById('loading').style.display = 'none';
+            document.getElementById('app').style.display = 'block';
+            document.getElementById('sidebar').style.display = 'block';
+            
+            // แสดงสถานะโหมด
+            const statusText = document.querySelector('.header-status span');
+            if (statusText && demoMode) {
+                statusText.innerHTML = `<span style="color: #FDD835;">⚠️ โหมดทดสอบ</span> &bull; <span id="current-time"></span>`;
+                updateTime();
             }
         }
 
         function updateWaterStatus(pondNum, value) {
             const hasWater = value == 1;
+            waterStatus[pondNum] = hasWater; // เก็บสถานะ
+            
             const led = document.getElementById(`water${pondNum}-led`);
             const status = document.getElementById(`water${pondNum}-status`);
             
             if (hasWater) {
                 led.classList.remove('off');
                 status.classList.remove('off');
-                status.textContent = 'เต็ม';
+                status.textContent = 'น้ำเต็ม';
             } else {
                 led.classList.add('off');
                 status.classList.add('off');
                 status.textContent = 'ไม่เต็ม';
             }
+            
+            // อัพเดทสถานะปุ่มปั๊ม
+            updatePumpButtonStatus(pondNum, hasWater);
+        }
+
+        function updatePumpButtonStatus(pondNum, hasWater) {
+            const pumpItem = document.getElementById(`pump${pondNum}-toggle`).closest('.switch-item');
+            
+            if (hasWater) {
+                pumpItem.classList.remove('disabled');
+            } else {
+                pumpItem.classList.add('disabled');
+                // ถ้าน้ำไม่เต็ม และปั๊มกำลังทำงานอยู่ ให้ปิด
+                const toggle = document.getElementById(`pump${pondNum}-toggle`);
+                if (toggle.classList.contains('active')) {
+                    toggle.classList.remove('active');
+                    const mode = document.getElementById(`pump${pondNum}-mode`);
+                    mode.textContent = 'Auto';
+                }
+            }
         }
 
         async function sendToBlynk(pin, value) {
+            if (emergencyStop && value === 1) return false;
+            if (demoMode) {
+                console.log(`[Demo Mode] ส่งคำสั่ง ${pin} = ${value}`);
+                return true;
+            }
+            
             try {
                 const response = await fetch(
                     `${BLYNK_SERVER}/external/api/update?token=${BLYNK_AUTH}&${pin}=${value}`,
@@ -773,23 +1205,49 @@
         }
 
         function toggleLight() {
+            if (emergencyStop) return;
+            
             const toggle = document.getElementById('light-toggle');
-            const mode = document.getElementById('light-mode');
-            const isActive = toggle.classList.toggle('active');
+            const isActive = toggle.classList.contains('active');
             
-            mode.textContent = isActive ? 'Manual' : 'Auto';
-            toggle.querySelector('.toggle-thumb').textContent = isActive ? '✓' : '';
-            
-            sendToBlynk('V24', isActive ? 1 : 0);
+            syncControls('main', !isActive, 'light');
+            sendToBlynk('V24', !isActive ? 1 : 0);
         }
 
         function toggleOxygen() {
+            if (emergencyStop) return;
+            
             const toggle = document.getElementById('oxygen-toggle');
-            const mode = document.getElementById('oxygen-mode');
-            const isActive = toggle.classList.toggle('active');
+            const isActive = toggle.classList.contains('active');
             
-            mode.textContent = isActive ? 'Auto' : 'ปิด';
-            toggle.querySelector('.toggle-thumb').textContent = isActive ? '✓' : '';
-            
-            sendToBlynk('V25', isActive ? 0 : 1);
+            syncControls('main', !isActive, 'oxygen');
+            sendToBlynk('V25', !isActive ? 0 : 1);
         }
+
+        async function togglePump(pumpNum) {
+            if (emergencyStop) return;
+            
+            const toggle = document.getElementById(`pump${pumpNum}-toggle`);
+            const isActive = toggle.classList.contains('active');
+            
+            syncControls('main', !isActive, `pump${pumpNum}`);
+            
+            const pins = { 1: 'V12', 2: 'V11', 3: 'V10' };
+            const success = await sendToBlynk(pins[pumpNum], !isActive ? 1 : 0);
+            
+            if (!isActive && success) {
+                addHarvestRecord(pumpNum);
+            }
+        }
+
+        loadHistory();
+        updateTime();
+        setInterval(updateTime, 1000);
+        
+        fetchBlynkData();
+        if (!demoMode) {
+            setInterval(fetchBlynkData, 2000);
+        }
+    </script>
+</body>
+</html>
