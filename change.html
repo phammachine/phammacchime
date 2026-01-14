@@ -1015,7 +1015,7 @@ body {
             <ul class="sidebar-menu">
                 <li class="sidebar-menu-item active" onclick="showSection('history')">
                     <span>📋</span>
-                    <span>ประวัติการเก็บ</span>
+                    <span>ประวัติการเก็บเกี่ยว</span>
                 </li>
                 <li class="sidebar-menu-item" onclick="showSection('fertilizer')">
                     <span>🌾</span>
@@ -1032,10 +1032,10 @@ body {
             <div class="sidebar-section active" id="section-history">
                 <div class="sidebar-header">
                     <span>📋</span>
-                    <span>ประวัติการเก็บ</span>
+                    <span>ประวัติการเก็บเกี่ยว</span>
                 </div>
                 <div id="history-list">
-                    <div class="no-history">ยังไม่มีประวัติการเก็บ</div>
+                    <div class="no-history">ยังไม่มีประวัติการเก็บเกี่ยว</div>
                 </div>
                 <button class="clear-history-btn" onclick="clearHistory()">
                     <span>🗑️</span>
@@ -1065,37 +1065,37 @@ body {
                     <span>การควบคุม</span>
                 </div>
                 
-                <div class="control-item">
-                    <div class="switch-item light">
-                        <div class="switch-left">
-                            <div class="led-circle off" id="light-led-menu"></div>
-                            <div class="switch-icon">💡</div>
-                            <div class="switch-info">
-                                <div class="switch-label">ไฟ</div>
-                                <div class="switch-pin"><span id="light-mode-menu">Auto</span></div>
-                            </div>
-                        </div>
-                        <div class="toggle light" id="light-toggle-menu" onclick="toggleLightMenu()">
-                            <div class="toggle-thumb"></div>
-                        </div>
-                    </div>
-                </div>
+<div class="control-item">
+    <div class="switch-item light">
+        <div class="switch-left">
+            <div class="led-circle off" id="light-led-menu"></div>
+            <div class="switch-icon">💡</div>
+            <div class="switch-info">
+                <div class="switch-label">ไฟ</div>
+                <div class="switch-pin"><span id="light-mode-menu">Auto</span></div>
+            </div>
+        </div>
+        <div class="toggle light" id="light-toggle-menu" onclick="toggleLightMenu()" style="cursor: pointer;">
+            <div class="toggle-thumb"></div>
+        </div>
+    </div>
+</div>
 
-                <div class="control-item">
-                    <div class="switch-item oxygen">
-                        <div class="switch-left">
-                            <div class="led-circle" id="oxygen-led-menu"></div>
-                            <div class="switch-icon">💨</div>
-                            <div class="switch-info">
-                                <div class="switch-label">ออกซิเจน</div>
-                                <div class="switch-pin"><span id="oxygen-mode-menu">Auto</span></div>
-                            </div>
-                        </div>
-                        <div class="toggle active oxygen" id="oxygen-toggle-menu" onclick="toggleOxygenMenu()">
-                            <div class="toggle-thumb"></div>
-                        </div>
-                    </div>
-                </div>
+<div class="control-item">
+    <div class="switch-item oxygen">
+        <div class="switch-left">
+            <div class="led-circle" id="oxygen-led-menu"></div>
+            <div class="switch-icon">💨</div>
+            <div class="switch-info">
+                <div class="switch-label">ออกซิเจน</div>
+                <div class="switch-pin"><span id="oxygen-mode-menu">Auto</span></div>
+            </div>
+        </div>
+        <div class="toggle active oxygen" id="oxygen-toggle-menu" onclick="toggleOxygenMenu()" style="cursor: pointer;">
+            <div class="toggle-thumb"></div>
+        </div>
+    </div>
+</div>
             </div>
         </div>
     </div>
@@ -1656,25 +1656,47 @@ function syncControls(source, isActive, type) {
 }
 
 
-        function toggleLightMenu() {
-            if (emergencyStop) return;
-            
-            const toggle = document.getElementById('light-toggle-menu');
-            const isActive = toggle.classList.contains('active');
-            
-            syncControls('menu', !isActive, 'light');
-            sendToBlynk('V24', !isActive ? 1 : 0);
-        }
+function toggleLightMenu() {
+    if (emergencyStop) return;
+    
+    const toggle = document.getElementById('light-toggle-menu');
+    const menuMode = document.getElementById('light-mode-menu');
+    
+    // สลับสถานะ
+    toggle.classList.toggle('active');
+    
+    // อัพเดทข้อความ
+    if (toggle.classList.contains('active')) {
+        menuMode.textContent = 'Manual';
+        sendToBlynk('V24', 1);  // เปิดไฟ
+    } else {
+        menuMode.textContent = 'Auto';
+        sendToBlynk('V24', 0);  // ปิดไฟ
+    }
+    
+    console.log('💡 ไฟ:', toggle.classList.contains('active') ? 'เปิด' : 'ปิด');
+}
 
-        function toggleOxygenMenu() {
-            if (emergencyStop) return;
-            
-            const toggle = document.getElementById('oxygen-toggle-menu');
-            const isActive = toggle.classList.contains('active');
-            
-            syncControls('menu', !isActive, 'oxygen');
-            sendToBlynk('V25', !isActive ? 0 : 1);
-        }
+function toggleOxygenMenu() {
+    if (emergencyStop) return;
+    
+    const toggle = document.getElementById('oxygen-toggle-menu');
+    const menuMode = document.getElementById('oxygen-mode-menu');
+    
+    // สลับสถานะ
+    toggle.classList.toggle('active');
+    
+    // อัพเดทข้อความ
+    if (toggle.classList.contains('active')) {
+        menuMode.textContent = 'Auto';
+        sendToBlynk('V25', 0);  // เปิดออกซิเจน
+    } else {
+        menuMode.textContent = 'ปิด';
+        sendToBlynk('V25', 1);  // ปิดออกซิเจน
+    }
+    
+    console.log('💨 ออกซิเจน:', toggle.classList.contains('active') ? 'เปิด' : 'ปิด');
+}
 
         async function togglePumpMenu(pumpNum) {
             if (emergencyStop) return;
@@ -1721,8 +1743,8 @@ const demoData = {
         // เคลียร์ประวัติ
 async function clearHistory() {
     const confirmed = await showConfirm(
-        '🗑️ ลบประวัติการเก็บ',
-        'คุณต้องการเคลียร์ประวัติการเก็บทั้งหมดใช่หรือไม่?',
+        '🗑️ ลบประวัติการเก็บเกี่ยว',
+        'คุณต้องการเคลียร์ประวัติการเก็บเกี่ยวทั้งหมดใช่หรือไม่?',
         { icon: '🗑️', type: 'danger', confirmType: 'danger' }
     );
     
@@ -2043,7 +2065,13 @@ async function togglePump(pumpNum) {
     const isActive = toggle.classList.contains('active');
     const pumpItem = toggle.closest('.switch-item');
     
-    // ตรวจสอบว่าปุ่มถูก disabled หรือไม่
+    // ✅ เพิ่มเงื่อนไข: ไม่ให้เก็บถ้ายังไม่ได้เริ่มปลูก
+    if (!isActive && !growingStatus[pumpNum].active) {
+        alert(`❌ ไม่สามารถเก็บเกี่ยวได้\n\nต้องเริ่มปลูกในกระบะที่ ${pumpNum} ก่อน`);
+        return;
+    }
+    
+    // ตรวจสอบว่าปุ่มถูก disabled (ไม่มีน้ำ)
     if (pumpItem.classList.contains('disabled') && !isActive) {
         alert(`❌ ไม่สามารถเก็บเกี่ยวได้\n\nกระบะที่ ${pumpNum} ไม่มีน้ำ`);
         return;
@@ -2062,37 +2090,51 @@ async function togglePump(pumpNum) {
         // === กดครั้งที่ 2: ปิดปั๊ม + สิ้นสุดการปลูก ===
         console.log(`💧 Pump ${pumpNum}: ปิดปั๊ม + สิ้นสุดการปลูก`);
         
-        syncControls('main', false, `pump${pumpNum}`);
-        const success = await sendToBlynk(pins[pumpNum], 0);
+        // ✅ เพิ่มการแสดง Confirmation Dialog เมื่อเก็บเกี่ยวสำเร็จ
+        const confirmed = await showConfirm(
+            '✅ เก็บเกี่ยวสำเร็จ',
+            `กระบะที่ ${pumpNum} เก็บเกี่ยวสำเร็จแล้ว!\n\nข้อมูลการปลูกจะถูกบันทึกในประวัติ`,
+            { icon: '✅', type: 'normal' }
+        );
         
-        if (success) {
-            // บันทึกประวัติการเก็บ
-            addHarvestRecord(pumpNum);
+        if (confirmed) {
+            syncControls('main', false, `pump${pumpNum}`);
+            const success = await sendToBlynk(pins[pumpNum], 0);
             
-            // รีเซ็ตการปลูก
-            if (growingStatus[pumpNum].active) {
-                growingStatus[pumpNum].active = false;
-                growingStatus[pumpNum].startTime = null;
-                growingStatus[pumpNum].minutes = 0;
-                growingStatus[pumpNum].harvestTime = Date.now();
-                updateGrowingUI(pumpNum, false);
-                saveGrowingData();
+            if (success) {
+                // บันทึกประวัติการเก็บ
+                addHarvestRecord(pumpNum);
                 
-                // ลบการแจ้งเตือนเก็บเกี่ยวของกระบะนี้
-                notifications.harvest = notifications.harvest.filter(n => n !== pumpNum);
-            }
-            
-            // ✅ ปิดออกซิเจนถ้าไม่มีกระบะไหนปลูกอยู่
-            const anyPondActive = Object.values(growingStatus).some(s => s.active);
-            if (!anyPondActive) {
-                const oxygenToggle = document.getElementById('oxygen-toggle-menu');
-                const oxygenMode = document.getElementById('oxygen-mode-menu');
-                if (oxygenToggle && oxygenMode) {
-                    oxygenToggle.classList.remove('active');
-                    oxygenMode.textContent = 'ปิด';
-                    sendToBlynk('V25', 1);
+                // รีเซ็ตการปลูก
+                if (growingStatus[pumpNum].active) {
+                    growingStatus[pumpNum].active = false;
+                    growingStatus[pumpNum].startTime = null;
+                    growingStatus[pumpNum].minutes = 0;
+                    growingStatus[pumpNum].harvestTime = Date.now();
+                    updateGrowingUI(pumpNum, false);
+                    saveGrowingData();
+                    
+                    // ลบการแจ้งเตือนเก็บเกี่ยวของกระบะนี้
+                    notifications.harvest = notifications.harvest.filter(n => n !== pumpNum);
+                }
+                
+                // ปิดออกซิเจนถ้าไม่มีกระบะไหนปลูกอยู่
+                const anyPondActive = Object.values(growingStatus).some(s => s.active);
+                if (!anyPondActive) {
+                    const oxygenToggle = document.getElementById('oxygen-toggle-menu');
+                    const oxygenMode = document.getElementById('oxygen-mode-menu');
+                    if (oxygenToggle && oxygenMode) {
+                        oxygenToggle.classList.remove('active');
+                        oxygenMode.textContent = 'ปิด';
+                        sendToBlynk('V25', 1);
+                    }
                 }
             }
+        } else {
+            // ถ้าผู้ใช้กด "ยกเลิก" ให้ปิด toggle กลับเป็นเปิด
+            toggle.classList.add('active');
+            const mode = document.getElementById(`pump${pumpNum}-mode`);
+            mode.textContent = 'บังคับเปิด';
         }
     }
 }
