@@ -1170,6 +1170,125 @@ body.dark-mode .fertilizer-item {
 body.dark-mode .no-history {
     color: #666;
 }
+/* Settings Items Styles */
+.settings-item {
+    padding: 16px;
+    background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+    border-radius: 12px;
+    margin-bottom: 10px;
+    border: 2px solid #E8E8E8;
+    transition: all 0.3s;
+}
+
+.settings-item:hover {
+    border-color: #64B5F6;
+    transform: translateX(4px);
+}
+
+.settings-item-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    cursor: pointer;
+}
+
+.settings-item-left {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    flex: 1;
+}
+
+.settings-icon {
+    font-size: 24px;
+}
+
+.settings-label {
+    font-size: 15px;
+    font-weight: 600;
+    color: #333;
+}
+
+.settings-desc {
+    font-size: 12px;
+    color: #666;
+    margin-top: 2px;
+}
+
+.settings-arrow {
+    font-size: 18px;
+    color: #999;
+    transition: transform 0.3s;
+}
+
+.settings-item.expanded .settings-arrow {
+    transform: rotate(90deg);
+}
+
+.settings-content {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.3s ease-out;
+    margin-top: 0;
+}
+
+.settings-item.expanded .settings-content {
+    max-height: 500px;
+    margin-top: 12px;
+    padding-top: 12px;
+    border-top: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+.settings-option {
+    padding: 10px 12px;
+    background: white;
+    border-radius: 8px;
+    margin-bottom: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.settings-option-label {
+    font-size: 14px;
+    color: #555;
+}
+
+.settings-value {
+    font-size: 13px;
+    font-weight: 600;
+    color: #2E7D32;
+}
+
+/* Dark Mode for Settings */
+body.dark-mode .settings-item {
+    background: linear-gradient(135deg, #2a2a3e 0%, #1f1f2e 100%);
+    border-color: rgba(255, 255, 255, 0.1);
+}
+
+body.dark-mode .settings-item:hover {
+    border-color: #64B5F6;
+}
+
+body.dark-mode .settings-label {
+    color: #ffffff;
+}
+
+body.dark-mode .settings-desc {
+    color: #b0b0b0;
+}
+
+body.dark-mode .settings-option {
+    background: rgba(42, 42, 62, 0.5);
+}
+
+body.dark-mode .settings-option-label {
+    color: #b0b0b0;
+}
+
+body.dark-mode .settings-content {
+    border-top-color: rgba(255, 255, 255, 0.1);
+}
     </style>
 </head>
 <body>
@@ -1270,25 +1389,110 @@ body.dark-mode .no-history {
             </div>
 
             <!-- ตั้งค่า -->
-            <div class="sidebar-section" id="section-settings">
-                <div class="sidebar-header">
-                    <span>⚙️</span>
-                    <span>ตั้งค่า</span>
-                </div>
-                
-                <div class="switch-item" style="margin-bottom: 12px; background: linear-gradient(135deg, #E3F2FD 0%, #BBDEFB 100%); border-color: #64B5F6;">
-                    <div class="switch-left">
-                        <div class="switch-icon">🌙</div>
-                        <div class="switch-info">
-                            <div class="switch-label">โหมดมืด</div>
-                            <div class="switch-pin">Dark Mode</div>
-                        </div>
-                    </div>
-                    <div class="toggle" id="darkmode-toggle" onclick="toggleDarkMode()" style="cursor: pointer;">
-                        <div class="toggle-thumb">🌙</div>
-                    </div>
+<!-- ตั้งค่า -->
+<!-- ตั้งค่า -->
+<div class="sidebar-section" id="section-settings">
+    <div class="sidebar-header">
+        <span>⚙️</span>
+        <span>ตั้งค่า</span>
+    </div>
+    
+    <!-- โหมดมืด -->
+    <div class="switch-item" style="margin-bottom: 12px; background: linear-gradient(135deg, #E3F2FD 0%, #BBDEFB 100%); border-color: #64B5F6;">
+        <div class="switch-left">
+            <div class="switch-icon">🌙</div>
+            <div class="switch-info">
+                <div class="switch-label">โหมดมืด</div>
+                <div class="switch-pin">Dark Mode</div>
+            </div>
+        </div>
+        <div class="toggle" id="darkmode-toggle" onclick="toggleDarkMode()" style="cursor: pointer;">
+            <div class="toggle-thumb">🌙</div>
+        </div>
+    </div>
+
+    <!-- การแจ้งเตือน -->
+    <div class="settings-item" onclick="toggleSettingsItem(this)">
+        <div class="settings-item-header">
+            <div class="settings-item-left">
+                <div class="settings-icon">🔔</div>
+                <div>
+                    <div class="settings-label">การแจ้งเตือน</div>
+                    <div class="settings-desc">ตั้งค่าการแจ้งเตือนต่างๆ</div>
                 </div>
             </div>
+            <div class="settings-arrow">›</div>
+        </div>
+        <div class="settings-content">
+            <div class="settings-option">
+                <span class="settings-option-label">เสียงแจ้งเตือน</span>
+                <div class="toggle" id="sound-toggle" onclick="event.stopPropagation(); toggleSound();" style="cursor: pointer;">
+                    <div class="toggle-thumb"></div>
+                </div>
+            </div>
+            <div class="settings-option">
+                <span class="settings-option-label">แจ้งเตือนเก็บเกี่ยว</span>
+                <div class="toggle active" id="harvest-notif-toggle" onclick="event.stopPropagation(); toggleHarvestNotif();" style="cursor: pointer;">
+                    <div class="toggle-thumb"></div>
+                </div>
+            </div>
+            <div class="settings-option">
+                <span class="settings-option-label">แจ้งเตือนใส่ปุ๋ย</span>
+                <div class="toggle active" id="fertilizer-notif-toggle" onclick="event.stopPropagation(); toggleFertilizerNotif();" style="cursor: pointer;">
+                    <div class="toggle-thumb"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ข้อมูลระบบ -->
+    <div class="settings-item" onclick="toggleSettingsItem(this)">
+        <div class="settings-item-header">
+            <div class="settings-item-left">
+                <div class="settings-icon">📊</div>
+                <div>
+                    <div class="settings-label">ข้อมูลระบบ</div>
+                    <div class="settings-desc">ข้อมูลและเวอร์ชันแอป</div>
+                </div>
+            </div>
+            <div class="settings-arrow">›</div>
+        </div>
+        <div class="settings-content">
+            <div class="settings-option">
+                <span class="settings-option-label">เวอร์ชัน</span>
+                <span class="settings-value">v1.0.0</span>
+            </div>
+            <div class="settings-option">
+                <span class="settings-option-label">สถานะการเชื่อมต่อ</span>
+                <span class="settings-value" id="connection-status">กำลังตรวจสอบ...</span>
+            </div>
+            <div class="settings-option">
+                <span class="settings-option-label">โหมด</span>
+                <span class="settings-value" id="mode-status">ปกติ</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- จัดการข้อมูล -->
+    <div class="settings-item" onclick="toggleSettingsItem(this)">
+        <div class="settings-item-header">
+            <div class="settings-item-left">
+                <div class="settings-icon">🗑️</div>
+                <div>
+                    <div class="settings-label">จัดการข้อมูล</div>
+                    <div class="settings-desc">ลบหรือรีเซ็ตข้อมูล</div>
+                </div>
+            </div>
+            <div class="settings-arrow">›</div>
+        </div>
+        <div class="settings-content">
+            <button class="clear-history-btn" onclick="event.stopPropagation(); resetAllData();" style="margin-top: 0;">
+                <span>🔄</span>
+                <span>รีเซ็ตข้อมูลทั้งหมด</span>
+            </button>
+        </div>
+    </div>
+</div>
         </div>
     </div>
 <!-- Custom Confirm Dialog -->
@@ -1536,6 +1740,13 @@ function toggleDarkMode() {
         console.log('☀️ โหมดสว่าง: เปิด');
     }
 }
+// ตั้งค่าการแจ้งเตือน (ประกาศตัวแปร global)
+let notificationSettings = {
+    sound: false,
+    harvest: true,
+    fertilizer: true
+};
+
 // โหลดการตั้งค่าโหมดมืดจาก localStorage
 function loadDarkMode() {
     const savedMode = localStorage.getItem('darkMode');
@@ -1550,6 +1761,140 @@ function loadDarkMode() {
         }
     }
 }
+
+// โหลดการตั้งค่าการแจ้งเตือน
+function loadNotificationSettings() {
+    const saved = localStorage.getItem('notificationSettings');
+    if (saved) {
+        notificationSettings = JSON.parse(saved);
+        
+        // อัพเดท UI
+        const soundToggle = document.getElementById('sound-toggle');
+        const harvestToggle = document.getElementById('harvest-notif-toggle');
+        const fertilizerToggle = document.getElementById('fertilizer-notif-toggle');
+        
+        if (soundToggle) {
+            soundToggle.classList.toggle('active', notificationSettings.sound);
+        }
+        if (harvestToggle) {
+            harvestToggle.classList.toggle('active', notificationSettings.harvest);
+        }
+        if (fertilizerToggle) {
+            fertilizerToggle.classList.toggle('active', notificationSettings.fertilizer);
+        }
+    }
+}
+
+// บันทึกการตั้งค่าการแจ้งเตือน
+function saveNotificationSettings() {
+    localStorage.setItem('notificationSettings', JSON.stringify(notificationSettings));
+}
+
+// สลับเสียงแจ้งเตือน
+function toggleSound() {
+    notificationSettings.sound = !notificationSettings.sound;
+    const toggle = document.getElementById('sound-toggle');
+    toggle.classList.toggle('active');
+    saveNotificationSettings();
+    
+    if (notificationSettings.sound) {
+        // เล่นเสียงทดสอบ
+        playNotificationSound();
+    }
+    
+    console.log('🔔 เสียงแจ้งเตือน:', notificationSettings.sound ? 'เปิด' : 'ปิด');
+}
+
+// สลับการแจ้งเตือนเก็บเกี่ยว
+function toggleHarvestNotif() {
+    notificationSettings.harvest = !notificationSettings.harvest;
+    const toggle = document.getElementById('harvest-notif-toggle');
+    toggle.classList.toggle('active');
+    saveNotificationSettings();
+    console.log('🌱 แจ้งเตือนเก็บเกี่ยว:', notificationSettings.harvest ? 'เปิด' : 'ปิด');
+}
+
+// สลับการแจ้งเตือนใส่ปุ๋ย
+function toggleFertilizerNotif() {
+    notificationSettings.fertilizer = !notificationSettings.fertilizer;
+    const toggle = document.getElementById('fertilizer-notif-toggle');
+    toggle.classList.toggle('active');
+    saveNotificationSettings();
+    console.log('🌾 แจ้งเตือนใส่ปุ๋ย:', notificationSettings.fertilizer ? 'เปิด' : 'ปิด');
+}
+
+// เล่นเสียงแจ้งเตือน
+function playNotificationSound() {
+    if (notificationSettings.sound) {
+        // สร้างเสียง beep ง่ายๆ
+        const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+        const oscillator = audioContext.createOscillator();
+        const gainNode = audioContext.createGain();
+        
+        oscillator.connect(gainNode);
+        gainNode.connect(audioContext.destination);
+        
+        oscillator.frequency.value = 800;
+        oscillator.type = 'sine';
+        
+        gainNode.gain.setValueAtTime(0.3, audioContext.currentTime);
+        gainNode.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 0.5);
+        
+        oscillator.start(audioContext.currentTime);
+        oscillator.stop(audioContext.currentTime + 0.5);
+    }
+}
+
+// สลับการแสดง Settings Item
+function toggleSettingsItem(element) {
+    element.classList.toggle('expanded');
+}
+
+// รีเซ็ตข้อมูลทั้งหมด
+async function resetAllData() {
+    const confirmed = await showConfirm(
+        '⚠️ รีเซ็ตข้อมูลทั้งหมด',
+        'คุณต้องการลบข้อมูลทั้งหมดและรีเซ็ตระบบใช่หรือไม่?\n\n• ประวัติการเก็บเกี่ยว\n• ประวัติการใส่ปุ๋ย\n• ข้อมูลการปลูก\n• การตั้งค่าต่างๆ',
+        { icon: '⚠️', type: 'danger', confirmType: 'danger' }
+    );
+    
+    if (confirmed) {
+        // ลบข้อมูลทั้งหมด
+        localStorage.removeItem('harvestHistory');
+        localStorage.removeItem('fertilizerHistory');
+        localStorage.removeItem('growingStatus');
+        localStorage.removeItem('notificationSettings');
+        localStorage.removeItem('darkMode');
+        
+        console.log('🔄 รีเซ็ตข้อมูลทั้งหมดสำเร็จ');
+        
+        // รีโหลดหน้าเว็บ
+        alert('✅ รีเซ็ตข้อมูลสำเร็จ\n\nระบบจะรีโหลดหน้าเว็บ');
+        location.reload();
+    }
+}
+
+// อัพเดทสถานะการเชื่อมต่อ
+function updateConnectionStatus() {
+    const statusEl = document.getElementById('connection-status');
+    const modeEl = document.getElementById('mode-status');
+    
+    if (statusEl) {
+        if (demoMode) {
+            statusEl.textContent = 'Demo Mode';
+            statusEl.style.color = '#FFA000';
+        } else {
+            statusEl.textContent = 'เชื่อมต่อแล้ว';
+            statusEl.style.color = '#2E7D32';
+        }
+    }
+    
+    if (modeEl) {
+        modeEl.textContent = demoMode ? 'ทดสอบ' : 'ปกติ';
+        modeEl.style.color = demoMode ? '#FFA000' : '#2E7D32';
+    }
+}
+
 // Custom Confirm Dialog
         function showConfirm(title, message, options = {}) {
             return new Promise((resolve) => {
@@ -1609,29 +1954,37 @@ function loadDarkMode() {
             });
         }
         // แสดงการแจ้งเตือน
-        function showAlert(type, pondNum, message) {
-            const container = document.getElementById('alert-container');
-            const alertId = `alert-${type}-${pondNum}-${Date.now()}`;
-            
-            const alertHtml = `
-                <div class="alert-banner ${type}" id="${alertId}">
-                    <div class="alert-icon">${type === 'harvest' ? '🌱' : '🌾'}</div>
-                    <div class="alert-content">
-                        <div class="alert-title">${type === 'harvest' ? 'ถึงเวลาเก็บเกี่ยว!' : 'ถึงเวลาใส่ปุ๋ย!'}</div>
-                        <div class="alert-text">${message}</div>
-                    </div>
-                    <button class="alert-close" onclick="closeAlert('${alertId}', '${type}', ${pondNum})">×</button>
-                </div>
-            `;
-            
-            container.insertAdjacentHTML('beforeend', alertHtml);
-            
-            // เพิ่มในรายการแจ้งเตือน
-            if (type === 'fertilizer') {
-                notifications.fertilizer.push({ pondNum, time: Date.now() });
-                updateFertilizerBadge();
-            }
-        }
+// แสดงการแจ้งเตือน
+function showAlert(type, pondNum, message) {
+    // เช็คว่าควรแจ้งเตือนหรือไม่
+    if (type === 'harvest' && !notificationSettings.harvest) return;
+    if (type === 'fertilizer' && !notificationSettings.fertilizer) return;
+    
+    const container = document.getElementById('alert-container');
+    const alertId = `alert-${type}-${pondNum}-${Date.now()}`;
+    
+    const alertHtml = `
+        <div class="alert-banner ${type}" id="${alertId}">
+            <div class="alert-icon">${type === 'harvest' ? '🌱' : '🌾'}</div>
+            <div class="alert-content">
+                <div class="alert-title">${type === 'harvest' ? 'ถึงเวลาเก็บเกี่ยว!' : 'ถึงเวลาใส่ปุ๋ย!'}</div>
+                <div class="alert-text">${message}</div>
+            </div>
+            <button class="alert-close" onclick="closeAlert('${alertId}', '${type}', ${pondNum})">×</button>
+        </div>
+    `;
+    
+    container.insertAdjacentHTML('beforeend', alertHtml);
+    
+    // เล่นเสียงแจ้งเตือน
+    playNotificationSound();
+    
+    // เพิ่มในรายการแจ้งเตือน
+    if (type === 'fertilizer') {
+        notifications.fertilizer.push({ pondNum, time: Date.now() });
+        updateFertilizerBadge();
+    }
+}
 
         function closeAlert(alertId, type, pondNum) {
             const alert = document.getElementById(alertId);
@@ -2180,6 +2533,8 @@ function displayData(data) {
         statusText.innerHTML = `<span style="color: #FDD835;">⚠️ โหมดทดสอบ</span> &bull; <span id="current-time"></span>`;
         updateTime();
     }
+	updateConnectionStatus();
+
 }
 // ✅ วางฟังก์ชันใหม่ตรงนี้
 function updateLEDStatus(data) {
@@ -2461,6 +2816,7 @@ loadGrowingData();
 loadHistory();
 loadFertilizerHistory();
 updateTime();
+loadNotificationSettings();
 
 // ตั้งค่า intervals
 setInterval(updateTime, 1000);
