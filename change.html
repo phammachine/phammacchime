@@ -1065,37 +1065,33 @@ body {
                     <span>การควบคุม</span>
                 </div>
                 
-<div class="control-item">
-    <div class="switch-item light">
-        <div class="switch-left">
-            <div class="led-circle off" id="light-led-menu"></div>
-            <div class="switch-icon">💡</div>
-            <div class="switch-info">
-                <div class="switch-label">ไฟ</div>
-                <div class="switch-pin"><span id="light-mode-menu">Auto</span></div>
-            </div>
-        </div>
-        <div class="toggle light" id="light-toggle-menu" onclick="toggleLightMenu()" style="cursor: pointer;">
-            <div class="toggle-thumb"></div>
-        </div>
-    </div>
-</div>
+                <div class="switch-item light" style="margin-bottom: 12px;">
+                    <div class="switch-left">
+                        <div class="led-circle off" id="light-led-menu"></div>
+                        <div class="switch-icon">💡</div>
+                        <div class="switch-info">
+                            <div class="switch-label">ไฟ</div>
+                            <div class="switch-pin"><span id="light-mode-menu">Auto</span></div>
+                        </div>
+                    </div>
+                    <div class="toggle light" id="light-toggle-menu" onclick="toggleLightMenu()" style="cursor: pointer;">
+                        <div class="toggle-thumb"></div>
+                    </div>
+                </div>
 
-<div class="control-item">
-    <div class="switch-item oxygen">
-        <div class="switch-left">
-            <div class="led-circle" id="oxygen-led-menu"></div>
-            <div class="switch-icon">💨</div>
-            <div class="switch-info">
-                <div class="switch-label">ออกซิเจน</div>
-                <div class="switch-pin"><span id="oxygen-mode-menu">Auto</span></div>
-            </div>
-        </div>
-        <div class="toggle active oxygen" id="oxygen-toggle-menu" onclick="toggleOxygenMenu()" style="cursor: pointer;">
-            <div class="toggle-thumb"></div>
-        </div>
-    </div>
-</div>
+                <div class="switch-item oxygen" style="margin-bottom: 12px;">
+                    <div class="switch-left">
+                        <div class="led-circle" id="oxygen-led-menu"></div>
+                        <div class="switch-icon">💨</div>
+                        <div class="switch-info">
+                            <div class="switch-label">ออกซิเจน</div>
+                            <div class="switch-pin"><span id="oxygen-mode-menu">Auto</span></div>
+                        </div>
+                    </div>
+                    <div class="toggle active oxygen" id="oxygen-toggle-menu" onclick="toggleOxygenMenu()" style="cursor: pointer;">
+                        <div class="toggle-thumb"></div>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
@@ -1555,8 +1551,10 @@ async function clearFertilizerHistory() {
 
 
 // อัพเดท UI การปลูก
+// อัพเดท UI การปลูก
 function updateGrowingUI(pondNum, isGrowing) {
-	console.log(`🌱 Update UI Pond ${pondNum}:`, isGrowing ? 'GROWING' : 'STOPPED');  // ← เพิ่ม
+    console.log(`🌱 Update UI Pond ${pondNum}:`, isGrowing ? 'GROWING' : 'STOPPED');
+    
     const btn = document.getElementById(`grow-btn-${pondNum}`);
     const statusText = document.getElementById(`grow-status-${pondNum}`);
     const timerItem = document.getElementById(`timer-item-${pondNum}`);
@@ -1575,10 +1573,11 @@ function updateGrowingUI(pondNum, isGrowing) {
         document.getElementById(`timer-value-${pondNum}`).textContent = '00:00:00';
     }
     
-    // ✅ ย้ายบรรทัดนี้เข้ามาใน function
     updatePumpButtonStatus(pondNum, waterStatus[pondNum]);
 }
 
+// คำนวณและอัพเดทเวลา
+// คำนวณและอัพเดทเวลา
 // คำนวณและอัพเดทเวลา
 function updateGrowingTimers() {
     for (let i = 1; i <= 3; i++) {
@@ -1998,8 +1997,10 @@ function updateWaterStatus(pondNum, value) {
 function updatePumpButtonStatus(pondNum, hasWater) {
     const pumpItem = document.getElementById(`pump${pondNum}-toggle`).closest('.switch-item');
     
-    // ✅ ปุ่มเก็บเกี่ยวทำงานได้เมื่อ: มีน้ำเท่านั้น (ไม่ต้องเช็คว่ากำลังปลูก)
-    if (hasWater) {
+    // ✅ ปุ่มเก็บเกี่ยวทำงานได้เมื่อ: มีน้ำ + กำลังปลูกอยู่
+    const isGrowing = growingStatus[pondNum] && growingStatus[pondNum].active;
+    
+    if (hasWater && isGrowing) {
         pumpItem.classList.remove('disabled');
     } else {
         pumpItem.classList.add('disabled');
@@ -2009,7 +2010,7 @@ function updatePumpButtonStatus(pondNum, hasWater) {
             toggle.classList.remove('active');
             const mode = document.getElementById(`pump${pondNum}-mode`);
             mode.textContent = 'Auto';
-            sendToBlynk(getPumpPin(pondNum), 0);  // ✅ เพิ่มบรรทัดนี้
+            sendToBlynk(getPumpPin(pondNum), 0);
         }
     }
 }
@@ -2038,15 +2039,15 @@ function getPumpPin(pondNum) {
             }
         }
 
-        function toggleLight() {
-            if (emergencyStop) return;
-            
-            const toggle = document.getElementById('light-toggle');
-            const isActive = toggle.classList.contains('active');
-            
-            syncControls('main', !isActive, 'light');
-            sendToBlynk('V24', !isActive ? 1 : 0);
-        }
+function toggleLight() {
+    if (emergencyStop) return;
+    
+    const toggle = document.getElementById('light-toggle');  // ✅ ถูกต้อง
+    const isActive = toggle.classList.contains('active');
+    
+    syncControls('main', !isActive, 'light');
+    sendToBlynk('V24', !isActive ? 1 : 0);
+}
 
         function toggleOxygen() {
             if (emergencyStop) return;
@@ -2065,32 +2066,28 @@ async function togglePump(pumpNum) {
     const isActive = toggle.classList.contains('active');
     const pumpItem = toggle.closest('.switch-item');
     
-    // ✅ เพิ่มเงื่อนไข: ไม่ให้เก็บถ้ายังไม่ได้เริ่มปลูก
-    if (!isActive && !growingStatus[pumpNum].active) {
-        alert(`❌ ไม่สามารถเก็บเกี่ยวได้\n\nต้องเริ่มปลูกในกระบะที่ ${pumpNum} ก่อน`);
-        return;
-    }
-    
-    // ตรวจสอบว่าปุ่มถูก disabled (ไม่มีน้ำ)
+    // ✅ รวมการเช็คเงื่อนไขไว้ด้วยกัน
     if (pumpItem.classList.contains('disabled') && !isActive) {
-        alert(`❌ ไม่สามารถเก็บเกี่ยวได้\n\nกระบะที่ ${pumpNum} ไม่มีน้ำ`);
+        if (!growingStatus[pumpNum].active) {
+            alert(`❌ ไม่สามารถเก็บเกี่ยวได้\n\nต้องเริ่มปลูกในกระบะที่ ${pumpNum} ก่อน`);
+        } else if (!waterStatus[pumpNum]) {
+            alert(`❌ ไม่สามารถเก็บเกี่ยวได้\n\nกระบะที่ ${pumpNum} ไม่มีน้ำ`);
+        }
         return;
     }
     
     const pins = { 1: 'V12', 2: 'V11', 3: 'V10' };
     
     if (!isActive) {
-        // === กดครั้งที่ 1: เปิดปั๊ม ===
+        // === เปิดปั๊ม ===
         console.log(`💧 Pump ${pumpNum}: เปิดปั๊มดูดน้ำ`);
-        
         syncControls('main', true, `pump${pumpNum}`);
         await sendToBlynk(pins[pumpNum], 1);
         
     } else {
-        // === กดครั้งที่ 2: ปิดปั๊ม + สิ้นสุดการปลูก ===
+        // === ปิดปั๊ม + สิ้นสุดการปลูก ===
         console.log(`💧 Pump ${pumpNum}: ปิดปั๊ม + สิ้นสุดการปลูก`);
         
-        // ✅ เพิ่มการแสดง Confirmation Dialog เมื่อเก็บเกี่ยวสำเร็จ
         const confirmed = await showConfirm(
             '✅ เก็บเกี่ยวสำเร็จ',
             `กระบะที่ ${pumpNum} เก็บเกี่ยวสำเร็จแล้ว!\n\nข้อมูลการปลูกจะถูกบันทึกในประวัติ`,
@@ -2102,19 +2099,23 @@ async function togglePump(pumpNum) {
             const success = await sendToBlynk(pins[pumpNum], 0);
             
             if (success) {
-                // บันทึกประวัติการเก็บ
                 addHarvestRecord(pumpNum);
                 
-                // รีเซ็ตการปลูก
+                // ✅ สิ้นสุดการปลูก + หยุดเซนเซอร์
                 if (growingStatus[pumpNum].active) {
                     growingStatus[pumpNum].active = false;
                     growingStatus[pumpNum].startTime = null;
                     growingStatus[pumpNum].minutes = 0;
                     growingStatus[pumpNum].harvestTime = Date.now();
+                    
                     updateGrowingUI(pumpNum, false);
                     saveGrowingData();
                     
-                    // ลบการแจ้งเตือนเก็บเกี่ยวของกระบะนี้
+                    // ✅ ส่งสัญญาณหยุดเซนเซอร์ไปยัง ESP32
+                    const growPins = { 1: 'V20', 2: 'V21', 3: 'V22' };
+                    await sendToBlynk(growPins[pumpNum], 0);
+                    console.log(`🛑 หยุดเซนเซอร์กระบะที่ ${pumpNum} (เก็บเกี่ยวสำเร็จ)`);
+                    
                     notifications.harvest = notifications.harvest.filter(n => n !== pumpNum);
                 }
                 
@@ -2127,11 +2128,12 @@ async function togglePump(pumpNum) {
                         oxygenToggle.classList.remove('active');
                         oxygenMode.textContent = 'ปิด';
                         sendToBlynk('V25', 1);
+                        console.log('💨 ออกซิเจน: ปิดอัตโนมัติ');
                     }
                 }
             }
         } else {
-            // ถ้าผู้ใช้กด "ยกเลิก" ให้ปิด toggle กลับเป็นเปิด
+            // ถ้าผู้ใช้กด "ยกเลิก" ให้คงสถานะเปิดไว้
             toggle.classList.add('active');
             const mode = document.getElementById(`pump${pumpNum}-mode`);
             mode.textContent = 'บังคับเปิด';
@@ -2140,82 +2142,92 @@ async function togglePump(pumpNum) {
 }
 
 // ฟังก์ชันเริ่ม/หยุดการปลูก
-        async function toggleGrowing(pondNum) {
-            if (emergencyStop) return;
-            
-            const isCurrentlyGrowing = growingStatus[pondNum].active;
-            
-if (!isCurrentlyGrowing) {
-    // เริ่มปลูก
-    const confirmed = await showConfirm(
-        '🌱 เริ่มการปลูก',
-        `ต้องการเริ่มปลูกในกระบะที่ ${pondNum} ใช่หรือไม่?`,
-        { icon: '🌱', type: 'normal' }
-    );
+async function toggleGrowing(pondNum) {
+    if (emergencyStop) return;
     
-    if (confirmed) {
-                    growingStatus[pondNum].active = true;
-                    growingStatus[pondNum].startTime = Date.now();
-                    growingStatus[pondNum].minutes = 0;
-                    
-                    updateGrowingUI(pondNum, true);
-                    saveGrowingData();
-                    
-// ✅ เปิดออกซิเจนทันทีเมื่อเริ่มปลูก
-const oxygenToggle = document.getElementById('oxygen-toggle-menu');
-const oxygenMode = document.getElementById('oxygen-mode-menu');
-if (oxygenToggle && oxygenMode) {
-    oxygenToggle.classList.add('active');
-    oxygenMode.textContent = 'Auto';
-    sendToBlynk('V25', 0);
-}
-                    // ส่งสัญญาณไปยัง Blynk
-                    const growPins = { 1: 'V20', 2: 'V21', 3: 'V22' };
-                    await sendToBlynk(growPins[pondNum], 1);
-                }
-} else {
-    // หยุดการปลูก
-    const confirmed = await showConfirm(
-        '⚠️ หยุดการปลูก',
-        `ต้องการหยุดการปลูกในกระบะที่ ${pondNum} ใช่หรือไม่?\n\nข้อมูลเวลาการปลูกจะถูกรีเซ็ต`,
-        { icon: '⚠️', type: 'warning', confirmType: 'danger' }
-    );
+    const isCurrentlyGrowing = growingStatus[pondNum].active;
     
-    if (confirmed) {
-                    growingStatus[pondNum].active = false;
-                    growingStatus[pondNum].startTime = null;
-                    growingStatus[pondNum].minutes = 0;
-                    
-                    updateGrowingUI(pondNum, false);
-                    saveGrowingData();
-                    
-// ถ้าไม่มีกระบะไหนปลูกอยู่เลย ปิดออกซิเจน
-                    const anyPondActive = Object.values(growingStatus).some(s => s.active);
-                    if (!anyPondActive) {
-                        const oxygenToggle = document.getElementById('oxygen-toggle-menu');
-                        const oxygenMode = document.getElementById('oxygen-mode-menu');
-                        if (oxygenToggle && oxygenMode) {
-                            oxygenToggle.classList.remove('active');
-                            oxygenMode.textContent = 'ปิด';
-                            sendToBlynk('V25', 1);
-                        }
-                    }
-                    
-                    // ส่งสัญญาณไปยัง Blynk
-                    const growPins = { 1: 'V20', 2: 'V21', 3: 'V22' };
-                    await sendToBlynk(growPins[pondNum], 0);
-                    
-                    // ลบการแจ้งเตือนเก็บเกี่ยวของกระบะนี้
-                    notifications.harvest = notifications.harvest.filter(n => n !== pondNum);
+    if (!isCurrentlyGrowing) {
+        // === เริ่มปลูก ===
+        const confirmed = await showConfirm(
+            '🌱 เริ่มการปลูก',
+            `ต้องการเริ่มปลูกในกระบะที่ ${pondNum} ใช่หรือไม่?\n\nระบบจะเปิดใช้งาน: เซนเซอร์น้ำ, ไฟ, ออกซิเจน`,
+            { icon: '🌱', type: 'normal' }
+        );
+        
+        if (confirmed) {
+            // เริ่มการปลูก
+            growingStatus[pondNum].active = true;
+            growingStatus[pondNum].startTime = Date.now();
+            growingStatus[pondNum].minutes = 0;
+            
+            updateGrowingUI(pondNum, true);
+            saveGrowingData();
+            
+            // 🔥 เปิดออกซิเจนทันที (ถ้ายังไม่เปิด)
+            const oxygenToggle = document.getElementById('oxygen-toggle-menu');
+            const oxygenMode = document.getElementById('oxygen-mode-menu');
+            if (oxygenToggle && oxygenMode && !oxygenToggle.classList.contains('active')) {
+                oxygenToggle.classList.add('active');
+                oxygenMode.textContent = 'Auto';
+                sendToBlynk('V25', 0);
+                console.log('💨 ออกซิเจน: เปิดอัตโนมัติ');
+            }
+            
+            // 🔥 ส่งสัญญาณเริ่มปลูกไปยัง ESP32
+            const growPins = { 1: 'V20', 2: 'V21', 3: 'V22' };
+            await sendToBlynk(growPins[pondNum], 1);
+            console.log(`✅ เริ่มปลูกกระบะที่ ${pondNum} - เซนเซอร์และไฟเริ่มทำงาน`);
+        }
+    } else {
+        // === หยุดการปลูก ===
+        const confirmed = await showConfirm(
+            '⚠️ หยุดการปลูก',
+            `ต้องการหยุดการปลูกในกระบะที่ ${pondNum} ใช่หรือไม่?\n\nเซนเซอร์และไฟจะหยุดทำงาน`,
+            { icon: '⚠️', type: 'warning', confirmType: 'danger' }
+        );
+        
+        if (confirmed) {
+            // หยุดการปลูก
+            growingStatus[pondNum].active = false;
+            growingStatus[pondNum].startTime = null;
+            growingStatus[pondNum].minutes = 0;
+            
+            updateGrowingUI(pondNum, false);
+            saveGrowingData();
+            
+            // 🔥 ส่งสัญญาณหยุดปลูกไปยัง ESP32
+            const growPins = { 1: 'V20', 2: 'V21', 3: 'V22' };
+            await sendToBlynk(growPins[pondNum], 0);
+            console.log(`🛑 หยุดปลูกกระบะที่ ${pondNum} - เซนเซอร์และไฟหยุดทำงาน`);
+            
+            // 🔥 ถ้าไม่มีกระบะไหนปลูกอยู่เลย → ปิดออกซิเจน
+            const anyPondActive = Object.values(growingStatus).some(s => s.active);
+            if (!anyPondActive) {
+                const oxygenToggle = document.getElementById('oxygen-toggle-menu');
+                const oxygenMode = document.getElementById('oxygen-mode-menu');
+                if (oxygenToggle && oxygenMode) {
+                    oxygenToggle.classList.remove('active');
+                    oxygenMode.textContent = 'ปิด';
+                    sendToBlynk('V25', 1);
+                    console.log('💨 ออกซิเจน: ปิดอัตโนมัติ (ไม่มีกระบะปลูก)');
                 }
             }
+            
+            // ลบการแจ้งเตือนเก็บเกี่ยว
+            notifications.harvest = notifications.harvest.filter(n => n !== pondNum);
         }
-loadGrowingData();  // ← ย้ายมาก่อน
+    }
+}
+// โหลดข้อมูลก่อนเริ่มระบบ
+loadGrowingData();
 loadHistory();
 loadFertilizerHistory();
 updateTime();
-        setInterval(updateTime, 1000);
-        setInterval(updateGrowingTimers, 1000); // อัพเดททุก 1 วินาที
+
+// ตั้งค่า intervals
+setInterval(updateTime, 1000);
+setInterval(updateGrowingTimers, 1000);
         setInterval(checkNotifications, 60000); // ตรวจสอบการแจ้งเตือนทุก 1 นาที
         checkNotifications(); // ตรวจสอบทันทีเมื่อเริ่มต้น
         
