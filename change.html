@@ -47,13 +47,13 @@ body {
             box-shadow: 0 6px 16px rgba(0, 0, 0, 0.2);
         }
 
-        .hamburger-line {
-            width: 24px;
-            height: 3px;
-            background: #667eea;
-            border-radius: 2px;
-            transition: all 0.3s;
-        }
+.hamburger-line {
+    width: 24px;
+    height: 3px;
+    background: #2E7D32;
+    border-radius: 2px;
+    transition: all 0.3s;
+}
 
         .hamburger-btn.active .hamburger-line:nth-child(1) {
             transform: translateY(8px) rotate(45deg);
@@ -133,13 +133,13 @@ body {
         }
 
         .sidebar-menu-item:hover {
-            background: linear-gradient(135deg, #e3f2fd 0%, #bbdefb 100%);
-            border-color: #2196F3;
-            transform: translateX(4px);
-        }
+			background: linear-gradient(135deg, #C8E6C9 0%, #A5D6A7 100%);
+			border-color: #4CAF50;
+			transform: translateX(4px);
+		}
 
         .sidebar-menu-item.active {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: linear-gradient(135deg, #2E7D32 0%, #1B5E20 100%);
             color: white;
         }
 
@@ -906,18 +906,18 @@ body {
             }
         }
 
-        .confirm-icon {
-            width: 64px;
-            height: 64px;
-            margin: 0 auto 20px;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 32px;
-            box-shadow: 0 8px 24px rgba(102, 126, 234, 0.4);
-        }
+.confirm-icon {
+    width: 64px;
+    height: 64px;
+    margin: 0 auto 20px;
+    background: linear-gradient(135deg, #2E7D32 0%, #1B5E20 100%);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 32px;
+    box-shadow: 0 8px 24px rgba(46, 125, 50, 0.4);
+}
 
         .confirm-icon.warning {
             background: linear-gradient(135deg, #FFC107 0%, #FFA000 100%);
@@ -976,15 +976,15 @@ body {
             box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
         }
 
-        .confirm-btn.confirm {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-        }
+.confirm-btn.confirm {
+    background: linear-gradient(135deg, #2E7D32 0%, #1B5E20 100%);
+    color: white;
+}
 
-        .confirm-btn.confirm:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 6px 20px rgba(102, 126, 234, 0.4);
-        }
+.confirm-btn.confirm:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(46, 125, 50, 0.4);
+}
 
         .confirm-btn.danger {
             background: linear-gradient(135deg, #FF5252 0%, #F44336 100%);
@@ -996,8 +996,185 @@ body {
             box-shadow: 0 6px 20px rgba(244, 67, 54, 0.4);
         }
 
-        .confirm-btn:active {
+.confirm-btn:active {
             transform: translateY(0);
+        }
+
+        /* Dark Mode Styles */
+        body.dark-mode {
+            background: url('https://i.ibb.co/Hf7VjRbp/desktop-wallpaper-milky-green-blurred-backgrounds-blur.jpg') center/cover fixed;
+            filter: brightness(0.7) contrast(1.1);
+        }
+
+        body.dark-mode::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.6);
+            z-index: -1;
+            pointer-events: none;
+        }
+
+        body.dark-mode .sidebar {
+            background: rgba(30, 30, 30, 0.98);
+            border-right: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        body.dark-mode .hamburger-btn {
+            background: rgba(40, 40, 40, 0.95);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        body.dark-mode .hamburger-line {
+            background: #81C784;
+        }
+
+        body.dark-mode .sidebar-menu-item {
+            background: linear-gradient(135deg, #2a2a2a 0%, #1a1a1a 100%);
+            color: #e0e0e0;
+        }
+
+        body.dark-mode .sidebar-menu-item:hover {
+            background: linear-gradient(135deg, #2E7D32 0%, #1B5E20 100%);
+            border-color: #4CAF50;
+        }
+
+        body.dark-mode .sidebar-menu-item.active {
+            background: linear-gradient(135deg, #2E7D32 0%, #1B5E20 100%);
+            color: white;
+        }
+
+        body.dark-mode .sidebar-header {
+            color: #e0e0e0;
+            border-bottom: 3px solid #333;
+        }
+
+        body.dark-mode .card,
+        body.dark-mode .timer-card {
+            background: rgba(30, 30, 30, 0.85);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        body.dark-mode .card-header {
+            color: #e0e0e0;
+            border-bottom: 3px solid #333;
+        }
+
+        body.dark-mode .switch-item {
+            background: linear-gradient(135deg, #2a2a2a 0%, #1a1a1a 100%);
+            border-color: #444;
+        }
+
+        body.dark-mode .switch-label {
+            color: #e0e0e0;
+        }
+
+        body.dark-mode .header {
+            background: linear-gradient(135deg, rgba(30, 30, 30, 0.9) 0%, rgba(46, 125, 50, 0.7) 100%);
+        }
+
+        body.dark-mode .no-history {
+            color: #666;
+        }
+		body.dark-mode .no-history {
+            color: #666;
+        }
+
+        body.dark-mode .temp-item {
+            background: linear-gradient(135deg, #2E7D32 0%, #1B5E20 100%);
+        }
+
+        body.dark-mode .led-item {
+            background: linear-gradient(135deg, #2a2a2a 0%, #1a1a1a 100%);
+            border-color: #444;
+        }
+
+        body.dark-mode .led-item:hover {
+            border-color: #4CAF50;
+        }
+
+        body.dark-mode .led-label {
+            color: #e0e0e0;
+        }
+
+        body.dark-mode .info-box {
+            background: linear-gradient(135deg, #3a2a1a 0%, #2a1a0a 100%);
+            border-color: #8B4513;
+        }
+
+        body.dark-mode .info-text {
+            color: #FFB74D;
+        }
+
+        body.dark-mode .history-item {
+            background: linear-gradient(135deg, #1B5E20 0%, #2E7D32 100%);
+        }
+
+        body.dark-mode .history-pond,
+        body.dark-mode .history-date,
+        body.dark-mode .history-time {
+            color: #C8E6C9;
+        }
+
+        body.dark-mode .fertilizer-item {
+            background: linear-gradient(135deg, #3a2a1a 0%, #5a3a2a 100%);
+        }
+
+        body.dark-mode .fertilizer-pond,
+        body.dark-mode .fertilizer-date,
+        body.dark-mode .fertilizer-time {
+            color: #FFE0B2;
+        }
+
+        body.dark-mode .timer-item {
+            background: linear-gradient(135deg, #1B5E20 0%, #2E7D32 100%);
+            border-color: #4CAF50;
+        }
+
+        body.dark-mode .timer-item.inactive {
+            background: linear-gradient(135deg, #2a2a2a 0%, #1a1a1a 100%);
+            border-color: #555;
+        }
+
+        body.dark-mode .timer-label,
+        body.dark-mode .timer-value {
+            color: #C8E6C9;
+        }
+
+        body.dark-mode .timer-item.inactive .timer-label,
+        body.dark-mode .timer-item.inactive .timer-value {
+            color: #666;
+        }
+
+        body.dark-mode .grow-btn {
+            background: linear-gradient(135deg, #2E7D32 0%, #1B5E20 100%);
+        }
+
+        body.dark-mode .grow-btn.growing {
+            background: linear-gradient(135deg, #F57F17 0%, #E65100 100%);
+        }
+
+        body.dark-mode .alert-banner {
+            background: linear-gradient(135deg, #3a2a1a 0%, #5a3a2a 100%);
+            border-color: #8B4513;
+        }
+
+        body.dark-mode .alert-banner.harvest {
+            background: linear-gradient(135deg, #1B5E20 0%, #2E7D32 100%);
+            border-color: #4CAF50;
+        }
+
+        body.dark-mode .alert-title,
+        body.dark-mode .alert-text {
+            color: #FFE0B2;
+        }
+
+        body.dark-mode .alert-banner.harvest .alert-title,
+        body.dark-mode .alert-banner.harvest .alert-text {
+            color: #C8E6C9;
         }
     </style>
 </head>
@@ -1022,9 +1199,13 @@ body {
                     <span>ประวัติการใส่ปุ๋ย</span>
                     <div class="notification-badge" id="fertilizer-badge" style="display: none;">0</div>
                 </li>
-                <li class="sidebar-menu-item" onclick="showSection('control')">
+					<li class="sidebar-menu-item" onclick="showSection('control')">
                     <span>🎮</span>
                     <span>การควบคุม</span>
+                </li>
+                <li class="sidebar-menu-item" onclick="showSection('settings')">
+                    <span>⚙️</span>
+                    <span>ตั้งค่า</span>
                 </li>
             </ul>
 
@@ -1058,7 +1239,7 @@ body {
                 </button>
             </div>
 
-            <!-- การควบคุม -->
+<!-- การควบคุม -->
             <div class="sidebar-section" id="section-control">
                 <div class="sidebar-header">
                     <span>🎮</span>
@@ -1088,8 +1269,29 @@ body {
                             <div class="switch-pin"><span id="oxygen-mode-menu">Auto</span></div>
                         </div>
                     </div>
-                    <div class="toggle active oxygen" id="oxygen-toggle-menu" onclick="toggleOxygenMenu()" style="cursor: pointer;">
+                    <div class="toggle oxygen" id="oxygen-toggle-menu" onclick="toggleOxygenMenu()" style="cursor: pointer;">
                         <div class="toggle-thumb"></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ตั้งค่า -->
+            <div class="sidebar-section" id="section-settings">
+                <div class="sidebar-header">
+                    <span>⚙️</span>
+                    <span>ตั้งค่า</span>
+                </div>
+                
+                <div class="switch-item" style="margin-bottom: 12px; background: linear-gradient(135deg, #E3F2FD 0%, #BBDEFB 100%); border-color: #64B5F6;">
+                    <div class="switch-left">
+                        <div class="switch-icon">🌙</div>
+                        <div class="switch-info">
+                            <div class="switch-label">โหมดมืด</div>
+                            <div class="switch-pin">Dark Mode</div>
+                        </div>
+                    </div>
+                    <div class="toggle" id="darkmode-toggle" onclick="toggleDarkMode()" style="cursor: pointer;">
+                        <div class="toggle-thumb">🌙</div>
                     </div>
                 </div>
             </div>
@@ -1295,7 +1497,7 @@ body {
 
 <div class="info-box">
     <div class="info-icon">⚠️</div>
-    <div class="info-text">ขณะเก็บไข่ผำควรอยู่กับเครื่องตลอดเวลา</div>
+    <div class="info-text">ขณะเก็บเกี่ยวไข่ผำควรอยู่กับเครื่องตลอดเวลา</div>
 </div>
         </div>
     </div>
@@ -1314,10 +1516,46 @@ body {
             2: { active: false, startTime: null, minutes: 0, harvestTime: null },
             3: { active: false, startTime: null, minutes: 0, harvestTime: null }
         };
-        let notifications = {
+let notifications = {
             harvest: [],
             fertilizer: []
         };
+        let darkMode = false;
+		// ฟังก์ชันเปิด/ปิดโหมดมืด
+function toggleDarkMode() {
+    darkMode = !darkMode;
+    const body = document.body;
+    const toggle = document.getElementById('darkmode-toggle');
+    const thumb = toggle.querySelector('.toggle-thumb');
+    
+    if (darkMode) {
+        body.classList.add('dark-mode');
+        toggle.classList.add('active');
+        thumb.textContent = '☀️';
+        localStorage.setItem('darkMode', 'enabled');
+        console.log('🌙 โหมดมืด: เปิด');
+    } else {
+        body.classList.remove('dark-mode');
+        toggle.classList.remove('active');
+        thumb.textContent = '🌙';
+        localStorage.setItem('darkMode', 'disabled');
+        console.log('☀️ โหมดสว่าง: เปิด');
+    }
+}
+// โหลดการตั้งค่าโหมดมืดจาก localStorage
+function loadDarkMode() {
+    const savedMode = localStorage.getItem('darkMode');
+    if (savedMode === 'enabled') {
+        darkMode = true;
+        document.body.classList.add('dark-mode');
+        const toggle = document.getElementById('darkmode-toggle');
+        if (toggle) {
+            toggle.classList.add('active');
+            const thumb = toggle.querySelector('.toggle-thumb');
+            if (thumb) thumb.textContent = '☀️';
+        }
+    }
+}
 // Custom Confirm Dialog
         function showConfirm(title, message, options = {}) {
             return new Promise((resolve) => {
@@ -1681,20 +1919,22 @@ function toggleOxygenMenu() {
     
     const toggle = document.getElementById('oxygen-toggle-menu');
     const menuMode = document.getElementById('oxygen-mode-menu');
+    const isCurrentlyActive = toggle.classList.contains('active');
     
     // สลับสถานะ
     toggle.classList.toggle('active');
+    const newState = !isCurrentlyActive;
     
-    // อัพเดทข้อความ
-    if (toggle.classList.contains('active')) {
-        menuMode.textContent = 'Auto';
-        sendToBlynk('V25', 0);  // เปิดออกซิเจน
+    // อัพเดทข้อความและค่า
+    if (newState) {
+        menuMode.textContent = 'Manual';
+        sendToBlynk('V25', 1);  // 1 = เปิด (Manual ON)
     } else {
-        menuMode.textContent = 'ปิด';
-        sendToBlynk('V25', 1);  // ปิดออกซิเจน
+        menuMode.textContent = 'Auto';
+        sendToBlynk('V25', 0);  // 0 = ปิด (Auto)
     }
     
-    console.log('💨 ออกซิเจน:', toggle.classList.contains('active') ? 'เปิด' : 'ปิด');
+    console.log('💨 ออกซิเจน:', newState ? 'Manual ON' : 'Auto');
 }
 
         async function togglePumpMenu(pumpNum) {
@@ -1905,19 +2145,19 @@ function syncInitialState(data) {
         lightMode.textContent = lightManual ? 'Manual' : 'Auto';
     }
     
-    // Sync Oxygen (เปิดถ้ามีกระบะปลูก)
-    const anyGrowing = Object.values(growingStatus).some(s => s.active);
+    // ✅ Sync Oxygen (ตรวจสอบว่าเปิดหรือปิด)
+    const oxygenOn = data.V25 == 1;  // V25 = 1 คือเปิด
     const oxygenToggle = document.getElementById('oxygen-toggle-menu');
     const oxygenMode = document.getElementById('oxygen-mode-menu');
     
     if (oxygenToggle && oxygenMode) {
-        oxygenToggle.classList.toggle('active', anyGrowing);
-        oxygenMode.textContent = anyGrowing ? 'Auto' : 'ปิด';
+        oxygenToggle.classList.toggle('active', oxygenOn);
+        oxygenMode.textContent = oxygenOn ? 'Manual' : 'Auto';
     }
     
     console.log('✅ Synced initial state:', {
         lightManual,
-        anyGrowing,
+        oxygenOn,
         growingStatus
     });
 }
@@ -2167,12 +2407,13 @@ async function toggleGrowing(pondNum) {
             // 🔥 เปิดออกซิเจนทันที (ถ้ายังไม่เปิด)
             const oxygenToggle = document.getElementById('oxygen-toggle-menu');
             const oxygenMode = document.getElementById('oxygen-mode-menu');
-            if (oxygenToggle && oxygenMode && !oxygenToggle.classList.contains('active')) {
-                oxygenToggle.classList.add('active');
-                oxygenMode.textContent = 'Auto';
-                sendToBlynk('V25', 0);
-                console.log('💨 ออกซิเจน: เปิดอัตโนมัติ');
-            }
+            // เมื่อเริ่มปลูกกระบะ
+if (oxygenToggle && oxygenMode && !oxygenToggle.classList.contains('active')) {
+    oxygenToggle.classList.add('active');
+    oxygenMode.textContent = 'Manual';  // ✅ แสดง Manual
+    sendToBlynk('V25', 1);  // ✅ ส่ง 1 = เปิด
+    console.log('💨 ออกซิเจน: เปิดอัตโนมัติ (Manual ON)');
+}
             
             // 🔥 ส่งสัญญาณเริ่มปลูกไปยัง ESP32
             const growPins = { 1: 'V20', 2: 'V21', 3: 'V22' };
@@ -2204,15 +2445,16 @@ async function toggleGrowing(pondNum) {
             // 🔥 ถ้าไม่มีกระบะไหนปลูกอยู่เลย → ปิดออกซิเจน
             const anyPondActive = Object.values(growingStatus).some(s => s.active);
             if (!anyPondActive) {
-                const oxygenToggle = document.getElementById('oxygen-toggle-menu');
-                const oxygenMode = document.getElementById('oxygen-mode-menu');
-                if (oxygenToggle && oxygenMode) {
-                    oxygenToggle.classList.remove('active');
-                    oxygenMode.textContent = 'ปิด';
-                    sendToBlynk('V25', 1);
-                    console.log('💨 ออกซิเจน: ปิดอัตโนมัติ (ไม่มีกระบะปลูก)');
-                }
-            }
+				const oxygenToggle = document.getElementById('oxygen-toggle-menu');
+				const oxygenMode = document.getElementById('oxygen-mode-menu');
+				if (oxygenToggle && oxygenMode) {
+					oxygenToggle.classList.remove('active');
+					oxygenMode.textContent = 'Auto';  // ✅ แสดง Auto
+					sendToBlynk('V25', 0);  // ✅ ส่ง 0 = ปิด
+					console.log('💨 ออกซิเจน: ปิดอัตโนมัติ (ไม่มีกระบะปลูก)');
+				}
+			}
+
             
             // ลบการแจ้งเตือนเก็บเกี่ยว
             notifications.harvest = notifications.harvest.filter(n => n !== pondNum);
@@ -2220,6 +2462,7 @@ async function toggleGrowing(pondNum) {
     }
 }
 // โหลดข้อมูลก่อนเริ่มระบบ
+loadDarkMode(); 
 loadGrowingData();
 loadHistory();
 loadFertilizerHistory();
