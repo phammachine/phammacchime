@@ -1228,10 +1228,46 @@ body.dark-mode .no-history {
 }
 
 .settings-item.expanded .settings-content {
-    max-height: 500px;
+    max-height: 800px;
     margin-top: 12px;
     padding-top: 12px;
     border-top: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+.confirm-time-btn {
+    width: 100%;
+    padding: 14px 24px;
+    background: linear-gradient(135deg, #4CAF50 0%, #388E3C 100%);
+    color: white;
+    border: none;
+    border-radius: 12px;
+    font-size: 15px;
+    font-weight: 700;
+    cursor: pointer;
+    box-shadow: 0 4px 16px rgba(76, 175, 80, 0.4);
+    transition: all 0.3s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    margin-top: 16px;
+}
+
+.confirm-time-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(76, 175, 80, 0.6);
+}
+
+.confirm-time-btn:active {
+    transform: translateY(0);
+}
+
+body.dark-mode .confirm-time-btn {
+    box-shadow: 0 4px 16px rgba(76, 175, 80, 0.6);
+}
+
+body.dark-mode .confirm-time-btn:hover {
+    box-shadow: 0 6px 20px rgba(76, 175, 80, 0.8);
 }
 
 .settings-option {
@@ -1449,7 +1485,7 @@ body.dark-mode .settings-content {
 					</div>
                 </div>
 
-                <!-- ตั้งค่าระยะเวลา -->
+<!-- ตั้งค่าระยะเวลา -->
 <div class="settings-item" onclick="toggleSettingsItem(this)">
     <div class="settings-item-header">
         <div class="settings-item-left">
@@ -1470,23 +1506,76 @@ body.dark-mode .settings-content {
             </div>
             <div class="settings-option" style="background: white; margin-bottom: 8px;">
                 <span class="settings-option-label">📅 วันที่</span>
-                <input type="number" id="harvest-days" min="0" max="30" value="7" 
+                <select id="harvest-days" 
                        onclick="event.stopPropagation();"
-                       style="width: 60px; padding: 6px 10px; border: 2px solid #4CAF50; border-radius: 8px; text-align: center; font-weight: 600; color: #2E7D32; font-size: 14px;">
-                <span style="color: #2E7D32; font-weight: 600; margin-left: 4px;">วัน</span>
+                       style="padding: 6px 12px; border: 2px solid #4CAF50; border-radius: 8px; font-weight: 600; color: #2E7D32; font-size: 14px; background: white; cursor: pointer;">
+                    <option value="0">0 วัน</option>
+                    <option value="1">1 วัน</option>
+                    <option value="2">2 วัน</option>
+                    <option value="3">3 วัน</option>
+                    <option value="4">4 วัน</option>
+                    <option value="5">5 วัน</option>
+                    <option value="6">6 วัน</option>
+                    <option value="7" selected>7 วัน</option>
+                    <option value="8">8 วัน</option>
+                    <option value="9">9 วัน</option>
+                    <option value="10">10 วัน</option>
+                    <option value="11">11 วัน</option>
+                    <option value="12">12 วัน</option>
+                    <option value="13">13 วัน</option>
+                    <option value="14">14 วัน</option>
+                    <option value="15">15 วัน</option>
+                    <option value="16">16 วัน</option>
+                    <option value="17">17 วัน</option>
+                    <option value="18">18 วัน</option>
+                    <option value="19">19 วัน</option>
+                    <option value="20">20 วัน</option>
+                    <option value="21">21 วัน</option>
+                    <option value="22">22 วัน</option>
+                    <option value="23">23 วัน</option>
+                    <option value="24">24 วัน</option>
+                    <option value="25">25 วัน</option>
+                    <option value="26">26 วัน</option>
+                    <option value="27">27 วัน</option>
+                    <option value="28">28 วัน</option>
+                    <option value="29">29 วัน</option>
+                    <option value="30">30 วัน</option>
+                </select>
             </div>
             <div class="settings-option" style="background: white;">
-                <span class="settings-option-label">🕐 เวลา (24 ชม.)</span>
-                <input type="text" id="harvest-time" value="12:00" 
-                    pattern="[0-2][0-9]:[0-5][0-9]"
-                    placeholder="เช่น 14:30"
-                    maxlength="5"
-                    onclick="event.stopPropagation();"
-                    oninput="formatTime(this)"
-                    style="padding: 6px 10px; border: 2px solid #4CAF50; border-radius: 8px; font-weight: 600; color: #2E7D32; font-size: 14px; width: 100px; text-align: center;">
+                <span class="settings-option-label">🕐 เวลา</span>
+                <select id="harvest-time" 
+                       onclick="event.stopPropagation();"
+                       style="padding: 6px 12px; border: 2px solid #4CAF50; border-radius: 8px; font-weight: 600; color: #2E7D32; font-size: 14px; background: white; cursor: pointer;">
+                    <option value="00:00">00:00</option>
+                    <option value="01:00">01:00</option>
+                    <option value="02:00">02:00</option>
+                    <option value="03:00">03:00</option>
+                    <option value="04:00">04:00</option>
+                    <option value="05:00">05:00</option>
+                    <option value="06:00">06:00</option>
+                    <option value="07:00">07:00</option>
+                    <option value="08:00">08:00</option>
+                    <option value="09:00">09:00</option>
+                    <option value="10:00">10:00</option>
+                    <option value="11:00">11:00</option>
+                    <option value="12:00" selected>12:00</option>
+                    <option value="13:00">13:00</option>
+                    <option value="14:00">14:00</option>
+                    <option value="15:00">15:00</option>
+                    <option value="16:00">16:00</option>
+                    <option value="17:00">17:00</option>
+                    <option value="18:00">18:00</option>
+                    <option value="19:00">19:00</option>
+                    <option value="20:00">20:00</option>
+                    <option value="21:00">21:00</option>
+                    <option value="22:00">22:00</option>
+                    <option value="23:00">23:00</option>
+                </select>
+                <span style="color: #2E7D32; font-weight: 600; margin-left: 4px;">น.</span>
             </div>
             <div style="margin-top: 8px; padding: 8px; background: rgba(255, 255, 255, 0.7); border-radius: 6px; font-size: 11px; color: #2E7D32;">
-                💡 เช่น: วันที่ <strong>7</strong> เวลา <strong>12:00</strong> = เก็บเกี่ยววันที่ 7 เวลา 12:00 น.
+                💡 เช่น: นับจากวันที่ปลูกไปอีก <strong id="harvest-example-days">7</strong> วัน เวลา <strong id="harvest-example-time">12:00</strong> น.
             </div>
         </div>
 
@@ -1498,37 +1587,86 @@ body.dark-mode .settings-content {
             </div>
             <div class="settings-option" style="background: white; margin-bottom: 8px;">
                 <span class="settings-option-label">📅 วันที่</span>
-                <input type="number" id="fertilizer-days" min="0" max="30" value="7" 
-                    onclick="event.stopPropagation();"
-                    style="width: 60px; padding: 6px 10px; border: 2px solid #FF9800; border-radius: 8px; text-align: center; font-weight: 600; color: #E65100; font-size: 14px;">
-                <span style="color: #E65100; font-weight: 600; margin-left: 4px;">วัน</span>
+                <select id="fertilizer-days" 
+                       onclick="event.stopPropagation();"
+                       style="padding: 6px 12px; border: 2px solid #FF9800; border-radius: 8px; font-weight: 600; color: #E65100; font-size: 14px; background: white; cursor: pointer;">
+                    <option value="0">0 วัน</option>
+                    <option value="1">1 วัน</option>
+                    <option value="2">2 วัน</option>
+                    <option value="3">3 วัน</option>
+                    <option value="4">4 วัน</option>
+                    <option value="5">5 วัน</option>
+                    <option value="6">6 วัน</option>
+                    <option value="7" selected>7 วัน</option>
+                    <option value="8">8 วัน</option>
+                    <option value="9">9 วัน</option>
+                    <option value="10">10 วัน</option>
+                    <option value="11">11 วัน</option>
+                    <option value="12">12 วัน</option>
+                    <option value="13">13 วัน</option>
+                    <option value="14">14 วัน</option>
+                    <option value="15">15 วัน</option>
+                    <option value="16">16 วัน</option>
+                    <option value="17">17 วัน</option>
+                    <option value="18">18 วัน</option>
+                    <option value="19">19 วัน</option>
+                    <option value="20">20 วัน</option>
+                    <option value="21">21 วัน</option>
+                    <option value="22">22 วัน</option>
+                    <option value="23">23 วัน</option>
+                    <option value="24">24 วัน</option>
+                    <option value="25">25 วัน</option>
+                    <option value="26">26 วัน</option>
+                    <option value="27">27 วัน</option>
+                    <option value="28">28 วัน</option>
+                    <option value="29">29 วัน</option>
+                    <option value="30">30 วัน</option>
+                </select>
             </div>
             <div class="settings-option" style="background: white;">
-                <span class="settings-option-label">🕐 เวลา (24 ชม.)</span>
-                <input type="text" id="fertilizer-time" value="12:00" 
-                    pattern="[0-2][0-9]:[0-5][0-9]"
-                    placeholder="เช่น 14:30"
-                    maxlength="5"
-                    onclick="event.stopPropagation();"
-                    oninput="formatTime(this)"
-                    style="padding: 6px 10px; border: 2px solid #FF9800; border-radius: 8px; font-weight: 600; color: #E65100; font-size: 14px; width: 100px; text-align: center;">
+                <span class="settings-option-label">🕐 เวลา</span>
+                <select id="fertilizer-time" 
+                       onclick="event.stopPropagation();"
+                       style="padding: 6px 12px; border: 2px solid #FF9800; border-radius: 8px; font-weight: 600; color: #E65100; font-size: 14px; background: white; cursor: pointer;">
+                    <option value="00:00">00:00</option>
+                    <option value="01:00">01:00</option>
+                    <option value="02:00">02:00</option>
+                    <option value="03:00">03:00</option>
+                    <option value="04:00">04:00</option>
+                    <option value="05:00">05:00</option>
+                    <option value="06:00">06:00</option>
+                    <option value="07:00">07:00</option>
+                    <option value="08:00">08:00</option>
+                    <option value="09:00">09:00</option>
+                    <option value="10:00">10:00</option>
+                    <option value="11:00">11:00</option>
+                    <option value="12:00" selected>12:00</option>
+                    <option value="13:00">13:00</option>
+                    <option value="14:00">14:00</option>
+                    <option value="15:00">15:00</option>
+                    <option value="16:00">16:00</option>
+                    <option value="17:00">17:00</option>
+                    <option value="18:00">18:00</option>
+                    <option value="19:00">19:00</option>
+                    <option value="20:00">20:00</option>
+                    <option value="21:00">21:00</option>
+                    <option value="22:00">22:00</option>
+                    <option value="23:00">23:00</option>
+                </select>
+                <span style="color: #E65100; font-weight: 600; margin-left: 4px;">น.</span>
             </div>
             <div style="margin-top: 8px; padding: 8px; background: rgba(255, 255, 255, 0.7); border-radius: 6px; font-size: 11px; color: #E65100;">
-                💡 เช่น: วันที่ <strong>7</strong> เวลา <strong>14:30</strong> = ใส่ปุ๋ยวันที่ 7 เวลา 14:30 น.
+                💡 เช่น: นับจากวันที่เก็บเกี่ยวไปอีก <strong id="fertilizer-example-days">7</strong> วัน เวลา <strong id="fertilizer-example-time">12:00</strong> น.
             </div>
         </div>
 
         <!-- ปุ่มยืนยัน -->
-        <div style="display: flex; justify-content: flex-end;">
-            <button onclick="event.stopPropagation(); confirmTimeSettings();" 
-                style="padding: 10px 24px; background: linear-gradient(135deg, #4CAF50 0%, #388E3C 100%); color: white; border: none; border-radius: 10px; font-size: 14px; font-weight: 700; cursor: pointer; box-shadow: 0 4px 12px rgba(76, 175, 80, 0.4); transition: all 0.3s; display: flex; align-items: center; gap: 8px;"
-                onmouseover="this.style.transform='translateY(-2px)'; this.style.boxShadow='0 6px 16px rgba(76, 175, 80, 0.5)';"
-                onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='0 4px 12px rgba(76, 175, 80, 0.4)';">
-                <span>✓</span>
-                <span>ยืนยันการตั้งค่า</span>
-            </button>
-        </div>
+        <button class="confirm-time-btn" onclick="event.stopPropagation(); confirmTimeSettings();">
+            <span>✓</span>
+            <span>ยืนยันการตั้งค่า</span>
+        </button>
     </div>
+</div>
 </div>
 </div>
 
@@ -1941,33 +2079,162 @@ body.dark-mode .settings-content {
             }
         }
 
-        // โหลดการตั้งค่าระยะเวลา
-        function loadTimeSettings() {
-            const saved = localStorage.getItem('timeSettings');
-            if (saved) {
-                timeSettings = JSON.parse(saved);
-                
-                const harvestDaysInput = document.getElementById('harvest-days');
-                const harvestTimeInput = document.getElementById('harvest-time');
-                const fertilizerDaysInput = document.getElementById('fertilizer-days');
-                const fertilizerTimeInput = document.getElementById('fertilizer-time');
-                
-                if (harvestDaysInput) harvestDaysInput.value = timeSettings.harvestDays;
-                if (harvestTimeInput) harvestTimeInput.value = timeSettings.harvestTime;
-                if (fertilizerDaysInput) fertilizerDaysInput.value = timeSettings.fertilizerDays;
-                if (fertilizerTimeInput) fertilizerTimeInput.value = timeSettings.fertilizerTime;
-            }
-        }
+
 
         // บันทึกการตั้งค่า
         function saveNotificationSettings() {
             localStorage.setItem('notificationSettings', JSON.stringify(notificationSettings));
         }
 
-        function saveTimeSettings() {
-            localStorage.setItem('timeSettings', JSON.stringify(timeSettings));
-            console.log('✅ บันทึกการตั้งค่าระยะเวลา:', timeSettings);
+// ฟังก์ชันอัพเดทข้อความตัวอย่าง
+function updateExampleText() {
+    const harvestDays = document.getElementById('harvest-days').value;
+    const harvestTime = document.getElementById('harvest-time').value;
+    const fertilizerDays = document.getElementById('fertilizer-days').value;
+    const fertilizerTime = document.getElementById('fertilizer-time').value;
+    
+    document.getElementById('harvest-example-days').textContent = harvestDays;
+    document.getElementById('harvest-example-time').textContent = harvestTime;
+    document.getElementById('fertilizer-example-days').textContent = fertilizerDays;
+    document.getElementById('fertilizer-example-time').textContent = fertilizerTime;
+}
+
+// โหลดการตั้งค่าระยะเวลา (แก้ไขใหม่)
+function loadTimeSettings() {
+    const saved = localStorage.getItem('timeSettings');
+    if (saved) {
+        timeSettings = JSON.parse(saved);
+        
+        const harvestDaysInput = document.getElementById('harvest-days');
+        const harvestTimeInput = document.getElementById('harvest-time');
+        const fertilizerDaysInput = document.getElementById('fertilizer-days');
+        const fertilizerTimeInput = document.getElementById('fertilizer-time');
+        
+        if (harvestDaysInput) harvestDaysInput.value = timeSettings.harvestDays;
+        if (harvestTimeInput) harvestTimeInput.value = timeSettings.harvestTime;
+        if (fertilizerDaysInput) fertilizerDaysInput.value = timeSettings.fertilizerDays;
+        if (fertilizerTimeInput) fertilizerTimeInput.value = timeSettings.fertilizerTime;
+        
+        // อัพเดทข้อความตัวอย่าง
+        updateExampleText();
+    }
+}
+function saveTimeSettings() {
+    localStorage.setItem('timeSettings', JSON.stringify(timeSettings));
+    console.log('✅ บันทึกการตั้งค่าระยะเวลา:', timeSettings);
+}
+
+// ฟังก์ชันอัพเดทข้อความตัวอย่าง
+function updateExampleText() {
+    const harvestDays = document.getElementById('harvest-days').value;
+    const harvestTime = document.getElementById('harvest-time').value;
+    const fertilizerDays = document.getElementById('fertilizer-days').value;
+    const fertilizerTime = document.getElementById('fertilizer-time').value;
+    
+    document.getElementById('harvest-example-days').textContent = harvestDays;
+    document.getElementById('harvest-example-time').textContent = harvestTime;
+    document.getElementById('fertilizer-example-days').textContent = fertilizerDays;
+    document.getElementById('fertilizer-example-time').textContent = fertilizerTime;
+}
+
+// โหลดการตั้งค่าระยะเวลา
+function loadTimeSettings() {
+    const saved = localStorage.getItem('timeSettings');
+    if (saved) {
+        timeSettings = JSON.parse(saved);
+        
+        const harvestDaysInput = document.getElementById('harvest-days');
+        const harvestTimeInput = document.getElementById('harvest-time');
+        const fertilizerDaysInput = document.getElementById('fertilizer-days');
+        const fertilizerTimeInput = document.getElementById('fertilizer-time');
+        
+        if (harvestDaysInput) harvestDaysInput.value = timeSettings.harvestDays;
+        if (harvestTimeInput) harvestTimeInput.value = timeSettings.harvestTime;
+        if (fertilizerDaysInput) fertilizerDaysInput.value = timeSettings.fertilizerDays;
+        if (fertilizerTimeInput) fertilizerTimeInput.value = timeSettings.fertilizerTime;
+        
+        // อัพเดทข้อความตัวอย่าง
+        updateExampleText();
+    }
+}
+
+// ยืนยันการตั้งค่าเวลา
+async function confirmTimeSettings() {
+    const harvestDays = parseInt(document.getElementById('harvest-days').value);
+    const harvestTime = document.getElementById('harvest-time').value;
+    const fertilizerDays = parseInt(document.getElementById('fertilizer-days').value);
+    const fertilizerTime = document.getElementById('fertilizer-time').value;
+    
+    // ตรวจสอบความถูกต้อง
+    if (isNaN(harvestDays) || harvestDays < 0 || harvestDays > 30) {
+        alert('❌ กรุณาเลือกวันเก็บเกี่ยวระหว่าง 0-30 วัน');
+        return;
+    }
+    
+    if (isNaN(fertilizerDays) || fertilizerDays < 0 || fertilizerDays > 30) {
+        alert('❌ กรุณาเลือกวันใส่ปุ๋ยระหว่าง 0-30 วัน');
+        return;
+    }
+    
+    // แสดง Confirm Dialog
+    const confirmed = await showConfirm(
+        '✅ ยืนยันการตั้งค่า',
+        `คุณต้องการบันทึกการตั้งค่าเวลาใหม่ใช่หรือไม่?\n\n` +
+        `🌱 เก็บเกี่ยว: นับจากวันที่ปลูกไปอีก ${harvestDays} วัน เวลา ${harvestTime} น.\n` +
+        `🌾 ใส่ปุ๋ย: นับจากวันที่เก็บเกี่ยวไปอีก ${fertilizerDays} วัน เวลา ${fertilizerTime} น.`,
+        { icon: '✅', type: 'normal' }
+    );
+    
+    if (confirmed) {
+        // บันทึกการตั้งค่า
+        timeSettings.harvestDays = harvestDays;
+        timeSettings.harvestTime = harvestTime;
+        timeSettings.fertilizerDays = fertilizerDays;
+        timeSettings.fertilizerTime = fertilizerTime;
+        
+        saveTimeSettings();
+        
+        // อัพเดทข้อความตัวอย่าง
+        updateExampleText();
+        
+        // แสดงข้อความสำเร็จ
+        console.log('✅ บันทึกการตั้งค่าเวลาสำเร็จ:', timeSettings);
+        
+        // เล่นเสียงสำเร็จ
+        if (notificationSettings.sound) {
+            playNotificationSound();
         }
+        
+        // แสดงข้อความแจ้งเตือน
+        const container = document.getElementById('alert-container');
+        const alertId = `alert-success-${Date.now()}`;
+        
+        const alertHtml = `
+            <div class="alert-banner harvest" id="${alertId}" style="animation: slideIn 0.3s;">
+                <div class="alert-icon">✅</div>
+                <div class="alert-content">
+                    <div class="alert-title">บันทึกสำเร็จ!</div>
+                    <div class="alert-text">ตั้งค่าเวลาเรียบร้อยแล้ว</div>
+                </div>
+                <button class="alert-close" onclick="document.getElementById('${alertId}').remove()">×</button>
+            </div>
+        `;
+        
+        container.insertAdjacentHTML('beforeend', alertHtml);
+        
+        // ลบ alert หลัง 3 วินาที
+        setTimeout(() => {
+            const alert = document.getElementById(alertId);
+            if (alert) {
+                alert.style.animation = 'slideIn 0.3s reverse';
+                setTimeout(() => alert.remove(), 300);
+            }
+        }, 3000);
+    }
+}
+
+// ยืนยันการตั้งค่าเวลา (แก้ไขใหม่)
+
 
         // สลับการแจ้งเตือน
         function toggleSound() {
@@ -3165,6 +3432,26 @@ setInterval(updateTime, 1000);
 setInterval(updateGrowingTimers, 1000);
 setInterval(checkNotifications, 3000);
 checkNotifications();
+// Event Listeners สำหรับอัพเดทตัวอย่างเมื่อเปลี่ยนค่า
+document.addEventListener('DOMContentLoaded', function() {
+    const harvestDaysSelect = document.getElementById('harvest-days');
+    const harvestTimeSelect = document.getElementById('harvest-time');
+    const fertilizerDaysSelect = document.getElementById('fertilizer-days');
+    const fertilizerTimeSelect = document.getElementById('fertilizer-time');
+    
+    if (harvestDaysSelect) {
+        harvestDaysSelect.addEventListener('change', updateExampleText);
+    }
+    if (harvestTimeSelect) {
+        harvestTimeSelect.addEventListener('change', updateExampleText);
+    }
+    if (fertilizerDaysSelect) {
+        fertilizerDaysSelect.addEventListener('change', updateExampleText);
+    }
+    if (fertilizerTimeSelect) {
+        fertilizerTimeSelect.addEventListener('change', updateExampleText);
+    }
+});
 
 // เริ่มต้นเชื่อมต่อ Blynk
 console.log('🚀 กำลังเชื่อมต่อ Blynk...');
