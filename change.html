@@ -1443,6 +1443,10 @@ body.dark-mode .settings-content {
                             💡 <strong>Web Notification</strong> จะแจ้งเตือนแม้ปิดหน้านี้แล้ว (ต้องเปิดอยู่ในเบราว์เซอร์)
                         </div>
                     </div>
+					<div class="settings-option">
+						<span class="settings-option-label">🔔 ทดสอบการแจ้งเตือน</span>
+						<button onclick="testNotification()" style="padding: 8px 16px; background: #4CAF50; color: white; border: none; border-radius: 8px; cursor: pointer;">ทดสอบ</button>
+					</div>
                 </div>
 
                 <!-- ตั้งค่าระยะเวลา -->
@@ -2273,6 +2277,15 @@ function closeAlert(alertId, type, pondNum) {
 // ตรวจสอบการแจ้งเตือน
 function checkNotifications() {
     const now = new Date();
+	console.log('🔍 กำลังตรวจสอบการแจ้งเตือน...', {
+    เวลาปัจจุบัน: now.toLocaleString('th-TH'),
+    กระบะที่ปลูก: Object.entries(growingStatus)
+        .filter(([_, s]) => s.active)
+        .map(([num, s]) => ({
+            กระบะ: num,
+            เริ่มเมื่อ: new Date(s.startTime).toLocaleString('th-TH')
+        }))
+	});	
     const currentTime = now.getTime();
     
     for (let i = 1; i <= 3; i++) {
@@ -2342,7 +2355,12 @@ function checkNotifications() {
         }
     }
 }
-
+function testNotification() {
+    console.log('🔔 ทดสอบการแจ้งเตือน');
+    playNotificationSound();
+    sendWebNotification('🌱 ทดสอบการแจ้งเตือน', 'ระบบแจ้งเตือนทำงานปกติ', '✅');
+    showAlert('harvest', 1, 'นี่คือการทดสอบการแจ้งเตือนเก็บเกี่ยว');
+}
 // บันทึก/โหลดสถานะการแจ้งเตือน
 function saveNotificationState() {
     localStorage.setItem('notificationState', JSON.stringify(notifications));
@@ -3022,7 +3040,7 @@ loadNotificationState();
 // ตั้งค่า intervals
 setInterval(updateTime, 1000);
 setInterval(updateGrowingTimers, 1000);
-setInterval(checkNotifications, 10000);
+setInterval(checkNotifications, 3000);
 checkNotifications();
 
 // เริ่มต้นเชื่อมต่อ Blynk
