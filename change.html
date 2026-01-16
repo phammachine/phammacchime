@@ -596,9 +596,7 @@ body {
             font-size: 12px;
             opacity: 0.9;
             font-weight: 600;
-        }
-
-        .led-item {
+        }.led-item {
             display: flex;
             align-items: center;
             justify-content: space-between;
@@ -866,9 +864,7 @@ body {
             0% { transform: rotate(0deg); }
             100% { transform: rotate(360deg); }
         }
-		/* Custom Confirm Dialog */
-		/* Custom Confirm Dialog */
-/* Custom Confirm Dialog */
+
 .confirm-overlay {
     position: fixed;
     top: 0;
@@ -1002,7 +998,6 @@ body {
     transform: translateY(0);
 }
 
-/* Dark Mode Styles */
 body.dark-mode {
     background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
 }
@@ -1170,7 +1165,7 @@ body.dark-mode .fertilizer-item {
 body.dark-mode .no-history {
     color: #666;
 }
-/* Settings Items Styles */
+
 .settings-item {
     padding: 16px;
     background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
@@ -1260,7 +1255,6 @@ body.dark-mode .no-history {
     color: #2E7D32;
 }
 
-/* Dark Mode for Settings */
 body.dark-mode .settings-item {
     background: linear-gradient(135deg, #2a2a3e 0%, #1f1f2e 100%);
     border-color: rgba(255, 255, 255, 0.1);
@@ -1290,8 +1284,7 @@ body.dark-mode .settings-content {
     border-top-color: rgba(255, 255, 255, 0.1);
 }
     </style>
-</head>
-<body>
+</head><body>
     <button class="hamburger-btn" id="hamburger-btn" onclick="toggleSidebar()">
         <div class="hamburger-line"></div>
         <div class="hamburger-line"></div>
@@ -1312,7 +1305,7 @@ body.dark-mode .settings-content {
                     <span>ประวัติการใส่ปุ๋ย</span>
                     <div class="notification-badge" id="fertilizer-badge" style="display: none;">0</div>
                 </li>
-					<li class="sidebar-menu-item" onclick="showSection('control')">
+                <li class="sidebar-menu-item" onclick="showSection('control')">
                     <span>🎮</span>
                     <span>การควบคุม</span>
                 </li>
@@ -1352,7 +1345,7 @@ body.dark-mode .settings-content {
                 </button>
             </div>
 
-<!-- การควบคุม -->
+            <!-- การควบคุม -->
             <div class="sidebar-section" id="section-control">
                 <div class="sidebar-header">
                     <span>🎮</span>
@@ -1389,113 +1382,188 @@ body.dark-mode .settings-content {
             </div>
 
             <!-- ตั้งค่า -->
-<!-- ตั้งค่า -->
-<!-- ตั้งค่า -->
-<div class="sidebar-section" id="section-settings">
-    <div class="sidebar-header">
-        <span>⚙️</span>
-        <span>ตั้งค่า</span>
-    </div>
-    
-    <!-- โหมดมืด -->
-    <div class="switch-item" style="margin-bottom: 12px; background: linear-gradient(135deg, #E3F2FD 0%, #BBDEFB 100%); border-color: #64B5F6;">
-        <div class="switch-left">
-            <div class="switch-icon">🌙</div>
-            <div class="switch-info">
-                <div class="switch-label">โหมดมืด</div>
-                <div class="switch-pin">Dark Mode</div>
+            <div class="sidebar-section" id="section-settings">
+                <div class="sidebar-header">
+                    <span>⚙️</span>
+                    <span>ตั้งค่า</span>
+                </div>
+                
+                <!-- โหมดมืด -->
+                <div class="switch-item" style="margin-bottom: 12px; background: linear-gradient(135deg, #E3F2FD 0%, #BBDEFB 100%); border-color: #64B5F6;">
+                    <div class="switch-left">
+                        <div class="switch-icon">🌙</div>
+                        <div class="switch-info">
+                            <div class="switch-label">โหมดมืด</div>
+                            <div class="switch-pin">Dark Mode</div>
+                        </div>
+                    </div>
+                    <div class="toggle" id="darkmode-toggle" onclick="toggleDarkMode()" style="cursor: pointer;">
+                        <div class="toggle-thumb">🌙</div>
+                    </div>
+                </div>
+
+                <!-- การแจ้งเตือน -->
+                <div class="settings-item" onclick="toggleSettingsItem(this)">
+                    <div class="settings-item-header">
+                        <div class="settings-item-left">
+                            <div class="settings-icon">🔔</div>
+                            <div>
+                                <div class="settings-label">การแจ้งเตือน</div>
+                                <div class="settings-desc">ตั้งค่าการแจ้งเตือนต่างๆ</div>
+                            </div>
+                        </div>
+                        <div class="settings-arrow">›</div>
+                    </div>
+                    <div class="settings-content">
+                        <div class="settings-option">
+                            <span class="settings-option-label">เสียงแจ้งเตือน</span>
+                            <div class="toggle" id="sound-toggle" onclick="event.stopPropagation(); toggleSound();" style="cursor: pointer;">
+                                <div class="toggle-thumb"></div>
+                            </div>
+                        </div>
+                        <div class="settings-option">
+                            <span class="settings-option-label">🔔 Web Notification</span>
+                            <div class="toggle" id="web-notif-toggle" onclick="event.stopPropagation(); toggleWebNotification();" style="cursor: pointer;">
+                                <div class="toggle-thumb"></div>
+                            </div>
+                        </div>
+                        <div class="settings-option">
+                            <span class="settings-option-label">แจ้งเตือนเก็บเกี่ยว</span>
+                            <div class="toggle active" id="harvest-notif-toggle" onclick="event.stopPropagation(); toggleHarvestNotif();" style="cursor: pointer;">
+                                <div class="toggle-thumb"></div>
+                            </div>
+                        </div>
+                        <div class="settings-option">
+                            <span class="settings-option-label">แจ้งเตือนใส่ปุ๋ย</span>
+                            <div class="toggle active" id="fertilizer-notif-toggle" onclick="event.stopPropagation(); toggleFertilizerNotif();" style="cursor: pointer;">
+                                <div class="toggle-thumb"></div>
+                            </div>
+                        </div>
+                        <div style="margin-top: 12px; padding: 10px; background: linear-gradient(135deg, #E3F2FD 0%, #BBDEFB 100%); border-radius: 8px; font-size: 11px; color: #1976D2; line-height: 1.6;">
+                            💡 <strong>Web Notification</strong> จะแจ้งเตือนแม้ปิดหน้านี้แล้ว (ต้องเปิดอยู่ในเบราว์เซอร์)
+                        </div>
+                    </div>
+                </div>
+
+                <!-- ตั้งค่าระยะเวลา -->
+                <div class="settings-item" onclick="toggleSettingsItem(this)">
+                    <div class="settings-item-header">
+                        <div class="settings-item-left">
+                            <div class="settings-icon">⏱️</div>
+                            <div>
+                                <div class="settings-label">ตั้งค่าระยะเวลา</div>
+                                <div class="settings-desc">กำหนดวันเก็บเกี่ยวและใส่ปุ๋ย</div>
+                            </div>
+                        </div>
+                        <div class="settings-arrow">›</div>
+                    </div>
+                    <div class="settings-content">
+                        <!-- เก็บเกี่ยว -->
+                        <div style="margin-bottom: 16px; padding: 12px; background: linear-gradient(135deg, #E8F5E9 0%, #C8E6C9 100%); border-radius: 10px; border: 2px solid #4CAF50;">
+                            <div style="font-size: 14px; font-weight: 700; color: #2E7D32; margin-bottom: 10px; display: flex; align-items: center; gap: 8px;">
+                                <span>🌱</span>
+                                <span>เวลาเก็บเกี่ยว</span>
+                            </div>
+                            <div class="settings-option" style="background: white; margin-bottom: 8px;">
+                                <span class="settings-option-label">📅 วันที่</span>
+                                <input type="number" id="harvest-days" min="1" max="30" value="7" 
+                                       onchange="updateHarvestDays(this.value)" 
+                                       onclick="event.stopPropagation();"
+                                       style="width: 60px; padding: 6px 10px; border: 2px solid #4CAF50; border-radius: 8px; text-align: center; font-weight: 600; color: #2E7D32; font-size: 14px;">
+                                <span style="color: #2E7D32; font-weight: 600; margin-left: 4px;">วัน</span>
+                            </div>
+                            <div class="settings-option" style="background: white;">
+                                <span class="settings-option-label">🕐 เวลา</span>
+                                <input type="time" id="harvest-time" value="12:00" 
+                                       onchange="updateHarvestTime(this.value)" 
+                                       onclick="event.stopPropagation();"
+                                       style="padding: 6px 10px; border: 2px solid #4CAF50; border-radius: 8px; font-weight: 600; color: #2E7D32; font-size: 14px;">
+                            </div>
+                            <div style="margin-top: 8px; padding: 8px; background: rgba(255, 255, 255, 0.7); border-radius: 6px; font-size: 11px; color: #2E7D32;">
+                                💡 เช่น: วันที่ <strong>7</strong> เวลา <strong>12:00</strong> = เก็บเกี่ยววันที่ 7 เวลา 12:00 น.
+                            </div>
+                        </div>
+
+                        <!-- ใส่ปุ๋ย -->
+                        <div style="padding: 12px; background: linear-gradient(135deg, #FFF3E0 0%, #FFE0B2 100%); border-radius: 10px; border: 2px solid #FF9800;">
+                            <div style="font-size: 14px; font-weight: 700; color: #E65100; margin-bottom: 10px; display: flex; align-items: center; gap: 8px;">
+                                <span>🌾</span>
+                                <span>เวลาใส่ปุ๋ย</span>
+                            </div>
+                            <div class="settings-option" style="background: white; margin-bottom: 8px;">
+                                <span class="settings-option-label">📅 วันที่</span>
+                                <input type="number" id="fertilizer-days" min="1" max="30" value="7" 
+                                       onchange="updateFertilizerDays(this.value)" 
+                                       onclick="event.stopPropagation();"
+                                       style="width: 60px; padding: 6px 10px; border: 2px solid #FF9800; border-radius: 8px; text-align: center; font-weight: 600; color: #E65100; font-size: 14px;">
+                                <span style="color: #E65100; font-weight: 600; margin-left: 4px;">วัน</span>
+                            </div>
+                            <div class="settings-option" style="background: white;">
+                                <span class="settings-option-label">🕐 เวลา</span>
+                                <input type="time" id="fertilizer-time" value="12:00" 
+                                       onchange="updateFertilizerTime(this.value)" 
+                                       onclick="event.stopPropagation();"
+                                       style="padding: 6px 10px; border: 2px solid #FF9800; border-radius: 8px; font-weight: 600; color: #E65100; font-size: 14px;">
+                            </div>
+                            <div style="margin-top: 8px; padding: 8px; background: rgba(255, 255, 255, 0.7); border-radius: 6px; font-size: 11px; color: #E65100;">
+                                💡 เช่น: วันที่ <strong>7</strong> เวลา <strong>14:30</strong> = ใส่ปุ๋ยวันที่ 7 เวลา 14:30 น.
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- ข้อมูลระบบ -->
+                <div class="settings-item" onclick="toggleSettingsItem(this)">
+                    <div class="settings-item-header">
+                        <div class="settings-item-left">
+                            <div class="settings-icon">📊</div>
+                            <div>
+                                <div class="settings-label">ข้อมูลระบบ</div>
+                                <div class="settings-desc">ข้อมูลและเวอร์ชันแอป</div>
+                            </div>
+                        </div>
+                        <div class="settings-arrow">›</div>
+                    </div>
+                    <div class="settings-content">
+                        <div class="settings-option">
+                            <span class="settings-option-label">เวอร์ชัน</span>
+                            <span class="settings-value">v1.0.0</span>
+                        </div>
+                        <div class="settings-option">
+                            <span class="settings-option-label">สถานะการเชื่อมต่อ</span>
+                            <span class="settings-value" id="connection-status">กำลังตรวจสอบ...</span>
+                        </div>
+                        <div class="settings-option">
+                            <span class="settings-option-label">โหมด</span>
+                            <span class="settings-value" id="mode-status">ปกติ</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- จัดการข้อมูล -->
+                <div class="settings-item" onclick="toggleSettingsItem(this)">
+                    <div class="settings-item-header">
+                        <div class="settings-item-left">
+                            <div class="settings-icon">🗑️</div>
+                            <div>
+                                <div class="settings-label">จัดการข้อมูล</div>
+                                <div class="settings-desc">ลบหรือรีเซ็ตข้อมูล</div>
+                            </div>
+                        </div>
+                        <div class="settings-arrow">›</div>
+                    </div>
+                    <div class="settings-content">
+                        <button class="clear-history-btn" onclick="event.stopPropagation(); resetAllData();" style="margin-top: 0;">
+                            <span>🔄</span>
+                            <span>รีเซ็ตข้อมูลทั้งหมด</span>
+                        </button>
+                    </div>
+                </div>
             </div>
-        </div>
-        <div class="toggle" id="darkmode-toggle" onclick="toggleDarkMode()" style="cursor: pointer;">
-            <div class="toggle-thumb">🌙</div>
         </div>
     </div>
 
-    <!-- การแจ้งเตือน -->
-    <div class="settings-item" onclick="toggleSettingsItem(this)">
-        <div class="settings-item-header">
-            <div class="settings-item-left">
-                <div class="settings-icon">🔔</div>
-                <div>
-                    <div class="settings-label">การแจ้งเตือน</div>
-                    <div class="settings-desc">ตั้งค่าการแจ้งเตือนต่างๆ</div>
-                </div>
-            </div>
-            <div class="settings-arrow">›</div>
-        </div>
-        <div class="settings-content">
-            <div class="settings-option">
-                <span class="settings-option-label">เสียงแจ้งเตือน</span>
-                <div class="toggle" id="sound-toggle" onclick="event.stopPropagation(); toggleSound();" style="cursor: pointer;">
-                    <div class="toggle-thumb"></div>
-                </div>
-            </div>
-            <div class="settings-option">
-                <span class="settings-option-label">แจ้งเตือนเก็บเกี่ยว</span>
-                <div class="toggle active" id="harvest-notif-toggle" onclick="event.stopPropagation(); toggleHarvestNotif();" style="cursor: pointer;">
-                    <div class="toggle-thumb"></div>
-                </div>
-            </div>
-            <div class="settings-option">
-                <span class="settings-option-label">แจ้งเตือนใส่ปุ๋ย</span>
-                <div class="toggle active" id="fertilizer-notif-toggle" onclick="event.stopPropagation(); toggleFertilizerNotif();" style="cursor: pointer;">
-                    <div class="toggle-thumb"></div>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- ข้อมูลระบบ -->
-    <div class="settings-item" onclick="toggleSettingsItem(this)">
-        <div class="settings-item-header">
-            <div class="settings-item-left">
-                <div class="settings-icon">📊</div>
-                <div>
-                    <div class="settings-label">ข้อมูลระบบ</div>
-                    <div class="settings-desc">ข้อมูลและเวอร์ชันแอป</div>
-                </div>
-            </div>
-            <div class="settings-arrow">›</div>
-        </div>
-        <div class="settings-content">
-            <div class="settings-option">
-                <span class="settings-option-label">เวอร์ชัน</span>
-                <span class="settings-value">v1.0.0</span>
-            </div>
-            <div class="settings-option">
-                <span class="settings-option-label">สถานะการเชื่อมต่อ</span>
-                <span class="settings-value" id="connection-status">กำลังตรวจสอบ...</span>
-            </div>
-            <div class="settings-option">
-                <span class="settings-option-label">โหมด</span>
-                <span class="settings-value" id="mode-status">ปกติ</span>
-            </div>
-        </div>
-    </div>
-
-    <!-- จัดการข้อมูล -->
-    <div class="settings-item" onclick="toggleSettingsItem(this)">
-        <div class="settings-item-header">
-            <div class="settings-item-left">
-                <div class="settings-icon">🗑️</div>
-                <div>
-                    <div class="settings-label">จัดการข้อมูล</div>
-                    <div class="settings-desc">ลบหรือรีเซ็ตข้อมูล</div>
-                </div>
-            </div>
-            <div class="settings-arrow">›</div>
-        </div>
-        <div class="settings-content">
-            <button class="clear-history-btn" onclick="event.stopPropagation(); resetAllData();" style="margin-top: 0;">
-                <span>🔄</span>
-                <span>รีเซ็ตข้อมูลทั้งหมด</span>
-            </button>
-        </div>
-    </div>
-</div>
-        </div>
-    </div>
-<!-- Custom Confirm Dialog -->
+    <!-- Custom Confirm Dialog -->
     <div class="confirm-overlay" id="confirm-overlay">
         <div class="confirm-dialog">
             <div class="confirm-icon" id="confirm-icon">❓</div>
@@ -1513,6 +1581,7 @@ body.dark-mode .settings-content {
             </div>
         </div>
     </div>
+
     <div id="loading" class="loading">
         <div class="spinner"></div>
         กำลังเชื่อมต่อ Blynk...
@@ -1637,15 +1706,15 @@ body.dark-mode .settings-content {
                 </div>
                 <div class="led-status" id="water3-status">น้ำเต็ม</div>
             </div>
-			<div class="led-item">
-    <div class="led-left">
-        <div class="led-circle" id="water4-led"></div>
-        <div class="led-info">
-            <div class="led-label">🪣 ถังพักน้ำ</div>
-        </div>
-    </div>
-    <div class="led-status" id="water4-status">น้ำเต็ม</div>
-</div>
+            <div class="led-item">
+                <div class="led-left">
+                    <div class="led-circle" id="water4-led"></div>
+                    <div class="led-info">
+                        <div class="led-label">🪣 ถังพักน้ำ</div>
+                    </div>
+                </div>
+                <div class="led-status" id="water4-status">น้ำเต็ม</div>
+            </div>
         </div>
 
         <div class="card">
@@ -1693,15 +1762,14 @@ body.dark-mode .settings-content {
                 </div>
             </div>
 
-<div class="info-box">
-    <div class="info-icon">⚠️</div>
-    <div class="info-text">ขณะเก็บเกี่ยวไข่ผำควรอยู่กับเครื่องตลอดเวลา</div>
-</div>
+            <div class="info-box">
+                <div class="info-icon">⚠️</div>
+                <div class="info-text">ขณะเก็บเกี่ยวไข่ผำควรอยู่กับเครื่องตลอดเวลา</div>
+            </div>
         </div>
     </div>
 
-    <script>
-        const BLYNK_SERVER = 'https://blynk.cloud';
+    <script>const BLYNK_SERVER = 'https://blynk.cloud';
         const BLYNK_AUTH = '4HB3ZavD44G28VPxLkuk8l5xyv-yEqrg';
         
         let emergencyStop = false;
@@ -1714,188 +1782,334 @@ body.dark-mode .settings-content {
             2: { active: false, startTime: null, minutes: 0, harvestTime: null },
             3: { active: false, startTime: null, minutes: 0, harvestTime: null }
         };
-let notifications = {
+        let notifications = {
             harvest: [],
             fertilizer: []
         };
         let darkMode = false;
-		// ฟังก์ชันเปิด/ปิดโหมดมืด
-function toggleDarkMode() {
-    darkMode = !darkMode;
-    const body = document.body;
-    const toggle = document.getElementById('darkmode-toggle');
-    const thumb = toggle.querySelector('.toggle-thumb');
-    
-    if (darkMode) {
-        body.classList.add('dark-mode');
-        toggle.classList.add('active');
-        thumb.textContent = '☀️';
-        localStorage.setItem('darkMode', 'enabled');
-        console.log('🌙 โหมดมืด: เปิด');
-    } else {
-        body.classList.remove('dark-mode');
-        toggle.classList.remove('active');
-        thumb.textContent = '🌙';
-        localStorage.setItem('darkMode', 'disabled');
-        console.log('☀️ โหมดสว่าง: เปิด');
-    }
-}
-// ตั้งค่าการแจ้งเตือน (ประกาศตัวแปร global)
-let notificationSettings = {
-    sound: false,
-    harvest: true,
-    fertilizer: true
-};
 
-// โหลดการตั้งค่าโหมดมืดจาก localStorage
-function loadDarkMode() {
-    const savedMode = localStorage.getItem('darkMode');
-    if (savedMode === 'enabled') {
-        darkMode = true;
-        document.body.classList.add('dark-mode');
-        const toggle = document.getElementById('darkmode-toggle');
-        if (toggle) {
-            toggle.classList.add('active');
+        // ตั้งค่าการแจ้งเตือน
+        let notificationSettings = {
+            sound: false,
+            harvest: true,
+            fertilizer: true,
+            webNotification: false
+        };
+
+        // ตั้งค่าระยะเวลา
+        let timeSettings = {
+            harvestDays: 7,
+            harvestTime: '12:00',
+            fertilizerDays: 7,
+            fertilizerTime: '12:00'
+        };
+
+        // ระบบ Web Notification
+        let notificationPermission = 'default';
+
+        // ขอสิทธิ์ใช้งาน Web Notification
+        async function requestNotificationPermission() {
+            if (!('Notification' in window)) {
+                console.log('❌ เบราว์เซอร์นี้ไม่รองรับ Web Notification');
+                return false;
+            }
+            
+            if (Notification.permission === 'granted') {
+                notificationPermission = 'granted';
+                return true;
+            }
+            
+            if (Notification.permission !== 'denied') {
+                const permission = await Notification.requestPermission();
+                notificationPermission = permission;
+                return permission === 'granted';
+            }
+            
+            return false;
+        }
+
+        // ส่ง Web Notification
+        function sendWebNotification(title, message, icon = '🌱') {
+            if (!notificationSettings.webNotification) return;
+            if (notificationPermission !== 'granted') return;
+            
+            try {
+                const notification = new Notification(title, {
+                    body: message,
+                    icon: `data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>${icon}</text></svg>`,
+                    badge: `data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🌱</text></svg>`,
+                    tag: 'baby-phum-notification',
+                    requireInteraction: true,
+                    vibrate: [200, 100, 200]
+                });
+                
+                notification.onclick = function() {
+                    window.focus();
+                    notification.close();
+                };
+                
+                console.log('✅ ส่ง Web Notification:', title);
+            } catch (error) {
+                console.error('❌ ส่ง Web Notification ไม่สำเร็จ:', error);
+            }
+        }
+
+        // ฟังก์ชันเปิด/ปิดโหมดมืด
+        function toggleDarkMode() {
+            darkMode = !darkMode;
+            const body = document.body;
+            const toggle = document.getElementById('darkmode-toggle');
             const thumb = toggle.querySelector('.toggle-thumb');
-            if (thumb) thumb.textContent = '☀️';
+            
+            if (darkMode) {
+                body.classList.add('dark-mode');
+                toggle.classList.add('active');
+                thumb.textContent = '☀️';
+                localStorage.setItem('darkMode', 'enabled');
+                console.log('🌙 โหมดมืด: เปิด');
+            } else {
+                body.classList.remove('dark-mode');
+                toggle.classList.remove('active');
+                thumb.textContent = '🌙';
+                localStorage.setItem('darkMode', 'disabled');
+                console.log('☀️ โหมดสว่าง: เปิด');
+            }
         }
-    }
-}
 
-// โหลดการตั้งค่าการแจ้งเตือน
-function loadNotificationSettings() {
-    const saved = localStorage.getItem('notificationSettings');
-    if (saved) {
-        notificationSettings = JSON.parse(saved);
-        
-        // อัพเดท UI
-        const soundToggle = document.getElementById('sound-toggle');
-        const harvestToggle = document.getElementById('harvest-notif-toggle');
-        const fertilizerToggle = document.getElementById('fertilizer-notif-toggle');
-        
-        if (soundToggle) {
-            soundToggle.classList.toggle('active', notificationSettings.sound);
+        // โหลดการตั้งค่าโหมดมืด
+        function loadDarkMode() {
+            const savedMode = localStorage.getItem('darkMode');
+            if (savedMode === 'enabled') {
+                darkMode = true;
+                document.body.classList.add('dark-mode');
+                const toggle = document.getElementById('darkmode-toggle');
+                if (toggle) {
+                    toggle.classList.add('active');
+                    const thumb = toggle.querySelector('.toggle-thumb');
+                    if (thumb) thumb.textContent = '☀️';
+                }
+            }
         }
-        if (harvestToggle) {
-            harvestToggle.classList.toggle('active', notificationSettings.harvest);
+
+        // โหลดการตั้งค่าการแจ้งเตือน
+        function loadNotificationSettings() {
+            const saved = localStorage.getItem('notificationSettings');
+            if (saved) {
+                notificationSettings = JSON.parse(saved);
+                
+                const soundToggle = document.getElementById('sound-toggle');
+                const harvestToggle = document.getElementById('harvest-notif-toggle');
+                const fertilizerToggle = document.getElementById('fertilizer-notif-toggle');
+                const webNotifToggle = document.getElementById('web-notif-toggle');
+                
+                if (soundToggle) {
+                    soundToggle.classList.toggle('active', notificationSettings.sound);
+                }
+                if (harvestToggle) {
+                    harvestToggle.classList.toggle('active', notificationSettings.harvest);
+                }
+                if (fertilizerToggle) {
+                    fertilizerToggle.classList.toggle('active', notificationSettings.fertilizer);
+                }
+                if (webNotifToggle) {
+                    webNotifToggle.classList.toggle('active', notificationSettings.webNotification);
+                }
+            }
+            
+            if ('Notification' in window) {
+                notificationPermission = Notification.permission;
+            }
         }
-        if (fertilizerToggle) {
-            fertilizerToggle.classList.toggle('active', notificationSettings.fertilizer);
+
+        // โหลดการตั้งค่าระยะเวลา
+        function loadTimeSettings() {
+            const saved = localStorage.getItem('timeSettings');
+            if (saved) {
+                timeSettings = JSON.parse(saved);
+                
+                const harvestDaysInput = document.getElementById('harvest-days');
+                const harvestTimeInput = document.getElementById('harvest-time');
+                const fertilizerDaysInput = document.getElementById('fertilizer-days');
+                const fertilizerTimeInput = document.getElementById('fertilizer-time');
+                
+                if (harvestDaysInput) harvestDaysInput.value = timeSettings.harvestDays;
+                if (harvestTimeInput) harvestTimeInput.value = timeSettings.harvestTime;
+                if (fertilizerDaysInput) fertilizerDaysInput.value = timeSettings.fertilizerDays;
+                if (fertilizerTimeInput) fertilizerTimeInput.value = timeSettings.fertilizerTime;
+            }
         }
-    }
-}
 
-// บันทึกการตั้งค่าการแจ้งเตือน
-function saveNotificationSettings() {
-    localStorage.setItem('notificationSettings', JSON.stringify(notificationSettings));
-}
-
-// สลับเสียงแจ้งเตือน
-function toggleSound() {
-    notificationSettings.sound = !notificationSettings.sound;
-    const toggle = document.getElementById('sound-toggle');
-    toggle.classList.toggle('active');
-    saveNotificationSettings();
-    
-    if (notificationSettings.sound) {
-        // เล่นเสียงทดสอบ
-        playNotificationSound();
-    }
-    
-    console.log('🔔 เสียงแจ้งเตือน:', notificationSettings.sound ? 'เปิด' : 'ปิด');
-}
-
-// สลับการแจ้งเตือนเก็บเกี่ยว
-function toggleHarvestNotif() {
-    notificationSettings.harvest = !notificationSettings.harvest;
-    const toggle = document.getElementById('harvest-notif-toggle');
-    toggle.classList.toggle('active');
-    saveNotificationSettings();
-    console.log('🌱 แจ้งเตือนเก็บเกี่ยว:', notificationSettings.harvest ? 'เปิด' : 'ปิด');
-}
-
-// สลับการแจ้งเตือนใส่ปุ๋ย
-function toggleFertilizerNotif() {
-    notificationSettings.fertilizer = !notificationSettings.fertilizer;
-    const toggle = document.getElementById('fertilizer-notif-toggle');
-    toggle.classList.toggle('active');
-    saveNotificationSettings();
-    console.log('🌾 แจ้งเตือนใส่ปุ๋ย:', notificationSettings.fertilizer ? 'เปิด' : 'ปิด');
-}
-
-// เล่นเสียงแจ้งเตือน
-function playNotificationSound() {
-    if (notificationSettings.sound) {
-        // สร้างเสียง beep ง่ายๆ
-        const audioContext = new (window.AudioContext || window.webkitAudioContext)();
-        const oscillator = audioContext.createOscillator();
-        const gainNode = audioContext.createGain();
-        
-        oscillator.connect(gainNode);
-        gainNode.connect(audioContext.destination);
-        
-        oscillator.frequency.value = 800;
-        oscillator.type = 'sine';
-        
-        gainNode.gain.setValueAtTime(0.3, audioContext.currentTime);
-        gainNode.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 0.5);
-        
-        oscillator.start(audioContext.currentTime);
-        oscillator.stop(audioContext.currentTime + 0.5);
-    }
-}
-
-// สลับการแสดง Settings Item
-function toggleSettingsItem(element) {
-    element.classList.toggle('expanded');
-}
-
-// รีเซ็ตข้อมูลทั้งหมด
-async function resetAllData() {
-    const confirmed = await showConfirm(
-        '⚠️ รีเซ็ตข้อมูลทั้งหมด',
-        'คุณต้องการลบข้อมูลทั้งหมดและรีเซ็ตระบบใช่หรือไม่?\n\n• ประวัติการเก็บเกี่ยว\n• ประวัติการใส่ปุ๋ย\n• ข้อมูลการปลูก\n• การตั้งค่าต่างๆ',
-        { icon: '⚠️', type: 'danger', confirmType: 'danger' }
-    );
-    
-    if (confirmed) {
-        // ลบข้อมูลทั้งหมด
-        localStorage.removeItem('harvestHistory');
-        localStorage.removeItem('fertilizerHistory');
-        localStorage.removeItem('growingStatus');
-        localStorage.removeItem('notificationSettings');
-        localStorage.removeItem('darkMode');
-        
-        console.log('🔄 รีเซ็ตข้อมูลทั้งหมดสำเร็จ');
-        
-        // รีโหลดหน้าเว็บ
-        alert('✅ รีเซ็ตข้อมูลสำเร็จ\n\nระบบจะรีโหลดหน้าเว็บ');
-        location.reload();
-    }
-}
-
-// อัพเดทสถานะการเชื่อมต่อ
-function updateConnectionStatus() {
-    const statusEl = document.getElementById('connection-status');
-    const modeEl = document.getElementById('mode-status');
-    
-    if (statusEl) {
-        if (demoMode) {
-            statusEl.textContent = 'Demo Mode';
-            statusEl.style.color = '#FFA000';
-        } else {
-            statusEl.textContent = 'เชื่อมต่อแล้ว';
-            statusEl.style.color = '#2E7D32';
+        // บันทึกการตั้งค่า
+        function saveNotificationSettings() {
+            localStorage.setItem('notificationSettings', JSON.stringify(notificationSettings));
         }
-    }
-    
-    if (modeEl) {
-        modeEl.textContent = demoMode ? 'ทดสอบ' : 'ปกติ';
-        modeEl.style.color = demoMode ? '#FFA000' : '#2E7D32';
-    }
-}
 
-// Custom Confirm Dialog
+        function saveTimeSettings() {
+            localStorage.setItem('timeSettings', JSON.stringify(timeSettings));
+            console.log('✅ บันทึกการตั้งค่าระยะเวลา:', timeSettings);
+        }
+
+        // สลับการแจ้งเตือน
+        function toggleSound() {
+            notificationSettings.sound = !notificationSettings.sound;
+            const toggle = document.getElementById('sound-toggle');
+            toggle.classList.toggle('active');
+            saveNotificationSettings();
+            
+            if (notificationSettings.sound) {
+                playNotificationSound();
+            }
+            
+            console.log('🔔 เสียงแจ้งเตือน:', notificationSettings.sound ? 'เปิด' : 'ปิด');
+        }
+
+        async function toggleWebNotification() {
+            notificationSettings.webNotification = !notificationSettings.webNotification;
+            const toggle = document.getElementById('web-notif-toggle');
+            
+            if (notificationSettings.webNotification) {
+                const granted = await requestNotificationPermission();
+                
+                if (granted) {
+                    toggle.classList.add('active');
+                    saveNotificationSettings();
+                    
+                    sendWebNotification(
+                        '✅ เปิด Web Notification สำเร็จ',
+                        'ระบบจะแจ้งเตือนคุณแม้ปิดหน้านี้แล้ว',
+                        '✅'
+                    );
+                    console.log('🔔 Web Notification: เปิด');
+                } else {
+                    notificationSettings.webNotification = false;
+                    toggle.classList.remove('active');
+                    alert('❌ ไม่สามารถเปิด Web Notification ได้\n\nกรุณาอนุญาตการแจ้งเตือนในการตั้งค่าเบราว์เซอร์');
+                }
+            } else {
+                toggle.classList.remove('active');
+                saveNotificationSettings();
+                console.log('🔕 Web Notification: ปิด');
+            }
+        }
+
+        function toggleHarvestNotif() {
+            notificationSettings.harvest = !notificationSettings.harvest;
+            const toggle = document.getElementById('harvest-notif-toggle');
+            toggle.classList.toggle('active');
+            saveNotificationSettings();
+            console.log('🌱 แจ้งเตือนเก็บเกี่ยว:', notificationSettings.harvest ? 'เปิด' : 'ปิด');
+        }
+
+        function toggleFertilizerNotif() {
+            notificationSettings.fertilizer = !notificationSettings.fertilizer;
+            const toggle = document.getElementById('fertilizer-notif-toggle');
+            toggle.classList.toggle('active');
+            saveNotificationSettings();
+            console.log('🌾 แจ้งเตือนใส่ปุ๋ย:', notificationSettings.fertilizer ? 'เปิด' : 'ปิด');
+        }
+
+        // อัพเดทการตั้งค่าเวลา
+        function updateHarvestDays(value) {
+            const days = parseInt(value);
+            if (days >= 1 && days <= 30) {
+                timeSettings.harvestDays = days;
+                saveTimeSettings();
+                console.log(`🌱 ตั้งค่าวันเก็บเกี่ยว: ${days} วัน`);
+            }
+        }
+
+        function updateHarvestTime(value) {
+            timeSettings.harvestTime = value;
+            saveTimeSettings();
+            console.log(`🕐 ตั้งค่าเวลาเก็บเกี่ยว: ${value} น.`);
+        }
+
+        function updateFertilizerDays(value) {
+            const days = parseInt(value);
+            if (days >= 1 && days <= 30) {
+                timeSettings.fertilizerDays = days;
+                saveTimeSettings();
+                console.log(`🌾 ตั้งค่าวันใส่ปุ๋ย: ${days} วัน`);
+            }
+        }
+
+        function updateFertilizerTime(value) {
+            timeSettings.fertilizerTime = value;
+            saveTimeSettings();
+            console.log(`🕐 ตั้งค่าเวลาใส่ปุ๋ย: ${value} น.`);
+        }
+
+        // เล่นเสียงแจ้งเตือน
+        function playNotificationSound() {
+            if (notificationSettings.sound) {
+                const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+                const oscillator = audioContext.createOscillator();
+                const gainNode = audioContext.createGain();
+                
+                oscillator.connect(gainNode);
+                gainNode.connect(audioContext.destination);
+                
+                oscillator.frequency.value = 800;
+                oscillator.type = 'sine';
+                
+                gainNode.gain.setValueAtTime(0.3, audioContext.currentTime);
+                gainNode.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 0.5);
+                
+                oscillator.start(audioContext.currentTime);
+                oscillator.stop(audioContext.currentTime + 0.5);
+            }
+        }
+
+        // สลับการแสดง Settings Item
+        function toggleSettingsItem(element) {
+            element.classList.toggle('expanded');
+        }
+
+        // รีเซ็ตข้อมูลทั้งหมด
+        async function resetAllData() {
+            const confirmed = await showConfirm(
+                '⚠️ รีเซ็ตข้อมูลทั้งหมด',
+                'คุณต้องการลบข้อมูลทั้งหมดและรีเซ็ตระบบใช่หรือไม่?\n\n• ประวัติการเก็บเกี่ยว\n• ประวัติการใส่ปุ๋ย\n• ข้อมูลการปลูก\n• การตั้งค่าต่างๆ',
+                { icon: '⚠️', type: 'danger', confirmType: 'danger' }
+            );
+            
+            if (confirmed) {
+                localStorage.removeItem('harvestHistory');
+                localStorage.removeItem('fertilizerHistory');
+                localStorage.removeItem('growingStatus');
+                localStorage.removeItem('notificationSettings');
+                localStorage.removeItem('darkMode');
+                localStorage.removeItem('timeSettings');
+                
+                console.log('🔄 รีเซ็ตข้อมูลทั้งหมดสำเร็จ');
+                
+                alert('✅ รีเซ็ตข้อมูลสำเร็จ\n\nระบบจะรีโหลดหน้าเว็บ');
+                location.reload();
+            }
+        }
+
+        // อัพเดทสถานะการเชื่อมต่อ
+        function updateConnectionStatus() {
+            const statusEl = document.getElementById('connection-status');
+            const modeEl = document.getElementById('mode-status');
+            
+            if (statusEl) {
+                if (demoMode) {
+                    statusEl.textContent = 'Demo Mode';
+                    statusEl.style.color = '#FFA000';
+                } else {
+                    statusEl.textContent = 'เชื่อมต่อแล้ว';
+                    statusEl.style.color = '#2E7D32';
+                }
+            }
+            
+            if (modeEl) {
+                modeEl.textContent = demoMode ? 'ทดสอบ' : 'ปกติ';
+                modeEl.style.color = demoMode ? '#FFA000' : '#2E7D32';
+            }
+        }
+
+        // Custom Confirm Dialog
         function showConfirm(title, message, options = {}) {
             return new Promise((resolve) => {
                 const overlay = document.getElementById('confirm-overlay');
@@ -1905,27 +2119,22 @@ function updateConnectionStatus() {
                 const cancelBtn = document.getElementById('confirm-cancel');
                 const confirmBtn = document.getElementById('confirm-confirm');
                 
-                // ตั้งค่า icon และสี
                 icon.textContent = options.icon || '❓';
                 icon.className = 'confirm-icon';
                 if (options.type === 'warning') icon.classList.add('warning');
                 if (options.type === 'danger') icon.classList.add('danger');
                 
-                // ตั้งค่าข้อความ
                 titleEl.textContent = title;
                 messageEl.textContent = message;
                 
-                // ตั้งค่าปุ่ม
                 confirmBtn.className = 'confirm-btn confirm';
                 if (options.confirmType === 'danger') {
                     confirmBtn.classList.remove('confirm');
                     confirmBtn.classList.add('danger');
                 }
                 
-                // แสดง dialog
                 overlay.classList.add('show');
                 
-                // Event handlers
                 const handleConfirm = () => {
                     overlay.classList.remove('show');
                     cleanup();
@@ -1953,38 +2162,39 @@ function updateConnectionStatus() {
                 overlay.addEventListener('click', handleOverlayClick);
             });
         }
+
         // แสดงการแจ้งเตือน
-// แสดงการแจ้งเตือน
-function showAlert(type, pondNum, message) {
-    // เช็คว่าควรแจ้งเตือนหรือไม่
-    if (type === 'harvest' && !notificationSettings.harvest) return;
-    if (type === 'fertilizer' && !notificationSettings.fertilizer) return;
-    
-    const container = document.getElementById('alert-container');
-    const alertId = `alert-${type}-${pondNum}-${Date.now()}`;
-    
-    const alertHtml = `
-        <div class="alert-banner ${type}" id="${alertId}">
-            <div class="alert-icon">${type === 'harvest' ? '🌱' : '🌾'}</div>
-            <div class="alert-content">
-                <div class="alert-title">${type === 'harvest' ? 'ถึงเวลาเก็บเกี่ยว!' : 'ถึงเวลาใส่ปุ๋ย!'}</div>
-                <div class="alert-text">${message}</div>
-            </div>
-            <button class="alert-close" onclick="closeAlert('${alertId}', '${type}', ${pondNum})">×</button>
-        </div>
-    `;
-    
-    container.insertAdjacentHTML('beforeend', alertHtml);
-    
-    // เล่นเสียงแจ้งเตือน
-    playNotificationSound();
-    
-    // เพิ่มในรายการแจ้งเตือน
-    if (type === 'fertilizer') {
-        notifications.fertilizer.push({ pondNum, time: Date.now() });
-        updateFertilizerBadge();
-    }
-}
+        function showAlert(type, pondNum, message) {
+            if (type === 'harvest' && !notificationSettings.harvest) return;
+            if (type === 'fertilizer' && !notificationSettings.fertilizer) return;
+            
+            const container = document.getElementById('alert-container');
+            const alertId = `alert-${type}-${pondNum}-${Date.now()}`;
+            
+            const alertHtml = `
+                <div class="alert-banner ${type}" id="${alertId}">
+                    <div class="alert-icon">${type === 'harvest' ? '🌱' : '🌾'}</div>
+                    <div class="alert-content">
+                        <div class="alert-title">${type === 'harvest' ? 'ถึงเวลาเก็บเกี่ยว!' : 'ถึงเวลาใส่ปุ๋ย!'}</div>
+                        <div class="alert-text">${message}</div>
+                    </div>
+                    <button class="alert-close" onclick="closeAlert('${alertId}', '${type}', ${pondNum})">×</button>
+                </div>
+            `;
+            
+            container.insertAdjacentHTML('beforeend', alertHtml);
+            
+            playNotificationSound();
+            
+            const title = type === 'harvest' ? '🌱 ถึงเวลาเก็บเกี่ยว!' : '🌾 ถึงเวลาใส่ปุ๋ย!';
+            const icon = type === 'harvest' ? '🌱' : '🌾';
+            sendWebNotification(title, message, icon);
+            
+            if (type === 'fertilizer') {
+                notifications.fertilizer.push({ pondNum, time: Date.now() });
+                updateFertilizerBadge();
+            }
+        }
 
         function closeAlert(alertId, type, pondNum) {
             const alert = document.getElementById(alertId);
@@ -1993,10 +2203,8 @@ function showAlert(type, pondNum, message) {
                 setTimeout(() => alert.remove(), 300);
             }
             
-            // ถ้าเป็นการแจ้งเตือนปุ๋ย ให้บันทึกประวัติ
             if (type === 'fertilizer') {
                 addFertilizerRecord(pondNum);
-                // ลบการแจ้งเตือนนี้
                 notifications.fertilizer = notifications.fertilizer.filter(n => n.pondNum !== pondNum);
                 updateFertilizerBadge();
             }
@@ -2013,39 +2221,125 @@ function showAlert(type, pondNum, message) {
             }
         }
 
-        // ตรวจสอบการแจ้งเตือน
-        function checkNotifications() {
-            const now = Date.now();
+// ตรวจสอบการแจ้งเตือน
+function checkNotifications() {
+    const now = new Date();
+    const currentTime = now.getTime();
+    
+    for (let i = 1; i <= 3; i++) {
+        const status = growingStatus[i];
+        
+        // ตรวจสอบเวลาเก็บเกี่ยว
+        if (status.active && status.startTime) {
+            const startDate = new Date(status.startTime);
             
-            for (let i = 1; i <= 3; i++) {
-                const status = growingStatus[i];
+            // คำนวณวันและเวลาที่ต้องเก็บเกี่ยว
+            const [targetHours, targetMinutes] = timeSettings.harvestTime.split(':').map(Number);
+            const harvestDate = new Date(startDate);
+            harvestDate.setDate(harvestDate.getDate() + timeSettings.harvestDays);
+            harvestDate.setHours(targetHours, targetMinutes, 0, 0);
+            
+            // ถ้าถึงเวลาแล้ว และยังไม่เคยแจ้งเตือน
+            if (currentTime >= harvestDate.getTime() && !notifications.harvest.includes(i)) {
+                const elapsed = currentTime - status.startTime;
+                const days = Math.floor(elapsed / (24 * 60 * 60 * 1000));
+                const remainingHours = Math.floor((elapsed % (24 * 60 * 60 * 1000)) / (60 * 60 * 1000));
+                const remainingMinutes = Math.floor((elapsed % (60 * 60 * 1000)) / (60 * 1000));
                 
-                // ตรวจสอบการแจ้งเตือนเก็บเกี่ยว (7 วัน)
-                if (status.active && status.startTime) {
-                    const minutesPassed = Math.floor((now - status.startTime) / (1000 * 60));
-                    const daysPassed = Math.floor(minutesPassed / (60 * 24));
+                console.log(`🔔 [เก็บเกี่ยว] กระบะที่ ${i} ถึงเวลาแล้ว!`, {
+                    เริ่มปลูก: startDate.toLocaleString('th-TH'),
+                    เป้าหมาย: harvestDate.toLocaleString('th-TH'),
+                    ปลูกมา: `${days} วัน ${remainingHours}:${String(remainingMinutes).padStart(2, '0')}`
+                });
+                
+                showAlert('harvest', i, 
+                    `กระบะที่ ${i} ปลูกมา ${days} วัน ${remainingHours}:${String(remainingMinutes).padStart(2, '0')} น. แล้ว\n` +
+                    `(ตั้งค่า ${timeSettings.harvestDays} วัน เวลา ${timeSettings.harvestTime} น.)`
+                );
+                notifications.harvest.push(i);
+                saveNotificationState();
+            }
+        }
+        
+        // ตรวจสอบเวลาใส่ปุ๋ย (เอาส่วนที่ซ้ำออก)
+        if (status.harvestTime) {
+            const harvestDate = new Date(status.harvestTime);
+            
+            // คำนวณวันและเวลาที่ต้องใส่ปุ๋ย
+            const [targetHours, targetMinutes] = timeSettings.fertilizerTime.split(':').map(Number);
+            const fertilizerDate = new Date(harvestDate);
+            fertilizerDate.setDate(fertilizerDate.getDate() + timeSettings.fertilizerDays);
+            fertilizerDate.setHours(targetHours, targetMinutes, 0, 0);
+            
+            // ถ้าถึงเวลาแล้ว และยังไม่เคยแจ้งเตือน
+            if (currentTime >= fertilizerDate.getTime() && !notifications.fertilizer.some(n => n.pondNum === i)) {
+                const elapsed = currentTime - status.harvestTime;
+                const days = Math.floor(elapsed / (24 * 60 * 60 * 1000));
+                const remainingHours = Math.floor((elapsed % (24 * 60 * 60 * 1000)) / (60 * 60 * 1000));
+                const remainingMinutes = Math.floor((elapsed % (60 * 60 * 1000)) / (60 * 1000));
+                
+                console.log(`🔔 [ใส่ปุ๋ย] กระบะที่ ${i} ถึงเวลาแล้ว!`, {
+                    เก็บเกี่ยว: harvestDate.toLocaleString('th-TH'),
+                    เป้าหมาย: fertilizerDate.toLocaleString('th-TH'),
+                    เก็บเกี่ยวมา: `${days} วัน ${remainingHours}:${String(remainingMinutes).padStart(2, '0')}`
+                });
+                
+                showAlert('fertilizer', i, 
+                    `กระบะที่ ${i} เก็บเกี่ยวมา ${days} วัน ${remainingHours}:${String(remainingMinutes).padStart(2, '0')} น. แล้ว\n` +
+                    `(ตั้งค่า ${timeSettings.fertilizerDays} วัน เวลา ${timeSettings.fertilizerTime} น.)`
+                );
+            }
+        }
+    }
+}
+
+// เพิ่มฟังก์ชันบันทึก/โหลดสถานะการแจ้งเตือน
+function saveNotificationState() {
+    localStorage.setItem('notificationState', JSON.stringify(notifications));
+    console.log('💾 บันทึกสถานะการแจ้งเตือน:', notifications);
+}
+
+function loadNotificationState() {
+    const saved = localStorage.getItem('notificationState');
+    if (saved) {
+        notifications = JSON.parse(saved);
+        updateFertilizerBadge();
+        console.log('📂 โหลดสถานะการแจ้งเตือน:', notifications);
+    }
+}
                     
-                    if (daysPassed >= 7 && !notifications.harvest.includes(i)) {
-                        showAlert('harvest', i, `กระบะที่ ${i} ปลูกครบ ${daysPassed} วันแล้ว`);
-                        notifications.harvest.push(i);
-                    }
-                }
-                
-                // ตรวจสอบการแจ้งเตือนใส่ปุ๋ย (7 วัน 2 ชั่วโมง = 10200 นาที)
+                // ตรวจสอบเวลาใส่ปุ๋ย
                 if (status.harvestTime) {
-                    const minutesPassed = Math.floor((now - status.harvestTime) / (1000 * 60));
-                    const totalMinutesRequired = (7 * 24 * 60) + (2 * 60); // 7 วัน 2 ชั่วโมง = 10200 นาที
+                    const harvestDate = new Date(status.harvestTime);
                     
-                    if (minutesPassed >= totalMinutesRequired && !notifications.fertilizer.some(n => n.pondNum === i)) {
-                        const days = Math.floor(minutesPassed / (60 * 24));
-                        const hours = Math.floor((minutesPassed % (60 * 24)) / 60);
-                        showAlert('fertilizer', i, `กระบะที่ ${i} เก็บเกี่ยวมา ${days} วัน ${hours} ชั่วโมงแล้ว`);
+                    // คำนวณวันและเวลาที่ต้องใส่ปุ๋ย
+                    const [targetHours, targetMinutes] = timeSettings.fertilizerTime.split(':').map(Number);
+                    const fertilizerDate = new Date(harvestDate);
+                    fertilizerDate.setDate(fertilizerDate.getDate() + timeSettings.fertilizerDays);
+                    fertilizerDate.setHours(targetHours, targetMinutes, 0, 0);
+                    
+                    // ถ้าถึงเวลาแล้ว และยังไม่เคยแจ้งเตือน
+                    if (currentTime >= fertilizerDate.getTime() && !notifications.fertilizer.some(n => n.pondNum === i)) {
+                        const elapsed = currentTime - status.harvestTime;
+                        const days = Math.floor(elapsed / (24 * 60 * 60 * 1000));
+                        const remainingHours = Math.floor((elapsed % (24 * 60 * 60 * 1000)) / (60 * 60 * 1000));
+                        const remainingMinutes = Math.floor((elapsed % (60 * 60 * 1000)) / (60 * 1000));
+                        
+                        console.log(`🔔 [ใส่ปุ๋ย] กระบะที่ ${i} ถึงเวลาแล้ว!`, {
+                            เก็บเกี่ยว: harvestDate.toLocaleString('th-TH'),
+                            เป้าหมาย: fertilizerDate.toLocaleString('th-TH'),
+                            เก็บเกี่ยวมา: `${days} วัน ${remainingHours}:${String(remainingMinutes).padStart(2, '0')}`
+                        });
+                        
+                        showAlert('fertilizer', i, 
+                            `กระบะที่ ${i} เก็บเกี่ยวมา ${days} วัน ${remainingHours}:${String(remainingMinutes).padStart(2, '0')} น. แล้ว\n` +
+                            `(ตั้งค่า ${timeSettings.fertilizerDays} วัน เวลา ${timeSettings.fertilizerTime} น.)`
+                        );
                     }
                 }
             }
         }
-
-        // บันทึกประวัติการใส่ปุ๋ย
+		// บันทึกและแสดงประวัติ
         function addFertilizerRecord(pondNum) {
             const now = new Date();
             const months = ['ม.ค.', 'ก.พ.', 'มี.ค.', 'เม.ย.', 'พ.ค.', 'มิ.ย.', 'ก.ค.', 'ส.ค.', 'ก.ย.', 'ต.ค.', 'พ.ย.', 'ธ.ค.'];
@@ -2063,12 +2357,10 @@ function showAlert(type, pondNum, message) {
             saveFertilizerHistory();
             displayFertilizerHistory();
             
-            // ล้างเวลาเก็บเกี่ยว
             growingStatus[pondNum].harvestTime = null;
             saveGrowingData();
         }
 
-        // แสดงประวัติการใส่ปุ๋ย
         function displayFertilizerHistory() {
             const fertilizerList = document.getElementById('fertilizer-list');
             
@@ -2086,7 +2378,6 @@ function showAlert(type, pondNum, message) {
             `).join('');
         }
 
-        // โหลดประวัติปุ๋ย
         function loadFertilizerHistory() {
             const saved = localStorage.getItem('fertilizerHistory');
             if (saved) {
@@ -2095,32 +2386,28 @@ function showAlert(type, pondNum, message) {
             }
         }
 
-        // บันทึกประวัติปุ๋ย
         function saveFertilizerHistory() {
             localStorage.setItem('fertilizerHistory', JSON.stringify(fertilizerHistory));
         }
 
-        // เคลียร์ประวัติปุ๋ย
-async function clearFertilizerHistory() {
-    const confirmed = await showConfirm(
-        '🗑️ ลบประวัติการใส่ปุ๋ย',
-        'คุณต้องการเคลียร์ประวัติการใส่ปุ๋ยทั้งหมดใช่หรือไม่?',
-        { icon: '🗑️', type: 'danger', confirmType: 'danger' }
-    );
-    
-    if (confirmed) {
+        async function clearFertilizerHistory() {
+            const confirmed = await showConfirm(
+                '🗑️ ลบประวัติการใส่ปุ๋ย',
+                'คุณต้องการเคลียร์ประวัติการใส่ปุ๋ยทั้งหมดใช่หรือไม่?',
+                { icon: '🗑️', type: 'danger', confirmType: 'danger' }
+            );
+            
+            if (confirmed) {
                 fertilizerHistory = [];
                 saveFertilizerHistory();
                 displayFertilizerHistory();
             }
         }
 
-        // โหลดข้อมูลการปลูก
         function loadGrowingData() {
             const saved = localStorage.getItem('growingStatus');
             if (saved) {
                 growingStatus = JSON.parse(saved);
-                // อัพเดท UI
                 for (let i = 1; i <= 3; i++) {
                     if (growingStatus[i].active) {
                         updateGrowingUI(i, true);
@@ -2129,58 +2416,50 @@ async function clearFertilizerHistory() {
             }
         }
 
-        // บันทึกข้อมูลการปลูก
         function saveGrowingData() {
             localStorage.setItem('growingStatus', JSON.stringify(growingStatus));
         }
 
-
-// อัพเดท UI การปลูก
-// อัพเดท UI การปลูก
-function updateGrowingUI(pondNum, isGrowing) {
-    console.log(`🌱 Update UI Pond ${pondNum}:`, isGrowing ? 'GROWING' : 'STOPPED');
-    
-    const btn = document.getElementById(`grow-btn-${pondNum}`);
-    const statusText = document.getElementById(`grow-status-${pondNum}`);
-    const timerItem = document.getElementById(`timer-item-${pondNum}`);
-    const timerStatus = document.getElementById(`timer-status-${pondNum}`);
-    
-    if (isGrowing) {
-        btn.classList.add('growing');
-        statusText.textContent = 'กำลังปลูก...';
-        timerItem.classList.remove('inactive');
-        timerStatus.textContent = '🌱 กำลังปลูก';
-    } else {
-        btn.classList.remove('growing');
-        statusText.textContent = 'เริ่มปลูก';
-        timerItem.classList.add('inactive');
-        timerStatus.textContent = 'ยังไม่เริ่ม';
-        document.getElementById(`timer-value-${pondNum}`).textContent = '00:00:00';
-    }
-    
-    updatePumpButtonStatus(pondNum, waterStatus[pondNum]);
-}
-
-// คำนวณและอัพเดทเวลา
-// คำนวณและอัพเดทเวลา
-// คำนวณและอัพเดทเวลา
-function updateGrowingTimers() {
-    for (let i = 1; i <= 3; i++) {
-        if (growingStatus[i].active && growingStatus[i].startTime) {
-            const elapsed = Date.now() - growingStatus[i].startTime;
-            const totalMinutes = Math.floor(elapsed / (1000 * 60));
-            const days = Math.floor(totalMinutes / (60 * 24));
-            const hours = Math.floor((totalMinutes % (60 * 24)) / 60);
-            const minutes = totalMinutes % 60;
+        function updateGrowingUI(pondNum, isGrowing) {
+            console.log(`🌱 Update UI Pond ${pondNum}:`, isGrowing ? 'GROWING' : 'STOPPED');
             
-            growingStatus[i].minutes = totalMinutes;
+            const btn = document.getElementById(`grow-btn-${pondNum}`);
+            const statusText = document.getElementById(`grow-status-${pondNum}`);
+            const timerItem = document.getElementById(`timer-item-${pondNum}`);
+            const timerStatus = document.getElementById(`timer-status-${pondNum}`);
             
-            const valueEl = document.getElementById(`timer-value-${i}`);
-            valueEl.textContent = `${String(days).padStart(2, '0')}:${String(hours).padStart(2, '0')}:${String(minutes).padStart(2, '0')}`;
+            if (isGrowing) {
+                btn.classList.add('growing');
+                statusText.textContent = 'กำลังปลูก...';
+                timerItem.classList.remove('inactive');
+                timerStatus.textContent = '🌱 กำลังปลูก';
+            } else {
+                btn.classList.remove('growing');
+                statusText.textContent = 'เริ่มปลูก';
+                timerItem.classList.add('inactive');
+                timerStatus.textContent = 'ยังไม่เริ่ม';
+                document.getElementById(`timer-value-${pondNum}`).textContent = '00:00:00';
+            }
+            
+            updatePumpButtonStatus(pondNum, waterStatus[pondNum]);
         }
-    }
-}
-// ✅ ลบคอมเมนต์และ } เกินออก
+
+        function updateGrowingTimers() {
+            for (let i = 1; i <= 3; i++) {
+                if (growingStatus[i].active && growingStatus[i].startTime) {
+                    const elapsed = Date.now() - growingStatus[i].startTime;
+                    const totalMinutes = Math.floor(elapsed / (1000 * 60));
+                    const days = Math.floor(totalMinutes / (60 * 24));
+                    const hours = Math.floor((totalMinutes % (60 * 24)) / 60);
+                    const minutes = totalMinutes % 60;
+                    
+                    growingStatus[i].minutes = totalMinutes;
+                    
+                    const valueEl = document.getElementById(`timer-value-${i}`);
+                    valueEl.textContent = `${String(days).padStart(2, '0')}:${String(hours).padStart(2, '0')}:${String(minutes).padStart(2, '0')}`;
+                }
+            }
+        }
 
         function toggleSidebar() {
             const sidebar = document.getElementById('sidebar');
@@ -2193,155 +2472,107 @@ function updateGrowingTimers() {
         }
 
         function showSection(sectionName) {
-            // ซ่อนทุก section
             document.querySelectorAll('.sidebar-section').forEach(section => {
                 section.classList.remove('active');
             });
             
-            // แสดง section ที่เลือก
             document.getElementById(`section-${sectionName}`).classList.add('active');
             
-            // อัพเดท menu item
             document.querySelectorAll('.sidebar-menu-item').forEach(item => {
                 item.classList.remove('active');
             });
             event.target.closest('.sidebar-menu-item').classList.add('active');
         }
 
-function syncControls(source, isActive, type) {
-    if (type === 'light') {
-        const menuToggle = document.getElementById('light-toggle-menu');
-        const menuMode = document.getElementById('light-mode-menu');
-        
-        menuToggle.classList.toggle('active', isActive);
-        menuMode.textContent = isActive ? 'Manual' : 'Auto';
-        
-        // ✅ ลบการควบคุม LED ออก - ให้ V0 ควบคุมแทน
-        // LED จะอัปเดตผ่าน updateLEDStatus() เท่านั้น
-        
-    } else if (type === 'oxygen') {
-        const menuToggle = document.getElementById('oxygen-toggle-menu');
-        const menuMode = document.getElementById('oxygen-mode-menu');
-        
-        menuToggle.classList.toggle('active', isActive);
-        menuMode.textContent = isActive ? 'Auto' : 'ปิด';
-        
-        // ✅ ลบการควบคุม LED ออก - ให้ V1 ควบคุมแทน
-        // LED จะอัปเดตผ่าน updateLEDStatus() เท่านั้น
-        
-    } else if (type.startsWith('pump')) {
-        const pumpNum = type.replace('pump', '');
-        const mainToggle = document.getElementById(`pump${pumpNum}-toggle`);
-        const mainMode = document.getElementById(`pump${pumpNum}-mode`);
-        
-        mainToggle.classList.toggle('active', isActive);
-        mainMode.textContent = isActive ? 'บังคับเปิด' : 'Auto';
-    }
-}
-
-
-function toggleLightMenu() {
-    if (emergencyStop) return;
-    
-    const toggle = document.getElementById('light-toggle-menu');
-    const menuMode = document.getElementById('light-mode-menu');
-    
-    // สลับสถานะ
-    toggle.classList.toggle('active');
-    
-    // อัพเดทข้อความ
-    if (toggle.classList.contains('active')) {
-        menuMode.textContent = 'Manual';
-        sendToBlynk('V24', 1);  // เปิดไฟ
-    } else {
-        menuMode.textContent = 'Auto';
-        sendToBlynk('V24', 0);  // ปิดไฟ
-    }
-    
-    console.log('💡 ไฟ:', toggle.classList.contains('active') ? 'เปิด' : 'ปิด');
-}
-
-function toggleOxygenMenu() {
-    if (emergencyStop) return;
-    
-    const toggle = document.getElementById('oxygen-toggle-menu');
-    const menuMode = document.getElementById('oxygen-mode-menu');
-    const isCurrentlyActive = toggle.classList.contains('active');
-    
-    // สลับสถานะ
-    toggle.classList.toggle('active');
-    const newState = !isCurrentlyActive;
-    
-    // อัพเดทข้อความและค่า
-    if (newState) {
-        menuMode.textContent = 'Manual';
-        sendToBlynk('V25', 1);  // 1 = เปิด (Manual ON)
-    } else {
-        menuMode.textContent = 'Auto';
-        sendToBlynk('V25', 0);  // 0 = ปิด (Auto)
-    }
-    
-    console.log('💨 ออกซิเจน:', newState ? 'Manual ON' : 'Auto');
-}
-
-        async function togglePumpMenu(pumpNum) {
-            if (emergencyStop) return;
-            
-            const toggle = document.getElementById(`pump${pumpNum}-toggle-menu`);
-            const isActive = toggle.classList.contains('active');
-            
-            syncControls('menu', !isActive, `pump${pumpNum}`);
-            
-            const pins = { 1: 'V12', 2: 'V11', 3: 'V10' };
-            const success = await sendToBlynk(pins[pumpNum], !isActive ? 1 : 0);
-            
-            if (!isActive && success) {
-                addHarvestRecord(pumpNum);
+        function syncControls(source, isActive, type) {
+            if (type === 'light') {
+                const menuToggle = document.getElementById('light-toggle-menu');
+                const menuMode = document.getElementById('light-mode-menu');
                 
-                // รีเซ็ตการปลูกเมื่อเก็บเกี่ยว และตั้งเวลาสำหรับแจ้งเตือนปุ๋ย
-                if (growingStatus[pumpNum].active) {
-                    growingStatus[pumpNum].active = false;
-                    growingStatus[pumpNum].startTime = null;
-                    growingStatus[pumpNum].minutes = 0;
-                    growingStatus[pumpNum].harvestTime = Date.now(); // บันทึกเวลาเก็บเกี่ยว
-                    updateGrowingUI(pumpNum, false);
-                    saveGrowingData();
-                    
-                    // ลบการแจ้งเตือนเก็บเกี่ยวของกระบะนี้
-                    notifications.harvest = notifications.harvest.filter(n => n !== pumpNum);
-                }
+                menuToggle.classList.toggle('active', isActive);
+                menuMode.textContent = isActive ? 'Manual' : 'Auto';
+            } else if (type === 'oxygen') {
+                const menuToggle = document.getElementById('oxygen-toggle-menu');
+                const menuMode = document.getElementById('oxygen-mode-menu');
+                
+                menuToggle.classList.toggle('active', isActive);
+                menuMode.textContent = isActive ? 'Auto' : 'ปิด';
+            } else if (type.startsWith('pump')) {
+                const pumpNum = type.replace('pump', '');
+                const mainToggle = document.getElementById(`pump${pumpNum}-toggle`);
+                const mainMode = document.getElementById(`pump${pumpNum}-mode`);
+                
+                mainToggle.classList.toggle('active', isActive);
+                mainMode.textContent = isActive ? 'บังคับเปิด' : 'Auto';
             }
         }
-                
-        // ข้อมูลจำลองสำหรับโหมดทดสอบ
-const demoData = {
-    V2: 1,   // สถานะถังพักน้ำ
-    V5: 28.5,
-    V6: 29.2,
-    V7: 27.8,
-    V15: 1,
-    V16: 1,
-    V17: 0,
-    V0: 0,
-    V1: 0,
-};
 
-        // เคลียร์ประวัติ
-async function clearHistory() {
-    const confirmed = await showConfirm(
-        '🗑️ ลบประวัติการเก็บเกี่ยว',
-        'คุณต้องการเคลียร์ประวัติการเก็บเกี่ยวทั้งหมดใช่หรือไม่?',
-        { icon: '🗑️', type: 'danger', confirmType: 'danger' }
-    );
-    
-    if (confirmed) {
+        function toggleLightMenu() {
+            if (emergencyStop) return;
+            
+            const toggle = document.getElementById('light-toggle-menu');
+            const menuMode = document.getElementById('light-mode-menu');
+            
+            toggle.classList.toggle('active');
+            
+            if (toggle.classList.contains('active')) {
+                menuMode.textContent = 'Manual';
+                sendToBlynk('V24', 1);
+            } else {
+                menuMode.textContent = 'Auto';
+                sendToBlynk('V24', 0);
+            }
+            
+            console.log('💡 ไฟ:', toggle.classList.contains('active') ? 'เปิด' : 'ปิด');
+        }
+
+        function toggleOxygenMenu() {
+            if (emergencyStop) return;
+            
+            const toggle = document.getElementById('oxygen-toggle-menu');
+            const menuMode = document.getElementById('oxygen-mode-menu');
+            const isCurrentlyActive = toggle.classList.contains('active');
+            
+            toggle.classList.toggle('active');
+            const newState = !isCurrentlyActive;
+            
+            if (newState) {
+                menuMode.textContent = 'Manual';
+                sendToBlynk('V25', 1);
+            } else {
+                menuMode.textContent = 'Auto';
+                sendToBlynk('V25', 0);
+            }
+            
+            console.log('💨 ออกซิเจน:', newState ? 'Manual ON' : 'Auto');
+        }
+
+        const demoData = {
+            V2: 1,
+            V5: 28.5,
+            V6: 29.2,
+            V7: 27.8,
+            V15: 1,
+            V16: 1,
+            V17: 0,
+            V0: 0,
+            V1: 0,
+        };
+
+        async function clearHistory() {
+            const confirmed = await showConfirm(
+                '🗑️ ลบประวัติการเก็บเกี่ยว',
+                'คุณต้องการเคลียร์ประวัติการเก็บเกี่ยวทั้งหมดใช่หรือไม่?',
+                { icon: '🗑️', type: 'danger', confirmType: 'danger' }
+            );
+            
+            if (confirmed) {
                 harvestHistory = [];
                 saveHistory();
                 displayHistory();
             }
         }
 
-        // โหลดประวัติจาก localStorage
         function loadHistory() {
             const saved = localStorage.getItem('harvestHistory');
             if (saved) {
@@ -2350,12 +2581,10 @@ async function clearHistory() {
             }
         }
 
-        // บันทึกประวัติ
         function saveHistory() {
             localStorage.setItem('harvestHistory', JSON.stringify(harvestHistory));
         }
 
-        // เพิ่มประวัติการเก็บ
         function addHarvestRecord(pondNum) {
             const now = new Date();
             const months = ['ม.ค.', 'ก.พ.', 'มี.ค.', 'เม.ย.', 'พ.ค.', 'มิ.ย.', 'ก.ค.', 'ส.ค.', 'ก.ย.', 'ต.ค.', 'พ.ย.', 'ธ.ค.'];
@@ -2374,7 +2603,6 @@ async function clearHistory() {
             displayHistory();
         }
 
-        // แสดงประวัติ
         function displayHistory() {
             const historyList = document.getElementById('history-list');
             
@@ -2392,41 +2620,6 @@ async function clearHistory() {
             `).join('');
         }
 
-        // ตัดการทำงานทั้งหมด
-        function toggleEmergency() {
-            emergencyStop = !emergencyStop;
-            const btn = document.getElementById('emergency-btn');
-            const text = document.getElementById('emergency-text');
-            
-            if (emergencyStop) {
-                btn.classList.add('active');
-                text.textContent = 'กลับสู่การทำงานปกติ';
-                
-                // ปิดทุกอย่าง
-                const menuLightLed = document.getElementById('light-led-menu');
-                const menuOxygenLed = document.getElementById('oxygen-led-menu');
-                
-                document.getElementById('light-toggle-menu').classList.remove('active');
-                if (menuLightLed) menuLightLed.classList.add('off');
-                document.getElementById('oxygen-toggle-menu').classList.remove('active');
-                if (menuOxygenLed) menuOxygenLed.classList.add('off');
-                document.getElementById('pump1-toggle').classList.remove('active');
-                document.getElementById('pump2-toggle').classList.remove('active');
-                document.getElementById('pump3-toggle').classList.remove('active');
-                
-                if (!demoMode) {
-                    sendToBlynk('V24', 0);
-                    sendToBlynk('V25', 1);
-                    sendToBlynk('V10', 0);
-                    sendToBlynk('V11', 0);
-                    sendToBlynk('V12', 0);
-                }
-            } else {
-                btn.classList.remove('active');
-                text.textContent = 'ตัดการทำงานทั้งหมด';
-            }
-        }
-
         function updateTime() {
             const now = new Date();
             const hours = String(now.getHours()).padStart(2, '0');
@@ -2437,178 +2630,163 @@ async function clearHistory() {
             }
         }
 
-async function fetchBlynkData() {
-    try {
-        const pins = ['V2', 'V5', 'V6', 'V7', 'V15', 'V16', 'V17', 'V24', 'V25', 'V10', 'V11', 'V12', 'V0', 'V1', 'V20', 'V21', 'V22'];
-        const response = await fetch(
-            `${BLYNK_SERVER}/external/api/get?token=${BLYNK_AUTH}&${pins.join('&')}`,
-            { method: 'GET', timeout: 5000 }
-        );
-        
-        if (!response.ok) throw new Error('Failed to fetch');
-        
-        const data = await response.json();
-        displayData(data);
-        
-    } catch (error) {
-        console.error('Error fetching Blynk data:', error);
-        
-        // เข้าสู่โหมดทดสอบอัตโนมัติ
-if (!demoMode) {
-            demoMode = true;
-            console.log('⚠️ เข้าสู่โหมดทดสอบ (Demo Mode)');
-            alert('⚠️ ไม่สามารถเชื่อมต่อ Blynk ได้\n\nระบบจะทำงานในโหมดทดสอบ (ไม่สามารถควบคุมอุปกรณ์จริงได้)');
-            document.getElementById('loading').innerHTML = 
-                '<div class="spinner"></div>ไม่สามารถเชื่อมต่อ Blynk<br><small>กำลังเข้าสู่โหมดทดสอบ...</small>';
+        async function fetchBlynkData() {
+            try {
+                const pins = ['V2', 'V5', 'V6', 'V7', 'V15', 'V16', 'V17', 'V24', 'V25', 'V10', 'V11', 'V12', 'V0', 'V1', 'V20', 'V21', 'V22'];
+                const response = await fetch(
+                    `${BLYNK_SERVER}/external/api/get?token=${BLYNK_AUTH}&${pins.join('&')}`,
+                    { method: 'GET', timeout: 5000 }
+                );
+                
+                if (!response.ok) throw new Error('Failed to fetch');
+                
+                const data = await response.json();
+                displayData(data);
+                
+            } catch (error) {
+                console.error('Error fetching Blynk data:', error);
+                
+                if (!demoMode) {
+                    demoMode = true;
+                    console.log('⚠️ เข้าสู่โหมดทดสอบ (Demo Mode)');
+                    alert('⚠️ ไม่สามารถเชื่อมต่อ Blynk ได้\n\nระบบจะทำงานในโหมดทดสอบ (ไม่สามารถควบคุมอุปกรณ์จริงได้)');
+                    document.getElementById('loading').innerHTML = 
+                        '<div class="spinner"></div>ไม่สามารถเชื่อมต่อ Blynk<br><small>กำลังเข้าสู่โหมดทดสอบ...</small>';
+                    
+                    setTimeout(() => {
+                        displayData(demoData);
+                        setInterval(() => {
+                            demoData.V2 = Math.random() > 0.5 ? 1 : 0;
+                            demoData.V5 = (27 + Math.random() * 3).toFixed(1);
+                            demoData.V6 = (27 + Math.random() * 3).toFixed(1);
+                            demoData.V7 = (27 + Math.random() * 3).toFixed(1);
+                            demoData.V15 = Math.random() > 0.5 ? 1 : 0;
+                            demoData.V16 = Math.random() > 0.5 ? 1 : 0;
+                            demoData.V17 = Math.random() > 0.5 ? 1 : 0;
+                            demoData.V0 = Math.random() > 0.5 ? 1 : 0;
+                            demoData.V1 = Math.random() > 0.5 ? 1 : 0;
+                            displayData(demoData);
+                        }, 3000);
+                    }, 2000);
+                }
+            }
+        }
+
+        function syncInitialState(data) {
+            const lightManual = data.V24 == 1;
+            const lightToggle = document.getElementById('light-toggle-menu');
+            const lightMode = document.getElementById('light-mode-menu');
             
-            setTimeout(() => {
-                displayData(demoData);
-                // เปลี่ยนข้อมูลจำลองทุก 3 วินาที
-                setInterval(() => {
-					demoData.V2 = Math.random() > 0.5 ? 1 : 0;
-                    demoData.V5 = (27 + Math.random() * 3).toFixed(1);
-                    demoData.V6 = (27 + Math.random() * 3).toFixed(1);
-                    demoData.V7 = (27 + Math.random() * 3).toFixed(1);
-                    demoData.V15 = Math.random() > 0.5 ? 1 : 0;
-                    demoData.V16 = Math.random() > 0.5 ? 1 : 0;
-                    demoData.V17 = Math.random() > 0.5 ? 1 : 0;
-                    demoData.V0 = Math.random() > 0.5 ? 1 : 0;
-                    demoData.V1 = Math.random() > 0.5 ? 1 : 0;
-                    displayData(demoData);
-                }, 3000);
-            }, 2000);
+            if (lightToggle && lightMode) {
+                lightToggle.classList.toggle('active', lightManual);
+                lightMode.textContent = lightManual ? 'Manual' : 'Auto';
+            }
+            
+            const oxygenOn = data.V25 == 1;
+            const oxygenToggle = document.getElementById('oxygen-toggle-menu');
+            const oxygenMode = document.getElementById('oxygen-mode-menu');
+            
+            if (oxygenToggle && oxygenMode) {
+                oxygenToggle.classList.toggle('active', oxygenOn);
+                oxygenMode.textContent = oxygenOn ? 'Manual' : 'Auto';
+            }
+            
+            console.log('✅ Synced initial state:', {
+                lightManual,
+                oxygenOn,
+                growingStatus
+            });
         }
-    }
-}
-// ✅ เพิ่มฟังก์ชันใหม่ตรงนี้
-function syncInitialState(data) {
-    // Sync Light toggle
-    const lightManual = data.V24 == 1;
-    const lightToggle = document.getElementById('light-toggle-menu');
-    const lightMode = document.getElementById('light-mode-menu');
-    
-    if (lightToggle && lightMode) {
-        lightToggle.classList.toggle('active', lightManual);
-        lightMode.textContent = lightManual ? 'Manual' : 'Auto';
-    }
-    
-    // ✅ Sync Oxygen (ตรวจสอบว่าเปิดหรือปิด)
-    const oxygenOn = data.V25 == 1;  // V25 = 1 คือเปิด
-    const oxygenToggle = document.getElementById('oxygen-toggle-menu');
-    const oxygenMode = document.getElementById('oxygen-mode-menu');
-    
-    if (oxygenToggle && oxygenMode) {
-        oxygenToggle.classList.toggle('active', oxygenOn);
-        oxygenMode.textContent = oxygenOn ? 'Manual' : 'Auto';
-    }
-    
-    console.log('✅ Synced initial state:', {
-        lightManual,
-        oxygenOn,
-        growingStatus
-    });
-}
 
-function displayData(data) {
-    document.getElementById('temp1').textContent = data.V5 !== undefined ? parseFloat(data.V5).toFixed(1) : '--';
-    document.getElementById('temp2').textContent = data.V6 !== undefined ? parseFloat(data.V6).toFixed(1) : '--';
-    document.getElementById('temp3').textContent = data.V7 !== undefined ? parseFloat(data.V7).toFixed(1) : '--';
-    
-    updateWaterStatus(1, data.V17);
-    updateWaterStatus(2, data.V16);
-    updateWaterStatus(3, data.V15);
-	updateWaterStatus(4, data.V2);
-
-    
-    // ✅ เพิ่มบรรทัดนี้
-    updateLEDStatus(data);
-    syncInitialState(data);  // ← เพิ่มบรรทัดนี้
-    document.getElementById('loading').style.display = 'none';
-    document.getElementById('app').style.display = 'block';
-    document.getElementById('sidebar').style.display = 'block';
-    
-    // แสดงสถานะโหมด
-    const statusText = document.querySelector('.header-status span');
-    if (statusText && demoMode) {
-        statusText.innerHTML = `<span style="color: #FDD835;">⚠️ โหมดทดสอบ</span> &bull; <span id="current-time"></span>`;
-        updateTime();
-    }
-	updateConnectionStatus();
-
-}
-// ✅ วางฟังก์ชันใหม่ตรงนี้
-function updateLEDStatus(data) {
-    // อัปเดต LED ไฟ (V0)
-    const lightLed = document.getElementById('light-led-menu');
-    if (lightLed) {  // ✅ เพิ่มการเช็คว่า element มีอยู่
-        if (data.V0 == 1) {
-            lightLed.classList.remove('off');
-        } else {
-            lightLed.classList.add('off');
+        function displayData(data) {
+            document.getElementById('temp1').textContent = data.V5 !== undefined ? parseFloat(data.V5).toFixed(1) : '--';
+            document.getElementById('temp2').textContent = data.V6 !== undefined ? parseFloat(data.V6).toFixed(1) : '--';
+            document.getElementById('temp3').textContent = data.V7 !== undefined ? parseFloat(data.V7).toFixed(1) : '--';
+            
+            updateWaterStatus(1, data.V17);
+            updateWaterStatus(2, data.V16);
+            updateWaterStatus(3, data.V15);
+            updateWaterStatus(4, data.V2);
+            
+            updateLEDStatus(data);
+            syncInitialState(data);
+            document.getElementById('loading').style.display = 'none';
+            document.getElementById('app').style.display = 'block';
+            document.getElementById('sidebar').style.display = 'block';
+            
+            const statusText = document.querySelector('.header-status span');
+            if (statusText && demoMode) {
+                statusText.innerHTML = `<span style="color: #FDD835;">⚠️ โหมดทดสอบ</span> &bull; <span id="current-time"></span>`;
+                updateTime();
+            }
+            updateConnectionStatus();
         }
-    }
-    
-    // อัปเดต LED ออกซิเจน (V1)
-    const oxygenLed = document.getElementById('oxygen-led-menu');
-    if (oxygenLed) {  // ✅ เพิ่มการเช็คว่า element มีอยู่
-        if (data.V1 == 1) {
-            oxygenLed.classList.remove('off');
-        } else {
-            oxygenLed.classList.add('off');
+
+        function updateLEDStatus(data) {
+            const lightLed = document.getElementById('light-led-menu');
+            if (lightLed) {
+                if (data.V0 == 1) {
+                    lightLed.classList.remove('off');
+                } else {
+                    lightLed.classList.add('off');
+                }
+            }
+            
+            const oxygenLed = document.getElementById('oxygen-led-menu');
+            if (oxygenLed) {
+                if (data.V1 == 1) {
+                    oxygenLed.classList.remove('off');
+                } else {
+                    oxygenLed.classList.add('off');
+                }
+            }
         }
-    }
-}
 
-
-function updateWaterStatus(pondNum, value) {
-    const hasWater = value == 1;
-    waterStatus[pondNum] = hasWater; // เก็บสถานะ
-    
-    const led = document.getElementById(`water${pondNum}-led`);
-    const status = document.getElementById(`water${pondNum}-status`);
-    
-    if (hasWater) {
-        led.classList.remove('off');
-        status.classList.remove('off');
-        status.textContent = 'น้ำเต็ม';
-    } else {
-        led.classList.add('off');
-        status.classList.add('off');
-        status.textContent = 'ไม่เต็ม';
-    }
-    
-    // อัพเดทสถานะปุ่มปั๊ม (เฉพาะกระบะ 1-3 เท่านั้น)
-    if (pondNum <= 3) {
-        updatePumpButtonStatus(pondNum, hasWater);
-    }
-}
-
-function updatePumpButtonStatus(pondNum, hasWater) {
-    const pumpItem = document.getElementById(`pump${pondNum}-toggle`).closest('.switch-item');
-    
-    // ✅ ปุ่มเก็บเกี่ยวทำงานได้เมื่อ: มีน้ำ + กำลังปลูกอยู่
-    const isGrowing = growingStatus[pondNum] && growingStatus[pondNum].active;
-    
-    if (hasWater && isGrowing) {
-        pumpItem.classList.remove('disabled');
-    } else {
-        pumpItem.classList.add('disabled');
-        // ถ้าเงื่อนไขไม่ผ่าน และปั๊มกำลังทำงานอยู่ ให้ปิด
-        const toggle = document.getElementById(`pump${pondNum}-toggle`);
-        if (toggle.classList.contains('active')) {
-            toggle.classList.remove('active');
-            const mode = document.getElementById(`pump${pondNum}-mode`);
-            mode.textContent = 'Auto';
-            sendToBlynk(getPumpPin(pondNum), 0);
+        function updateWaterStatus(pondNum, value) {
+            const hasWater = value == 1;
+            waterStatus[pondNum] = hasWater;
+            
+            const led = document.getElementById(`water${pondNum}-led`);
+            const status = document.getElementById(`water${pondNum}-status`);
+            
+            if (hasWater) {
+                led.classList.remove('off');
+                status.classList.remove('off');
+                status.textContent = 'น้ำเต็ม';
+            } else {
+                led.classList.add('off');
+                status.classList.add('off');
+                status.textContent = 'ไม่เต็ม';
+            }
+            
+            if (pondNum <= 3) {
+                updatePumpButtonStatus(pondNum, hasWater);
+            }
         }
-    }
-}
 
-// ✅ เพิ่มฟังก์ชันใหม่ต่อท้าย
-function getPumpPin(pondNum) {
-    const pins = { 1: 'V12', 2: 'V11', 3: 'V10' };
-    return pins[pondNum];
-}
+        function updatePumpButtonStatus(pondNum, hasWater) {
+            const pumpItem = document.getElementById(`pump${pondNum}-toggle`).closest('.switch-item');
+            const isGrowing = growingStatus[pondNum] && growingStatus[pondNum].active;
+            
+            if (hasWater && isGrowing) {
+                pumpItem.classList.remove('disabled');
+            } else {
+                pumpItem.classList.add('disabled');
+                const toggle = document.getElementById(`pump${pondNum}-toggle`);
+                if (toggle.classList.contains('active')) {
+                    toggle.classList.remove('active');
+                    const mode = document.getElementById(`pump${pondNum}-mode`);
+                    mode.textContent = 'Auto';
+                    sendToBlynk(getPumpPin(pondNum), 0);
+                }
+            }
+        }
+
+        function getPumpPin(pondNum) {
+            const pins = { 1: 'V12', 2: 'V11', 3: 'V10' };
+            return pins[pondNum];
+        }
+
         async function sendToBlynk(pin, value) {
             if (emergencyStop && value === 1) return false;
             if (demoMode) {
@@ -2628,201 +2806,165 @@ function getPumpPin(pondNum) {
             }
         }
 
-function toggleLight() {
-    if (emergencyStop) return;
-    
-    const toggle = document.getElementById('light-toggle');  // ✅ ถูกต้อง
-    const isActive = toggle.classList.contains('active');
-    
-    syncControls('main', !isActive, 'light');
-    sendToBlynk('V24', !isActive ? 1 : 0);
-}
-
-        function toggleOxygen() {
+        async function togglePump(pumpNum) {
             if (emergencyStop) return;
             
-            const toggle = document.getElementById('oxygen-toggle');
+            const toggle = document.getElementById(`pump${pumpNum}-toggle`);
             const isActive = toggle.classList.contains('active');
+            const pumpItem = toggle.closest('.switch-item');
             
-            syncControls('main', !isActive, 'oxygen');
-            sendToBlynk('V25', !isActive ? 0 : 1);
-        }
-
-async function togglePump(pumpNum) {
-    if (emergencyStop) return;
-    
-    const toggle = document.getElementById(`pump${pumpNum}-toggle`);
-    const isActive = toggle.classList.contains('active');
-    const pumpItem = toggle.closest('.switch-item');
-    
-    // ✅ รวมการเช็คเงื่อนไขไว้ด้วยกัน
-    if (pumpItem.classList.contains('disabled') && !isActive) {
-        if (!growingStatus[pumpNum].active) {
-            alert(`❌ ไม่สามารถเก็บเกี่ยวได้\n\nต้องเริ่มปลูกในกระบะที่ ${pumpNum} ก่อน`);
-        } else if (!waterStatus[pumpNum]) {
-            alert(`❌ ไม่สามารถเก็บเกี่ยวได้\n\nกระบะที่ ${pumpNum} ไม่มีน้ำ`);
-        }
-        return;
-    }
-    
-    const pins = { 1: 'V12', 2: 'V11', 3: 'V10' };
-    
-    if (!isActive) {
-        // === เปิดปั๊ม ===
-        console.log(`💧 Pump ${pumpNum}: เปิดปั๊มดูดน้ำ`);
-        syncControls('main', true, `pump${pumpNum}`);
-        await sendToBlynk(pins[pumpNum], 1);
-        
-    } else {
-        // === ปิดปั๊ม + สิ้นสุดการปลูก ===
-        console.log(`💧 Pump ${pumpNum}: ปิดปั๊ม + สิ้นสุดการปลูก`);
-        
-        const confirmed = await showConfirm(
-            '✅ เก็บเกี่ยวสำเร็จ',
-            `กระบะที่ ${pumpNum} เก็บเกี่ยวสำเร็จแล้ว!\n\nข้อมูลการปลูกจะถูกบันทึกในประวัติ`,
-            { icon: '✅', type: 'normal' }
-        );
-        
-        if (confirmed) {
-            syncControls('main', false, `pump${pumpNum}`);
-            const success = await sendToBlynk(pins[pumpNum], 0);
-            
-            if (success) {
-                addHarvestRecord(pumpNum);
-                
-                // ✅ สิ้นสุดการปลูก + หยุดเซนเซอร์
-                if (growingStatus[pumpNum].active) {
-                    growingStatus[pumpNum].active = false;
-                    growingStatus[pumpNum].startTime = null;
-                    growingStatus[pumpNum].minutes = 0;
-                    growingStatus[pumpNum].harvestTime = Date.now();
-                    
-                    updateGrowingUI(pumpNum, false);
-                    saveGrowingData();
-                    
-                    // ✅ ส่งสัญญาณหยุดเซนเซอร์ไปยัง ESP32
-                    const growPins = { 1: 'V20', 2: 'V21', 3: 'V22' };
-                    await sendToBlynk(growPins[pumpNum], 0);
-                    console.log(`🛑 หยุดเซนเซอร์กระบะที่ ${pumpNum} (เก็บเกี่ยวสำเร็จ)`);
-                    
-                    notifications.harvest = notifications.harvest.filter(n => n !== pumpNum);
+            if (pumpItem.classList.contains('disabled') && !isActive) {
+                if (!growingStatus[pumpNum].active) {
+                    alert(`❌ ไม่สามารถเก็บเกี่ยวได้\n\nต้องเริ่มปลูกในกระบะที่ ${pumpNum} ก่อน`);
+                } else if (!waterStatus[pumpNum]) {
+                    alert(`❌ ไม่สามารถเก็บเกี่ยวได้\n\nกระบะที่ ${pumpNum} ไม่มีน้ำ`);
                 }
+                return;
+            }
+            
+            const pins = { 1: 'V12', 2: 'V11', 3: 'V10' };
+            
+            if (!isActive) {
+                console.log(`💧 Pump ${pumpNum}: เปิดปั๊มดูดน้ำ`);
+                syncControls('main', true, `pump${pumpNum}`);
+                await sendToBlynk(pins[pumpNum], 1);
+            } else {
+                console.log(`💧 Pump ${pumpNum}: ปิดปั๊ม + สิ้นสุดการปลูก`);
                 
-                // ปิดออกซิเจนถ้าไม่มีกระบะไหนปลูกอยู่
-                const anyPondActive = Object.values(growingStatus).some(s => s.active);
-                if (!anyPondActive) {
-                    const oxygenToggle = document.getElementById('oxygen-toggle-menu');
-                    const oxygenMode = document.getElementById('oxygen-mode-menu');
-                    if (oxygenToggle && oxygenMode) {
-                        oxygenToggle.classList.remove('active');
-                        oxygenMode.textContent = 'ปิด';
-                        sendToBlynk('V25', 1);
-                        console.log('💨 ออกซิเจน: ปิดอัตโนมัติ');
+                const confirmed = await showConfirm(
+                    '✅ เก็บเกี่ยวสำเร็จ',
+                    `กระบะที่ ${pumpNum} เก็บเกี่ยวสำเร็จแล้ว!\n\nข้อมูลการปลูกจะถูกบันทึกในประวัติ`,
+                    { icon: '✅', type: 'normal' }
+                );
+                
+                if (confirmed) {
+                    syncControls('main', false, `pump${pumpNum}`);
+                    const success = await sendToBlynk(pins[pumpNum], 0);
+                    
+                    if (success) {
+                        addHarvestRecord(pumpNum);
+                        
+                        if (growingStatus[pumpNum].active) {
+                            growingStatus[pumpNum].active = false;
+                            growingStatus[pumpNum].startTime = null;
+                            growingStatus[pumpNum].minutes = 0;
+                            growingStatus[pumpNum].harvestTime = Date.now();
+                            
+                            updateGrowingUI(pumpNum, false);
+                            saveGrowingData();
+                            
+                            const growPins = { 1: 'V20', 2: 'V21', 3: 'V22' };
+                            await sendToBlynk(growPins[pumpNum], 0);
+                            console.log(`🛑 หยุดเซนเซอร์กระบะที่ ${pumpNum} (เก็บเกี่ยวสำเร็จ)`);
+                            
+                            notifications.harvest = notifications.harvest.filter(n => n !== pumpNum);
+                        }
+                        
+                        const anyPondActive = Object.values(growingStatus).some(s => s.active);
+                        if (!anyPondActive) {
+                            const oxygenToggle = document.getElementById('oxygen-toggle-menu');
+                            const oxygenMode = document.getElementById('oxygen-mode-menu');
+                            if (oxygenToggle && oxygenMode) {
+                                oxygenToggle.classList.remove('active');
+                                oxygenMode.textContent = 'ปิด';
+                                sendToBlynk('V25', 1);
+                                console.log('💨 ออกซิเจน: ปิดอัตโนมัติ');
+                            }
+                        }
                     }
+                } else {
+                    toggle.classList.add('active');
+                    const mode = document.getElementById(`pump${pumpNum}-mode`);
+                    mode.textContent = 'บังคับเปิด';
                 }
             }
-        } else {
-            // ถ้าผู้ใช้กด "ยกเลิก" ให้คงสถานะเปิดไว้
-            toggle.classList.add('active');
-            const mode = document.getElementById(`pump${pumpNum}-mode`);
-            mode.textContent = 'บังคับเปิด';
         }
-    }
-}
 
-// ฟังก์ชันเริ่ม/หยุดการปลูก
-async function toggleGrowing(pondNum) {
-    if (emergencyStop) return;
-    
-    const isCurrentlyGrowing = growingStatus[pondNum].active;
-    
-    if (!isCurrentlyGrowing) {
-        // === เริ่มปลูก ===
-        const confirmed = await showConfirm(
-            '🌱 เริ่มการปลูก',
-            `ต้องการเริ่มปลูกในกระบะที่ ${pondNum} ใช่หรือไม่?\n\nระบบจะเปิดใช้งาน: เซนเซอร์น้ำ, ไฟ, ออกซิเจน`,
-            { icon: '🌱', type: 'normal' }
-        );
-        
-        if (confirmed) {
-            // เริ่มการปลูก
-            growingStatus[pondNum].active = true;
-            growingStatus[pondNum].startTime = Date.now();
-            growingStatus[pondNum].minutes = 0;
+        async function toggleGrowing(pondNum) {
+            if (emergencyStop) return;
             
-            updateGrowingUI(pondNum, true);
-            saveGrowingData();
+            const isCurrentlyGrowing = growingStatus[pondNum].active;
             
-            // 🔥 เปิดออกซิเจนทันที (ถ้ายังไม่เปิด)
-            const oxygenToggle = document.getElementById('oxygen-toggle-menu');
-            const oxygenMode = document.getElementById('oxygen-mode-menu');
-            // เมื่อเริ่มปลูกกระบะ
-if (oxygenToggle && oxygenMode && !oxygenToggle.classList.contains('active')) {
-    oxygenToggle.classList.add('active');
-    oxygenMode.textContent = 'Manual';  // ✅ แสดง Manual
-    sendToBlynk('V25', 1);  // ✅ ส่ง 1 = เปิด
-    console.log('💨 ออกซิเจน: เปิดอัตโนมัติ (Manual ON)');
-}
-            
-            // 🔥 ส่งสัญญาณเริ่มปลูกไปยัง ESP32
-            const growPins = { 1: 'V20', 2: 'V21', 3: 'V22' };
-            await sendToBlynk(growPins[pondNum], 1);
-            console.log(`✅ เริ่มปลูกกระบะที่ ${pondNum} - เซนเซอร์และไฟเริ่มทำงาน`);
+            if (!isCurrentlyGrowing) {
+                const confirmed = await showConfirm(
+                    '🌱 เริ่มการปลูก',
+                    `ต้องการเริ่มปลูกในกระบะที่ ${pondNum} ใช่หรือไม่?\n\nระบบจะเปิดใช้งาน: เซนเซอร์น้ำ, ไฟ, ออกซิเจน`,
+                    { icon: '🌱', type: 'normal' }
+                );
+                
+                if (confirmed) {
+                    growingStatus[pondNum].active = true;
+                    growingStatus[pondNum].startTime = Date.now();
+                    growingStatus[pondNum].minutes = 0;
+                    
+                    updateGrowingUI(pondNum, true);
+                    saveGrowingData();
+                    
+                    const oxygenToggle = document.getElementById('oxygen-toggle-menu');
+                    const oxygenMode = document.getElementById('oxygen-mode-menu');
+                    if (oxygenToggle && oxygenMode && !oxygenToggle.classList.contains('active')) {
+                        oxygenToggle.classList.add('active');
+                        oxygenMode.textContent = 'Manual';
+                        sendToBlynk('V25', 1);
+                        console.log('💨 ออกซิเจน: เปิดอัตโนมัติ (Manual ON)');
+                    }
+                    
+                    const growPins = { 1: 'V20', 2: 'V21', 3: 'V22' };
+                    await sendToBlynk(growPins[pondNum], 1);
+                    console.log(`✅ เริ่มปลูกกระบะที่ ${pondNum} - เซนเซอร์และไฟเริ่มทำงาน`);
+                }
+            } else {
+                const confirmed = await showConfirm(
+                    '⚠️ หยุดการปลูก',
+                    `ต้องการหยุดการปลูกในกระบะที่ ${pondNum} ใช่หรือไม่?\n\nเซนเซอร์และไฟจะหยุดทำงาน`,
+                    { icon: '⚠️', type: 'warning', confirmType: 'danger' }
+                );
+                
+                if (confirmed) {
+                    growingStatus[pondNum].active = false;
+                    growingStatus[pondNum].startTime = null;
+                    growingStatus[pondNum].minutes = 0;
+                    
+                    updateGrowingUI(pondNum, false);
+                    saveGrowingData();
+                    
+                    const growPins = { 1: 'V20', 2: 'V21', 3: 'V22' };
+                    await sendToBlynk(growPins[pondNum], 0);
+                    console.log(`🛑 หยุดปลูกกระบะที่ ${pondNum} - เซนเซอร์และไฟหยุดทำงาน`);
+                    
+                    const anyPondActive = Object.values(growingStatus).some(s => s.active);
+                    if (!anyPondActive) {
+                        const oxygenToggle = document.getElementById('oxygen-toggle-menu');
+                        const oxygenMode = document.getElementById('oxygen-mode-menu');
+                        if (oxygenToggle && oxygenMode) {
+                            oxygenToggle.classList.remove('active');
+                            oxygenMode.textContent = 'Auto';
+                            sendToBlynk('V25', 0);
+                            console.log('💨 ออกซิเจน: ปิดอัตโนมัติ (ไม่มีกระบะปลูก)');
+                        }
+                    }
+                    
+                    notifications.harvest = notifications.harvest.filter(n => n !== pondNum);
+                }
+            }
         }
-    } else {
-        // === หยุดการปลูก ===
-        const confirmed = await showConfirm(
-            '⚠️ หยุดการปลูก',
-            `ต้องการหยุดการปลูกในกระบะที่ ${pondNum} ใช่หรือไม่?\n\nเซนเซอร์และไฟจะหยุดทำงาน`,
-            { icon: '⚠️', type: 'warning', confirmType: 'danger' }
-        );
-        
-        if (confirmed) {
-            // หยุดการปลูก
-            growingStatus[pondNum].active = false;
-            growingStatus[pondNum].startTime = null;
-            growingStatus[pondNum].minutes = 0;
-            
-            updateGrowingUI(pondNum, false);
-            saveGrowingData();
-            
-            // 🔥 ส่งสัญญาณหยุดปลูกไปยัง ESP32
-            const growPins = { 1: 'V20', 2: 'V21', 3: 'V22' };
-            await sendToBlynk(growPins[pondNum], 0);
-            console.log(`🛑 หยุดปลูกกระบะที่ ${pondNum} - เซนเซอร์และไฟหยุดทำงาน`);
-            
-            // 🔥 ถ้าไม่มีกระบะไหนปลูกอยู่เลย → ปิดออกซิเจน
-            const anyPondActive = Object.values(growingStatus).some(s => s.active);
-            if (!anyPondActive) {
-				const oxygenToggle = document.getElementById('oxygen-toggle-menu');
-				const oxygenMode = document.getElementById('oxygen-mode-menu');
-				if (oxygenToggle && oxygenMode) {
-					oxygenToggle.classList.remove('active');
-					oxygenMode.textContent = 'Auto';  // ✅ แสดง Auto
-					sendToBlynk('V25', 0);  // ✅ ส่ง 0 = ปิด
-					console.log('💨 ออกซิเจน: ปิดอัตโนมัติ (ไม่มีกระบะปลูก)');
-				}
-			}
 
-            
-            // ลบการแจ้งเตือนเก็บเกี่ยว
-            notifications.harvest = notifications.harvest.filter(n => n !== pondNum);
-        }
-    }
-}
-// โหลดข้อมูลก่อนเริ่มระบบ
-loadDarkMode(); 
-loadGrowingData();
-loadHistory();
-loadFertilizerHistory();
-updateTime();
-loadNotificationSettings();
+        // โหลดข้อมูลก่อนเริ่มระบบ
+        loadDarkMode(); 
+        loadGrowingData();
+        loadHistory();
+        loadFertilizerHistory();
+        updateTime();
+        loadNotificationSettings();
+        loadTimeSettings();
+		loadNotificationState(); 
+	
 
-// ตั้งค่า intervals
-setInterval(updateTime, 1000);
-setInterval(updateGrowingTimers, 1000);
-        setInterval(checkNotifications, 60000); // ตรวจสอบการแจ้งเตือนทุก 1 นาที
-        checkNotifications(); // ตรวจสอบทันทีเมื่อเริ่มต้น
+        // ตั้งค่า intervals
+        setInterval(updateTime, 1000);
+        setInterval(updateGrowingTimers, 1000);
+        setInterval(checkNotifications, 10000);
+        checkNotifications();
         
         fetchBlynkData();
         if (!demoMode) {
