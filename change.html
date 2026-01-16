@@ -1450,80 +1450,87 @@ body.dark-mode .settings-content {
                 </div>
 
                 <!-- ตั้งค่าระยะเวลา -->
-                <div class="settings-item" onclick="toggleSettingsItem(this)">
-                    <div class="settings-item-header">
-                        <div class="settings-item-left">
-                            <div class="settings-icon">⏱️</div>
-                            <div>
-                                <div class="settings-label">ตั้งค่าระยะเวลา</div>
-                                <div class="settings-desc">กำหนดวันเก็บเกี่ยวและใส่ปุ๋ย</div>
-                            </div>
-                        </div>
-                        <div class="settings-arrow">›</div>
-                    </div>
-                    <div class="settings-content">
-                        <!-- เก็บเกี่ยว -->
-                        <div style="margin-bottom: 16px; padding: 12px; background: linear-gradient(135deg, #E8F5E9 0%, #C8E6C9 100%); border-radius: 10px; border: 2px solid #4CAF50;">
-                            <div style="font-size: 14px; font-weight: 700; color: #2E7D32; margin-bottom: 10px; display: flex; align-items: center; gap: 8px;">
-                                <span>🌱</span>
-                                <span>เวลาเก็บเกี่ยว</span>
-                            </div>
-                            <div class="settings-option" style="background: white; margin-bottom: 8px;">
-                                <span class="settings-option-label">📅 วันที่</span>
-                                <input type="number" id="harvest-days" min="1" max="30" value="7" 
-                                       onchange="updateHarvestDays(this.value)" 
-                                       onclick="event.stopPropagation();"
-                                       style="width: 60px; padding: 6px 10px; border: 2px solid #4CAF50; border-radius: 8px; text-align: center; font-weight: 600; color: #2E7D32; font-size: 14px;">
-                                <span style="color: #2E7D32; font-weight: 600; margin-left: 4px;">วัน</span>
-                            </div>
-                            <div class="settings-option" style="background: white;">
-<span class="settings-option-label">🕐 เวลา (24 ชม.)</span>  <!-- เพิ่ม (24 ชม.) -->
-<!-- ✅ ถูกต้อง -->
-<input type="text" id="harvest-time" value="12:00" 
-    pattern="[0-2][0-9]:[0-5][0-9]"
-    placeholder="เช่น 14:30"
-    maxlength="5"
-    onchange="updateHarvestTime(this.value)" 
-    onclick="event.stopPropagation();"
-    oninput="formatTime(this)"
-    style="padding: 6px 10px; border: 2px solid #4CAF50; border-radius: 8px; font-weight: 600; color: #2E7D32; font-size: 14px; width: 100px; text-align: center;">
-                            </div>
-                            <div style="margin-top: 8px; padding: 8px; background: rgba(255, 255, 255, 0.7); border-radius: 6px; font-size: 11px; color: #2E7D32;">
-                                💡 เช่น: วันที่ <strong>7</strong> เวลา <strong>12:00</strong> = เก็บเกี่ยววันที่ 7 เวลา 12:00 น.
-                            </div>
-                        </div>
+<div class="settings-item" onclick="toggleSettingsItem(this)">
+    <div class="settings-item-header">
+        <div class="settings-item-left">
+            <div class="settings-icon">⏱️</div>
+            <div>
+                <div class="settings-label">ตั้งค่าระยะเวลา</div>
+                <div class="settings-desc">กำหนดวันเก็บเกี่ยวและใส่ปุ๋ย</div>
+            </div>
+        </div>
+        <div class="settings-arrow">›</div>
+    </div>
+    <div class="settings-content">
+        <!-- เก็บเกี่ยว -->
+        <div style="margin-bottom: 16px; padding: 12px; background: linear-gradient(135deg, #E8F5E9 0%, #C8E6C9 100%); border-radius: 10px; border: 2px solid #4CAF50;">
+            <div style="font-size: 14px; font-weight: 700; color: #2E7D32; margin-bottom: 10px; display: flex; align-items: center; gap: 8px;">
+                <span>🌱</span>
+                <span>เวลาเก็บเกี่ยว</span>
+            </div>
+            <div class="settings-option" style="background: white; margin-bottom: 8px;">
+                <span class="settings-option-label">📅 วันที่</span>
+                <input type="number" id="harvest-days" min="0" max="30" value="7" 
+                       onclick="event.stopPropagation();"
+                       style="width: 60px; padding: 6px 10px; border: 2px solid #4CAF50; border-radius: 8px; text-align: center; font-weight: 600; color: #2E7D32; font-size: 14px;">
+                <span style="color: #2E7D32; font-weight: 600; margin-left: 4px;">วัน</span>
+            </div>
+            <div class="settings-option" style="background: white;">
+                <span class="settings-option-label">🕐 เวลา (24 ชม.)</span>
+                <input type="text" id="harvest-time" value="12:00" 
+                    pattern="[0-2][0-9]:[0-5][0-9]"
+                    placeholder="เช่น 14:30"
+                    maxlength="5"
+                    onclick="event.stopPropagation();"
+                    oninput="formatTime(this)"
+                    style="padding: 6px 10px; border: 2px solid #4CAF50; border-radius: 8px; font-weight: 600; color: #2E7D32; font-size: 14px; width: 100px; text-align: center;">
+            </div>
+            <div style="margin-top: 8px; padding: 8px; background: rgba(255, 255, 255, 0.7); border-radius: 6px; font-size: 11px; color: #2E7D32;">
+                💡 เช่น: วันที่ <strong>7</strong> เวลา <strong>12:00</strong> = เก็บเกี่ยววันที่ 7 เวลา 12:00 น.
+            </div>
+        </div>
 
-                        <!-- ใส่ปุ๋ย -->
-                        <div style="padding: 12px; background: linear-gradient(135deg, #FFF3E0 0%, #FFE0B2 100%); border-radius: 10px; border: 2px solid #FF9800;">
-                            <div style="font-size: 14px; font-weight: 700; color: #E65100; margin-bottom: 10px; display: flex; align-items: center; gap: 8px;">
-                                <span>🌾</span>
-                                <span>เวลาใส่ปุ๋ย</span>
-                            </div>
-                            <div class="settings-option" style="background: white; margin-bottom: 8px;">
-                                <span class="settings-option-label">📅 วันที่</span>
-                                <input type="number" id="fertilizer-days" min="1" max="30" value="7" 
-									onchange="updateFertilizerDays(this.value)" 
-									onclick="event.stopPropagation();"
-									style="width: 60px; padding: 6px 10px; border: 2px solid #FF9800; border-radius: 8px; text-align: center; font-weight: 600; color: #E65100; font-size: 14px;">
-                                <span style="color: #E65100; font-weight: 600; margin-left: 4px;">วัน</span>
-                            </div>
-                            <div class="settings-option" style="background: white;">
-<span class="settings-option-label">🕐 เวลา (24 ชม.)</span>  <!-- เพิ่ม (24 ชม.) -->
-<input type="text" id="fertilizer-time" value="12:00" 
-    pattern="[0-2][0-9]:[0-5][0-9]"
-    placeholder="เช่น 14:30"
-    maxlength="5"
-    onchange="updateFertilizerTime(this.value)" 
-    onclick="event.stopPropagation();"
-    oninput="formatTime(this)"
-    style="padding: 6px 10px; border: 2px solid #FF9800; border-radius: 8px; font-weight: 600; color: #E65100; font-size: 14px; width: 100px; text-align: center;">
-                            </div>
-                            <div style="margin-top: 8px; padding: 8px; background: rgba(255, 255, 255, 0.7); border-radius: 6px; font-size: 11px; color: #E65100;">
-                                💡 เช่น: วันที่ <strong>7</strong> เวลา <strong>14:30</strong> = ใส่ปุ๋ยวันที่ 7 เวลา 14:30 น.
-                            </div>
-                        </div>
-                    </div>
-                </div>
+        <!-- ใส่ปุ๋ย -->
+        <div style="padding: 12px; background: linear-gradient(135deg, #FFF3E0 0%, #FFE0B2 100%); border-radius: 10px; border: 2px solid #FF9800; margin-bottom: 16px;">
+            <div style="font-size: 14px; font-weight: 700; color: #E65100; margin-bottom: 10px; display: flex; align-items: center; gap: 8px;">
+                <span>🌾</span>
+                <span>เวลาใส่ปุ๋ย</span>
+            </div>
+            <div class="settings-option" style="background: white; margin-bottom: 8px;">
+                <span class="settings-option-label">📅 วันที่</span>
+                <input type="number" id="fertilizer-days" min="0" max="30" value="7" 
+                    onclick="event.stopPropagation();"
+                    style="width: 60px; padding: 6px 10px; border: 2px solid #FF9800; border-radius: 8px; text-align: center; font-weight: 600; color: #E65100; font-size: 14px;">
+                <span style="color: #E65100; font-weight: 600; margin-left: 4px;">วัน</span>
+            </div>
+            <div class="settings-option" style="background: white;">
+                <span class="settings-option-label">🕐 เวลา (24 ชม.)</span>
+                <input type="text" id="fertilizer-time" value="12:00" 
+                    pattern="[0-2][0-9]:[0-5][0-9]"
+                    placeholder="เช่น 14:30"
+                    maxlength="5"
+                    onclick="event.stopPropagation();"
+                    oninput="formatTime(this)"
+                    style="padding: 6px 10px; border: 2px solid #FF9800; border-radius: 8px; font-weight: 600; color: #E65100; font-size: 14px; width: 100px; text-align: center;">
+            </div>
+            <div style="margin-top: 8px; padding: 8px; background: rgba(255, 255, 255, 0.7); border-radius: 6px; font-size: 11px; color: #E65100;">
+                💡 เช่น: วันที่ <strong>7</strong> เวลา <strong>14:30</strong> = ใส่ปุ๋ยวันที่ 7 เวลา 14:30 น.
+            </div>
+        </div>
+
+        <!-- ปุ่มยืนยัน -->
+        <div style="display: flex; justify-content: flex-end;">
+            <button onclick="event.stopPropagation(); confirmTimeSettings();" 
+                style="padding: 10px 24px; background: linear-gradient(135deg, #4CAF50 0%, #388E3C 100%); color: white; border: none; border-radius: 10px; font-size: 14px; font-weight: 700; cursor: pointer; box-shadow: 0 4px 12px rgba(76, 175, 80, 0.4); transition: all 0.3s; display: flex; align-items: center; gap: 8px;"
+                onmouseover="this.style.transform='translateY(-2px)'; this.style.boxShadow='0 6px 16px rgba(76, 175, 80, 0.5)';"
+                onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='0 4px 12px rgba(76, 175, 80, 0.4)';">
+                <span>✓</span>
+                <span>ยืนยันการตั้งค่า</span>
+            </button>
+        </div>
+    </div>
+</div>
+</div>
 
                 <!-- ข้อมูลระบบ -->
                 <div class="settings-item" onclick="toggleSettingsItem(this)">
@@ -2021,56 +2028,89 @@ body.dark-mode .settings-content {
             console.log('🌾 แจ้งเตือนใส่ปุ๋ย:', notificationSettings.fertilizer ? 'เปิด' : 'ปิด');
         }
 
-        // อัพเดทการตั้งค่าเวลา
-        function updateHarvestDays(value) {
-            const days = parseInt(value);
-            if (days >= 1 && days <= 30) {
-                timeSettings.harvestDays = days;
-                saveTimeSettings();
-                console.log(`🌱 ตั้งค่าวันเก็บเกี่ยว: ${days} วัน`);
-            }
-        }
-
-        function updateHarvestTime(value) {
-            timeSettings.harvestTime = value;
-            saveTimeSettings();
-            console.log(`🕐 ตั้งค่าเวลาเก็บเกี่ยว: ${value} น.`);
-        }
-
-        function updateFertilizerDays(value) {
-            const days = parseInt(value);
-            if (days >= 1 && days <= 30) {
-                timeSettings.fertilizerDays = days;
-                saveTimeSettings();
-                console.log(`🌾 ตั้งค่าวันใส่ปุ๋ย: ${days} วัน`);
-            }
-        }
-
-        function updateFertilizerTime(value) {
-            timeSettings.fertilizerTime = value;
-            saveTimeSettings();
-            console.log(`🕐 ตั้งค่าเวลาใส่ปุ๋ย: ${value} น.`);
-        }
-		// ฟอร์แมตเวลาให้เป็น 24 ชม. (HH:MM)
-function formatTime(input) {
-    let value = input.value.replace(/[^0-9]/g, ''); // เอาแต่ตัวเลข
+// เพิ่มฟังก์ชันนี้แทน (ตรงก่อนบรรทัด loadDarkMode())
+async function confirmTimeSettings() {
+    const harvestDays = parseInt(document.getElementById('harvest-days').value);
+    const harvestTime = document.getElementById('harvest-time').value;
+    const fertilizerDays = parseInt(document.getElementById('fertilizer-days').value);
+    const fertilizerTime = document.getElementById('fertilizer-time').value;
     
-    if (value.length >= 2) {
-        let hours = value.slice(0, 2);
-        let minutes = value.slice(2, 4);
-        
-        // จำกัดชั่วโมง 00-23
-        if (parseInt(hours) > 23) hours = '23';
-        
-        // จำกัดนาที 00-59
-        if (minutes && parseInt(minutes) > 59) minutes = '59';
-        
-        value = hours + (minutes ? ':' + minutes : '');
+    // ตรวจสอบความถูกต้อง
+    if (isNaN(harvestDays) || harvestDays < 0 || harvestDays > 30) {
+        alert('❌ กรุณาระบุวันเก็บเกี่ยวระหว่าง 0-30 วัน');
+        return;
     }
     
-    input.value = value;
+    if (isNaN(fertilizerDays) || fertilizerDays < 0 || fertilizerDays > 30) {
+        alert('❌ กรุณาระบุวันใส่ปุ๋ยระหว่าง 0-30 วัน');
+        return;
+    }
+    
+    // ตรวจสอบรูปแบบเวลา
+    const timeRegex = /^([0-1][0-9]|2[0-3]):[0-5][0-9]$/;
+    if (!timeRegex.test(harvestTime)) {
+        alert('❌ กรุณาระบุเวลาเก็บเกี่ยวในรูปแบบ HH:MM (เช่น 14:30)');
+        return;
+    }
+    
+    if (!timeRegex.test(fertilizerTime)) {
+        alert('❌ กรุณาระบุเวลาใส่ปุ๋ยในรูปแบบ HH:MM (เช่น 14:30)');
+        return;
+    }
+    
+    // แสดง Confirm Dialog
+    const confirmed = await showConfirm(
+        '✅ ยืนยันการตั้งค่า',
+        `คุณต้องการบันทึกการตั้งค่าเวลาใหม่ใช่หรือไม่?\n\n` +
+        `🌱 เก็บเกี่ยว: ${harvestDays} วัน เวลา ${harvestTime} น.\n` +
+        `🌾 ใส่ปุ๋ย: ${fertilizerDays} วัน เวลา ${fertilizerTime} น.`,
+        { icon: '✅', type: 'normal' }
+    );
+    
+    if (confirmed) {
+        // บันทึกการตั้งค่า
+        timeSettings.harvestDays = harvestDays;
+        timeSettings.harvestTime = harvestTime;
+        timeSettings.fertilizerDays = fertilizerDays;
+        timeSettings.fertilizerTime = fertilizerTime;
+        
+        saveTimeSettings();
+        
+        // แสดงข้อความสำเร็จ
+        console.log('✅ บันทึกการตั้งค่าเวลาสำเร็จ:', timeSettings);
+        
+        // เล่นเสียงสำเร็จ
+        if (notificationSettings.sound) {
+            playNotificationSound();
+        }
+        
+        // แสดงข้อความแจ้งเตือน
+        const container = document.getElementById('alert-container');
+        const alertId = `alert-success-${Date.now()}`;
+        
+        const alertHtml = `
+            <div class="alert-banner harvest" id="${alertId}" style="animation: slideIn 0.3s;">
+                <div class="alert-icon">✅</div>
+                <div class="alert-content">
+                    <div class="alert-title">บันทึกสำเร็จ!</div>
+                    <div class="alert-text">ตั้งค่าเวลาเรียบร้อยแล้ว</div>
+                </div>
+                <button class="alert-close" onclick="document.getElementById('${alertId}').remove()">×</button>
+            </div>
+        `;
+        
+        container.insertAdjacentHTML('beforeend', alertHtml);
+        
+        // ลบ alert หลัง 3 วินาที
+        setTimeout(() => {
+            const alert = document.getElementById(alertId);
+            if (alert) {
+                alert.style.animation = 'slideIn 0.3s reverse';
+                setTimeout(() => alert.remove(), 300);
+            }
+        }, 3000);
+    }
 }
-
         // เล่นเสียงแจ้งเตือน
         function playNotificationSound() {
             if (notificationSettings.sound) {
@@ -3025,6 +3065,89 @@ async function toggleGrowing(pondNum) {
             notifications.harvest = notifications.harvest.filter(n => n !== pondNum);
             saveNotificationState();
         }
+    }
+}
+// ยืนยันการตั้งค่าเวลา
+async function confirmTimeSettings() {
+    const harvestDays = parseInt(document.getElementById('harvest-days').value);
+    const harvestTime = document.getElementById('harvest-time').value;
+    const fertilizerDays = parseInt(document.getElementById('fertilizer-days').value);
+    const fertilizerTime = document.getElementById('fertilizer-time').value;
+    
+    // ตรวจสอบความถูกต้อง
+    if (isNaN(harvestDays) || harvestDays < 0 || harvestDays > 30) {
+        alert('❌ กรุณาระบุวันเก็บเกี่ยวระหว่าง 0-30 วัน');
+        return;
+    }
+    
+    if (isNaN(fertilizerDays) || fertilizerDays < 0 || fertilizerDays > 30) {
+        alert('❌ กรุณาระบุวันใส่ปุ๋ยระหว่าง 0-30 วัน');
+        return;
+    }
+    
+    // ตรวจสอบรูปแบบเวลา
+    const timeRegex = /^([0-1][0-9]|2[0-3]):[0-5][0-9]$/;
+    if (!timeRegex.test(harvestTime)) {
+        alert('❌ กรุณาระบุเวลาเก็บเกี่ยวในรูปแบบ HH:MM (เช่น 14:30)');
+        return;
+    }
+    
+    if (!timeRegex.test(fertilizerTime)) {
+        alert('❌ กรุณาระบุเวลาใส่ปุ๋ยในรูปแบบ HH:MM (เช่น 14:30)');
+        return;
+    }
+    
+    // แสดง Confirm Dialog
+    const confirmed = await showConfirm(
+        '✅ ยืนยันการตั้งค่า',
+        `คุณต้องการบันทึกการตั้งค่าเวลาใหม่ใช่หรือไม่?\n\n` +
+        `🌱 เก็บเกี่ยว: ${harvestDays} วัน เวลา ${harvestTime} น.\n` +
+        `🌾 ใส่ปุ๋ย: ${fertilizerDays} วัน เวลา ${fertilizerTime} น.`,
+        { icon: '✅', type: 'normal' }
+    );
+    
+    if (confirmed) {
+        // บันทึกการตั้งค่า
+        timeSettings.harvestDays = harvestDays;
+        timeSettings.harvestTime = harvestTime;
+        timeSettings.fertilizerDays = fertilizerDays;
+        timeSettings.fertilizerTime = fertilizerTime;
+        
+        saveTimeSettings();
+        
+        // แสดงข้อความสำเร็จ
+        console.log('✅ บันทึกการตั้งค่าเวลาสำเร็จ:', timeSettings);
+        
+        // เล่นเสียงสำเร็จ (optional)
+        if (notificationSettings.sound) {
+            playNotificationSound();
+        }
+        
+        // แสดงข้อความแจ้งเตือน
+        const container = document.getElementById('alert-container');
+        const alertId = `alert-success-${Date.now()}`;
+        
+        const alertHtml = `
+            <div class="alert-banner harvest" id="${alertId}" style="animation: slideIn 0.3s;">
+                <div class="alert-icon">✅</div>
+                <div class="alert-content">
+                    <div class="alert-title">บันทึกสำเร็จ!</div>
+                    <div class="alert-text">ตั้งค่าเวลาเรียบร้อยแล้ว</div>
+                </div>
+                <button class="alert-close" onclick="document.getElementById('${alertId}').remove()">×</button>
+            </div>
+        `;
+        
+        container.insertAdjacentHTML('beforeend', alertHtml);
+        
+        // ลบ alert หลัง 3 วินาที
+        setTimeout(() => {
+            const alert = document.getElementById(alertId);
+            if (alert) {
+                alert.style.animation = 'slideIn 0.3s reverse';
+                setTimeout(() => alert.remove(), 300);
+            }
+        }, 3000);
     }
 }
 // โหลดข้อมูลก่อนเริ่มระบบ
