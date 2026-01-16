@@ -2195,21 +2195,38 @@ body.dark-mode .settings-content {
                 updateFertilizerBadge();
             }
         }
-
-        function closeAlert(alertId, type, pondNum) {
-            const alert = document.getElementById(alertId);
-            if (alert) {
-                alert.style.animation = 'slideIn 0.3s reverse';
-                setTimeout(() => alert.remove(), 300);
-            }
-            
-            if (type === 'fertilizer') {
-                addFertilizerRecord(pondNum);
-                notifications.fertilizer = notifications.fertilizer.filter(n => n.pondNum !== pondNum);
-                updateFertilizerBadge();
-            }
-        }
-
+// แทนที่ฟังก์ชัน closeAlert() เดิมด้วยโค้ดนี้
+function closeAlert(alertId, type, pondNum) {
+    const alert = document.getElementById(alertId);
+    if (alert) {
+        alert.style.animation = 'slideIn 0.3s reverse';
+        setTimeout(() => alert.remove(), 300);
+    }
+    
+    if (type === 'fertilizer') {
+        // ✅ บันทึกประวัติ
+        addFertilizerRecord(pondNum);
+        
+        // ✅ ลบ notification
+        notifications.fertilizer = notifications.fertilizer.filter(n => n.pondNum !== pondNum);
+        
+        // ✅ บันทึกสถานะ
+        saveNotificationState();
+        
+        // ✅ อัพเดท badge
+        updateFertilizerBadge();
+        
+        console.log(`✅ ปิดแจ้งเตือนใส่ปุ๋ยกระบะ ${pondNum}`);
+    }
+    
+    if (type === 'harvest') {
+        // ✅ ลบ notification harvest (ถ้ามี)
+        notifications.harvest = notifications.harvest.filter(n => n !== pondNum);
+        saveNotificationState();
+        
+        console.log(`✅ ปิดแจ้งเตือนเก็บเกี่ยวกระบะ ${pondNum}`);
+    }
+}
         function updateFertilizerBadge() {
             const badge = document.getElementById('fertilizer-badge');
             const count = notifications.fertilizer.length;
@@ -2222,6 +2239,10 @@ body.dark-mode .settings-content {
         }
 
 // ตรวจสอบการแจ้งเตือน
+// ตรวจสอบการแจ้งเตือน
+// ตรวจสอบการแจ้งเตือน
+// แทนที่ฟังก์ชัน checkNotifications() เดิมทั้งหมดด้วยโค้ดนี้
+// ตรวจสอบการแจ้งเตือน
 function checkNotifications() {
     const now = new Date();
     const currentTime = now.getTime();
@@ -2232,15 +2253,15 @@ function checkNotifications() {
         // ตรวจสอบเวลาเก็บเกี่ยว
         if (status.active && status.startTime) {
             const startDate = new Date(status.startTime);
-            
-            // คำนวณวันและเวลาที่ต้องเก็บเกี่ยว
             const [targetHours, targetMinutes] = timeSettings.harvestTime.split(':').map(Number);
             const harvestDate = new Date(startDate);
             harvestDate.setDate(harvestDate.getDate() + timeSettings.harvestDays);
             harvestDate.setHours(targetHours, targetMinutes, 0, 0);
             
-            // ถ้าถึงเวลาแล้ว และยังไม่เคยแจ้งเตือน
-            if (currentTime >= harvestDate.getTime() && !notifications.harvest.includes(i)) {
+            const shouldNotify = currentTime >= harvestDate.getTime() && 
+                               !notifications.harvest.includes(i);
+            
+            if (shouldNotify) {
                 const elapsed = currentTime - status.startTime;
                 const days = Math.floor(elapsed / (24 * 60 * 60 * 1000));
                 const remainingHours = Math.floor((elapsed % (24 * 60 * 60 * 1000)) / (60 * 60 * 1000));
@@ -2256,23 +2277,24 @@ function checkNotifications() {
                     `กระบะที่ ${i} ปลูกมา ${days} วัน ${remainingHours}:${String(remainingMinutes).padStart(2, '0')} น. แล้ว\n` +
                     `(ตั้งค่า ${timeSettings.harvestDays} วัน เวลา ${timeSettings.harvestTime} น.)`
                 );
+                
                 notifications.harvest.push(i);
                 saveNotificationState();
             }
         }
         
-        // ตรวจสอบเวลาใส่ปุ๋ย (เอาส่วนที่ซ้ำออก)
+        // ตรวจสอบเวลาใส่ปุ๋ย
         if (status.harvestTime) {
             const harvestDate = new Date(status.harvestTime);
-            
-            // คำนวณวันและเวลาที่ต้องใส่ปุ๋ย
             const [targetHours, targetMinutes] = timeSettings.fertilizerTime.split(':').map(Number);
             const fertilizerDate = new Date(harvestDate);
             fertilizerDate.setDate(fertilizerDate.getDate() + timeSettings.fertilizerDays);
             fertilizerDate.setHours(targetHours, targetMinutes, 0, 0);
             
-            // ถ้าถึงเวลาแล้ว และยังไม่เคยแจ้งเตือน
-            if (currentTime >= fertilizerDate.getTime() && !notifications.fertilizer.some(n => n.pondNum === i)) {
+            const alreadyNotified = notifications.fertilizer.some(n => n.pondNum === i);
+            const shouldNotify = currentTime >= fertilizerDate.getTime() && !alreadyNotified;
+            
+            if (shouldNotify) {
                 const elapsed = currentTime - status.harvestTime;
                 const days = Math.floor(elapsed / (24 * 60 * 60 * 1000));
                 const remainingHours = Math.floor((elapsed % (24 * 60 * 60 * 1000)) / (60 * 60 * 1000));
@@ -2293,10 +2315,14 @@ function checkNotifications() {
     }
 }
 
-// เพิ่มฟังก์ชันบันทึก/โหลดสถานะการแจ้งเตือน
+// บันทึก/โหลดสถานะการแจ้งเตือน
 function saveNotificationState() {
     localStorage.setItem('notificationState', JSON.stringify(notifications));
-    console.log('💾 บันทึกสถานะการแจ้งเตือน:', notifications);
+    console.log('💾 บันทึกสถานะการแจ้งเตือน:', {
+        harvest: notifications.harvest,
+        fertilizer: notifications.fertilizer.map(f => f.pondNum),
+        total: notifications.harvest.length + notifications.fertilizer.length
+    });
 }
 
 function loadNotificationState() {
@@ -2307,38 +2333,6 @@ function loadNotificationState() {
         console.log('📂 โหลดสถานะการแจ้งเตือน:', notifications);
     }
 }
-                    
-                // ตรวจสอบเวลาใส่ปุ๋ย
-                if (status.harvestTime) {
-                    const harvestDate = new Date(status.harvestTime);
-                    
-                    // คำนวณวันและเวลาที่ต้องใส่ปุ๋ย
-                    const [targetHours, targetMinutes] = timeSettings.fertilizerTime.split(':').map(Number);
-                    const fertilizerDate = new Date(harvestDate);
-                    fertilizerDate.setDate(fertilizerDate.getDate() + timeSettings.fertilizerDays);
-                    fertilizerDate.setHours(targetHours, targetMinutes, 0, 0);
-                    
-                    // ถ้าถึงเวลาแล้ว และยังไม่เคยแจ้งเตือน
-                    if (currentTime >= fertilizerDate.getTime() && !notifications.fertilizer.some(n => n.pondNum === i)) {
-                        const elapsed = currentTime - status.harvestTime;
-                        const days = Math.floor(elapsed / (24 * 60 * 60 * 1000));
-                        const remainingHours = Math.floor((elapsed % (24 * 60 * 60 * 1000)) / (60 * 60 * 1000));
-                        const remainingMinutes = Math.floor((elapsed % (60 * 60 * 1000)) / (60 * 1000));
-                        
-                        console.log(`🔔 [ใส่ปุ๋ย] กระบะที่ ${i} ถึงเวลาแล้ว!`, {
-                            เก็บเกี่ยว: harvestDate.toLocaleString('th-TH'),
-                            เป้าหมาย: fertilizerDate.toLocaleString('th-TH'),
-                            เก็บเกี่ยวมา: `${days} วัน ${remainingHours}:${String(remainingMinutes).padStart(2, '0')}`
-                        });
-                        
-                        showAlert('fertilizer', i, 
-                            `กระบะที่ ${i} เก็บเกี่ยวมา ${days} วัน ${remainingHours}:${String(remainingMinutes).padStart(2, '0')} น. แล้ว\n` +
-                            `(ตั้งค่า ${timeSettings.fertilizerDays} วัน เวลา ${timeSettings.fertilizerTime} น.)`
-                        );
-                    }
-                }
-            }
-        }
 		// บันทึกและแสดงประวัติ
         function addFertilizerRecord(pondNum) {
             const now = new Date();
@@ -2631,46 +2625,85 @@ function loadNotificationState() {
         }
 
         async function fetchBlynkData() {
-            try {
-                const pins = ['V2', 'V5', 'V6', 'V7', 'V15', 'V16', 'V17', 'V24', 'V25', 'V10', 'V11', 'V12', 'V0', 'V1', 'V20', 'V21', 'V22'];
-                const response = await fetch(
-                    `${BLYNK_SERVER}/external/api/get?token=${BLYNK_AUTH}&${pins.join('&')}`,
-                    { method: 'GET', timeout: 5000 }
-                );
-                
-                if (!response.ok) throw new Error('Failed to fetch');
-                
-                const data = await response.json();
-                displayData(data);
-                
-            } catch (error) {
-                console.error('Error fetching Blynk data:', error);
-                
-                if (!demoMode) {
-                    demoMode = true;
-                    console.log('⚠️ เข้าสู่โหมดทดสอบ (Demo Mode)');
-                    alert('⚠️ ไม่สามารถเชื่อมต่อ Blynk ได้\n\nระบบจะทำงานในโหมดทดสอบ (ไม่สามารถควบคุมอุปกรณ์จริงได้)');
-                    document.getElementById('loading').innerHTML = 
-                        '<div class="spinner"></div>ไม่สามารถเชื่อมต่อ Blynk<br><small>กำลังเข้าสู่โหมดทดสอบ...</small>';
-                    
-                    setTimeout(() => {
-                        displayData(demoData);
-                        setInterval(() => {
-                            demoData.V2 = Math.random() > 0.5 ? 1 : 0;
-                            demoData.V5 = (27 + Math.random() * 3).toFixed(1);
-                            demoData.V6 = (27 + Math.random() * 3).toFixed(1);
-                            demoData.V7 = (27 + Math.random() * 3).toFixed(1);
-                            demoData.V15 = Math.random() > 0.5 ? 1 : 0;
-                            demoData.V16 = Math.random() > 0.5 ? 1 : 0;
-                            demoData.V17 = Math.random() > 0.5 ? 1 : 0;
-                            demoData.V0 = Math.random() > 0.5 ? 1 : 0;
-                            demoData.V1 = Math.random() > 0.5 ? 1 : 0;
-                            displayData(demoData);
-                        }, 3000);
-                    }, 2000);
-                }
+    try {
+        const pins = ['V2', 'V5', 'V6', 'V7', 'V15', 'V16', 'V17', 'V24', 'V25', 'V10', 'V11', 'V12', 'V0', 'V1', 'V20', 'V21', 'V22'];
+        
+        // เพิ่ม timeout 5 วินาที
+        const controller = new AbortController();
+        const timeoutId = setTimeout(() => controller.abort(), 5000);
+        
+        const response = await fetch(
+            `${BLYNK_SERVER}/external/api/get?token=${BLYNK_AUTH}&${pins.join('&')}`,
+            { 
+                method: 'GET',
+                signal: controller.signal
             }
+        );
+        
+        clearTimeout(timeoutId);
+        
+        if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
+        
+        const data = await response.json();
+        
+        // ตรวจสอบว่าได้ข้อมูลมาจริง
+        if (!data || Object.keys(data).length === 0) {
+            throw new Error('No data received');
         }
+        
+        // เชื่อมต่อสำเร็จ
+        if (demoMode) {
+            demoMode = false;
+            console.log('✅ เชื่อมต่อ Blynk สำเร็จ!');
+        }
+        
+        displayData(data);
+        
+    } catch (error) {
+        console.error('❌ Error fetching Blynk data:', error.message);
+        
+        // ถ้ายังไม่เคยเข้า demo mode ให้เข้าเลย
+        if (!demoMode) {
+            enterDemoMode();
+        } else {
+            // ถ้าอยู่ demo mode แล้ว ให้อัพเดทข้อมูลสุ่ม
+            displayData(demoData);
+        }
+    }
+}
+        
+		function enterDemoMode() {
+    demoMode = true;
+    console.log('⚠️ เข้าสู่โหมดทดสอบ (Demo Mode)');
+    
+    // แสดงข้อความแจ้งเตือน
+    const loadingEl = document.getElementById('loading');
+    if (loadingEl) {
+        loadingEl.innerHTML = 
+            '<div class="spinner"></div>' +
+            '<div style="margin-top: 16px;">⚠️ ไม่สามารถเชื่อมต่อ Blynk ได้</div>' +
+            '<div style="font-size: 13px; opacity: 0.8; margin-top: 8px;">กำลังเข้าสู่โหมดทดสอบ...</div>';
+    }
+    
+    // รอ 1.5 วินาที แล้วแสดงหน้าหลัก
+    setTimeout(() => {
+        displayData(demoData);
+        
+        // ตั้งค่าอัพเดทข้อมูลสุ่มทุก 3 วินาที
+        setInterval(() => {
+            demoData.V2 = Math.random() > 0.5 ? 1 : 0;
+            demoData.V5 = (27 + Math.random() * 3).toFixed(1);
+            demoData.V6 = (27 + Math.random() * 3).toFixed(1);
+            demoData.V7 = (27 + Math.random() * 3).toFixed(1);
+            demoData.V15 = Math.random() > 0.5 ? 1 : 0;
+            demoData.V16 = Math.random() > 0.5 ? 1 : 0;
+            demoData.V17 = Math.random() > 0.5 ? 1 : 0;
+            demoData.V0 = Math.random() > 0.5 ? 1 : 0;
+            demoData.V1 = Math.random() > 0.5 ? 1 : 0;
+            displayData(demoData);
+        }, 3000);
+    }, 1500);
+}
 
         function syncInitialState(data) {
             const lightManual = data.V24 == 1;
@@ -2858,6 +2891,7 @@ function loadNotificationState() {
                             console.log(`🛑 หยุดเซนเซอร์กระบะที่ ${pumpNum} (เก็บเกี่ยวสำเร็จ)`);
                             
                             notifications.harvest = notifications.harvest.filter(n => n !== pumpNum);
+							saveNotificationState();
                         }
                         
                         const anyPondActive = Object.values(growingStatus).some(s => s.active);
@@ -2949,27 +2983,32 @@ function loadNotificationState() {
             }
         }
 
-        // โหลดข้อมูลก่อนเริ่มระบบ
-        loadDarkMode(); 
-        loadGrowingData();
-        loadHistory();
-        loadFertilizerHistory();
-        updateTime();
-        loadNotificationSettings();
-        loadTimeSettings();
-		loadNotificationState(); 
-	
+// โหลดข้อมูลก่อนเริ่มระบบ
+loadDarkMode(); 
+loadGrowingData();
+loadHistory();
+loadFertilizerHistory();
+updateTime();
+loadNotificationSettings();
+loadTimeSettings();
+loadNotificationState();
 
-        // ตั้งค่า intervals
-        setInterval(updateTime, 1000);
-        setInterval(updateGrowingTimers, 1000);
-        setInterval(checkNotifications, 10000);
-        checkNotifications();
-        
+// ตั้งค่า intervals
+setInterval(updateTime, 1000);
+setInterval(updateGrowingTimers, 1000);
+setInterval(checkNotifications, 10000);
+checkNotifications();
+
+// เริ่มต้นเชื่อมต่อ Blynk
+console.log('🚀 กำลังเชื่อมต่อ Blynk...');
+fetchBlynkData();
+
+// ตั้งค่า interval สำหรับอัพเดทข้อมูล
+setInterval(() => {
+    if (!demoMode) {
         fetchBlynkData();
-        if (!demoMode) {
-            setInterval(fetchBlynkData, 2000);
-        }
+    }
+}, 2000);
     </script>
 </body>
 </html>
