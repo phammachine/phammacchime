@@ -1463,6 +1463,9 @@ body.dark-mode .settings-content {
                                 <div class="toggle-thumb"></div>
                             </div>
                         </div>
+						<div style="margin-top: 12px; padding: 10px; background: linear-gradient(135deg, #E3F2FD 0%, #BBDEFB 100%); border-radius: 8px; font-size: 11px; color: #1976D2; line-height: 1.6;">
+                            💡 <strong>Web Notification</strong> จะแจ้งเตือนแม้ปิดหน้านี้แล้ว (ต้องเปิดอยู่ในเบราว์เซอร์)
+                        </div>
                         <div class="settings-option">
                             <span class="settings-option-label">แจ้งเตือนเก็บเกี่ยว</span>
                             <div class="toggle active" id="harvest-notif-toggle" onclick="event.stopPropagation(); toggleHarvestNotif();" style="cursor: pointer;">
@@ -1475,10 +1478,20 @@ body.dark-mode .settings-content {
                                 <div class="toggle-thumb"></div>
                             </div>
                         </div>
-                        <div style="margin-top: 12px; padding: 10px; background: linear-gradient(135deg, #E3F2FD 0%, #BBDEFB 100%); border-radius: 8px; font-size: 11px; color: #1976D2; line-height: 1.6;">
-                            💡 <strong>Web Notification</strong> จะแจ้งเตือนแม้ปิดหน้านี้แล้ว (ต้องเปิดอยู่ในเบราว์เซอร์)
-                        </div>
+                        
+						<div class="settings-option">
+    <span class="settings-option-label">🌡️ แจ้งเตือนอุณหภูมิ</span>
+    <div class="toggle active" id="temperature-notif-toggle" onclick="event.stopPropagation(); toggleTemperatureNotif();" style="cursor: pointer;">
+        <div class="toggle-thumb"></div>
+    </div>
+</div>
+<div style="margin-top: 8px; padding: 10px; background: linear-gradient(135deg, #FFF3E0 0%, #FFE0B2 100%); border-radius: 8px; font-size: 11px; color: #E65100; line-height: 1.6;">
+    🌡️ <strong>แจ้งเตือนอุณหภูมิ</strong> จะแจ้งเมื่ออุณหภูมิต่ำกว่า 20°C หรือสูงกว่า 28°C
+</div>
                     </div>
+					<div class="settings-option">
+
+</div>
 					
 
 <!-- ตั้งค่าระยะเวลา -->
@@ -1904,13 +1917,13 @@ let notifications = {
 		};
 
         // ตั้งค่าการแจ้งเตือน
-        let notificationSettings = {
-            sound: false,
-            harvest: true,
-            fertilizer: true,
-            webNotification: false
-        };
-
+let notificationSettings = {
+    sound: false,
+    harvest: true,
+    fertilizer: true,
+    webNotification: false,
+    temperature: true  // ← เพิ่มนี้
+};
         // ตั้งค่าระยะเวลา
 let timeSettings = {
     harvestDays: 7,
@@ -1943,30 +1956,47 @@ let timeSettings = {
         }
 
         // ส่ง Web Notification
-        function sendWebNotification(title, message, icon = '🌱') {
-            if (!notificationSettings.webNotification) return;
-            if (notificationPermission !== 'granted') return;
-            
-            try {
-                const notification = new Notification(title, {
-                    body: message,
-                    icon: `data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>${icon}</text></svg>`,
-                    badge: `data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🌱</text></svg>`,
-                    tag: 'baby-phum-notification',
-                    requireInteraction: true,
-                    vibrate: [200, 100, 200]
-                });
-                
-                notification.onclick = function() {
-                    window.focus();
-                    notification.close();
-                };
-                
-                console.log('✅ ส่ง Web Notification:', title);
-            } catch (error) {
-                console.error('❌ ส่ง Web Notification ไม่สำเร็จ:', error);
-            }
-        }
+// ส่ง Web Notification (ปรับปรุงใหม่)
+function sendWebNotification(title, message, icon = '🌱') {
+    // เช็คว่าเปิดการแจ้งเตือนหรือไม่
+    if (!notificationSettings.webNotification) {
+        console.log('🔕 Web Notification ถูกปิด');
+        return;
+    }
+    
+    // เช็ค permission
+    if (notificationPermission !== 'granted') {
+        console.log('❌ ไม่ได้รับสิทธิ์ Web Notification');
+        return;
+    }
+    
+    // เช็คว่าเบราว์เซอร์รองรับหรือไม่
+    if (!('Notification' in window)) {
+        console.log('❌ เบราว์เซอร์นี้ไม่รองรับ Web Notification');
+        return;
+    }
+    
+    try {
+        const notification = new Notification(title, {
+            body: message,
+            icon: `data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>${icon}</text></svg>`,
+            badge: `data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🌱</text></svg>`,
+            tag: `baby-phum-${Date.now()}`, // แต่ละการแจ้งเตือนจะไม่ซ้ำกัน
+            requireInteraction: true, // ต้องกดปิดเอง
+            vibrate: [200, 100, 200], // สั่นเครื่อง (ถ้าเป็นมือถือ)
+            silent: false, // เล่นเสียง
+        });
+        
+        notification.onclick = function() {
+            window.focus();
+            notification.close();
+        };
+        
+        console.log('✅ ส่ง Web Notification สำเร็จ:', title);
+    } catch (error) {
+        console.error('❌ ส่ง Web Notification ไม่สำเร็จ:', error);
+    }
+}
 
         // ฟังก์ชันเปิด/ปิดโหมดมืด
         function toggleDarkMode() {
@@ -2006,34 +2036,43 @@ let timeSettings = {
         }
 
         // โหลดการตั้งค่าการแจ้งเตือน
-        function loadNotificationSettings() {
-            const saved = localStorage.getItem('notificationSettings');
-            if (saved) {
-                notificationSettings = JSON.parse(saved);
-                
-                const soundToggle = document.getElementById('sound-toggle');
-                const harvestToggle = document.getElementById('harvest-notif-toggle');
-                const fertilizerToggle = document.getElementById('fertilizer-notif-toggle');
-                const webNotifToggle = document.getElementById('web-notif-toggle');
-                
-                if (soundToggle) {
-                    soundToggle.classList.toggle('active', notificationSettings.sound);
-                }
-                if (harvestToggle) {
-                    harvestToggle.classList.toggle('active', notificationSettings.harvest);
-                }
-                if (fertilizerToggle) {
-                    fertilizerToggle.classList.toggle('active', notificationSettings.fertilizer);
-                }
-                if (webNotifToggle) {
-                    webNotifToggle.classList.toggle('active', notificationSettings.webNotification);
-                }
-            }
-            
-            if ('Notification' in window) {
-                notificationPermission = Notification.permission;
-            }
+function loadNotificationSettings() {
+    const saved = localStorage.getItem('notificationSettings');
+    if (saved) {
+        notificationSettings = JSON.parse(saved);
+        
+        const soundToggle = document.getElementById('sound-toggle');
+        const harvestToggle = document.getElementById('harvest-notif-toggle');
+        const fertilizerToggle = document.getElementById('fertilizer-notif-toggle');
+        const webNotifToggle = document.getElementById('web-notif-toggle');
+        const temperatureToggle = document.getElementById('temperature-notif-toggle'); // ← เพิ่มนี้
+        
+        if (soundToggle) {
+            soundToggle.classList.toggle('active', notificationSettings.sound);
         }
+        if (harvestToggle) {
+            harvestToggle.classList.toggle('active', notificationSettings.harvest);
+        }
+        if (fertilizerToggle) {
+            fertilizerToggle.classList.toggle('active', notificationSettings.fertilizer);
+        }
+        if (webNotifToggle) {
+            webNotifToggle.classList.toggle('active', notificationSettings.webNotification);
+        }
+        if (temperatureToggle) { // ← เพิ่มนี้
+            temperatureToggle.classList.toggle('active', notificationSettings.temperature !== false);
+        }
+    }
+    
+    // ตั้งค่า default ถ้าไม่มี
+    if (notificationSettings.temperature === undefined) {
+        notificationSettings.temperature = true;
+    }
+    
+    if ('Notification' in window) {
+        notificationPermission = Notification.permission;
+    }
+}
 
 
 
@@ -2046,36 +2085,47 @@ let timeSettings = {
 
 
 // โหลดการตั้งค่าระยะเวลา (แก้ไขใหม่)
-function loadTimeSettings() {
-    const saved = localStorage.getItem('timeSettings');
-    if (saved) {
-        timeSettings = JSON.parse(saved);
-    }
-    
-    // ตั้งค่าเริ่มต้นถ้ายังไม่มีค่า
-    if (!timeSettings.harvestTime) timeSettings.harvestTime = '12:00';
-    if (!timeSettings.fertilizerTime) timeSettings.fertilizerTime = '14:00';
-    
-    const harvestDaysInput = document.getElementById('harvest-days');
-    const harvestTimeInput = document.getElementById('harvest-time');
-    const fertilizerDaysInput = document.getElementById('fertilizer-days');
-    const fertilizerTimeInput = document.getElementById('fertilizer-time');
-    
-    if (harvestDaysInput) harvestDaysInput.value = timeSettings.harvestDays || 7;
-    if (harvestTimeInput) harvestTimeInput.value = timeSettings.harvestTime || '12:00';
-    if (fertilizerDaysInput) fertilizerDaysInput.value = timeSettings.fertilizerDays || 7;
-    if (fertilizerTimeInput) fertilizerTimeInput.value = timeSettings.fertilizerTime || '14:00';
-    
-    updateExampleText();
-}
-function saveTimeSettings() {
-    localStorage.setItem('timeSettings', JSON.stringify(timeSettings));
-    console.log('✅ บันทึกการตั้งค่าระยะเวลา:', timeSettings);
-    
-    // ✅ อัพเดทข้อความตัวอย่างทันทีหลังบันทึก
-    updateExampleText();
-}
 
+function saveTimeSettings() {
+    // บันทึกครบทุกค่า
+    const dataToSave = {
+        harvestDays: timeSettings.harvestDays,
+        harvestTime: timeSettings.harvestTime,
+        fertilizerDays: timeSettings.fertilizerDays,
+        fertilizerTime: timeSettings.fertilizerTime
+    };
+    
+    localStorage.setItem('timeSettings', JSON.stringify(dataToSave));
+    console.log('✅ บันทึกการตั้งค่าระยะเวลา:', dataToSave);
+    
+    // อัพเดทข้อความตัวอย่างทันทีหลังบันทึก
+    updateExampleText();
+}
+// ฟังก์ชันเคลียร์ข้อมูล timeSettings เก่า (เรียกครั้งเดียว)
+function resetTimeSettingsOnce() {
+    const key = 'timeSettingsFixed_v2'; // เปลี่ยนชื่อ key เพื่อบังคับรีเซ็ต
+    
+    if (!localStorage.getItem(key)) {
+        console.log('🔄 รีเซ็ตการตั้งค่าเวลาครั้งเดียว...');
+        
+        // ลบข้อมูลเก่า
+        localStorage.removeItem('timeSettings');
+        
+        // ตั้งค่าใหม่
+        timeSettings = {
+            harvestDays: 7,
+            harvestTime: '12:00',
+            fertilizerDays: 7,
+            fertilizerTime: '14:00'
+        };
+        
+        saveTimeSettings();
+        
+        // ทำเครื่องหมายว่ารีเซ็ตแล้ว
+        localStorage.setItem(key, 'true');
+        console.log('✅ รีเซ็ตเสร็จสิ้น');
+    }
+}
 // ฟังก์ชันอัพเดทข้อความตัวอย่าง
 // ฟังก์ชันอัพเดทข้อความตัวอย่าง (เวอร์ชันสุดท้าย)
 function updateExampleText() {
@@ -2106,30 +2156,70 @@ function updateExampleText() {
         fertilizer: `${fertilizerDays.value} วัน ${fertilizerTime.value}`
     });
 }
-
+function toggleTemperatureNotif() {
+    notificationSettings.temperature = !notificationSettings.temperature;
+    const toggle = document.getElementById('temperature-notif-toggle');
+    toggle.classList.toggle('active');
+    saveNotificationSettings();
+    console.log('🌡️ แจ้งเตือนอุณหภูมิ:', notificationSettings.temperature ? 'เปิด' : 'ปิด');
+}
 // โหลดการตั้งค่าระยะเวลา
 function loadTimeSettings() {
     const saved = localStorage.getItem('timeSettings');
+    
     if (saved) {
-        timeSettings = JSON.parse(saved);
-        
-        const harvestDaysInput = document.getElementById('harvest-days');
-        const harvestHoursInput = document.getElementById('harvest-hours');
-        const harvestMinutesInput = document.getElementById('harvest-minutes');
-        const fertilizerDaysInput = document.getElementById('fertilizer-days');
-        const fertilizerHoursInput = document.getElementById('fertilizer-hours');
-        const fertilizerMinutesInput = document.getElementById('fertilizer-minutes');
-        
-        if (harvestDaysInput) harvestDaysInput.value = timeSettings.harvestDays;
-        if (harvestHoursInput) harvestHoursInput.value = timeSettings.harvestHours;
-        if (harvestMinutesInput) harvestMinutesInput.value = timeSettings.harvestMinutes;
-        if (fertilizerDaysInput) fertilizerDaysInput.value = timeSettings.fertilizerDays;
-        if (fertilizerHoursInput) fertilizerHoursInput.value = timeSettings.fertilizerHours;
-        if (fertilizerMinutesInput) fertilizerMinutesInput.value = timeSettings.fertilizerMinutes;
-        
-        // ✅ เรียก updateExampleText() ก็ต่อเมื่อ elements พร้อม
-        updateExampleText();
+        try {
+            const savedData = JSON.parse(saved);
+            
+            // โหลดค่าทั้งหมดจาก localStorage
+            timeSettings.harvestDays = savedData.harvestDays !== undefined ? savedData.harvestDays : 7;
+            timeSettings.harvestTime = savedData.harvestTime || '12:00';
+            timeSettings.fertilizerDays = savedData.fertilizerDays !== undefined ? savedData.fertilizerDays : 7;
+            timeSettings.fertilizerTime = savedData.fertilizerTime || '14:00';
+            
+            console.log('✅ โหลดการตั้งค่าเวลาสำเร็จ:', timeSettings);
+        } catch (error) {
+            console.error('❌ โหลด timeSettings ไม่สำเร็จ:', error);
+            // ถ้า error ให้ใช้ค่า default
+            timeSettings = {
+                harvestDays: 7,
+                harvestTime: '12:00',
+                fertilizerDays: 7,
+                fertilizerTime: '14:00'
+            };
+        }
+    } else {
+        console.log('ℹ️ ไม่มีข้อมูล timeSettings ใช้ค่า default');
     }
+    
+    // อัพเดท UI
+    const harvestDaysInput = document.getElementById('harvest-days');
+    const harvestTimeInput = document.getElementById('harvest-time');
+    const fertilizerDaysInput = document.getElementById('fertilizer-days');
+    const fertilizerTimeInput = document.getElementById('fertilizer-time');
+    
+    if (harvestDaysInput) {
+        harvestDaysInput.value = timeSettings.harvestDays;
+        console.log('📅 ตั้งค่าวันเก็บเกี่ยว:', harvestDaysInput.value);
+    }
+    
+    if (harvestTimeInput) {
+        harvestTimeInput.value = timeSettings.harvestTime;
+        console.log('🕐 ตั้งค่าเวลาเก็บเกี่ยว:', harvestTimeInput.value);
+    }
+    
+    if (fertilizerDaysInput) {
+        fertilizerDaysInput.value = timeSettings.fertilizerDays;
+        console.log('📅 ตั้งค่าวันใส่ปุ๋ย:', fertilizerDaysInput.value);
+    }
+    
+    if (fertilizerTimeInput) {
+        fertilizerTimeInput.value = timeSettings.fertilizerTime;
+        console.log('🕐 ตั้งค่าเวลาใส่ปุ๋ย:', fertilizerTimeInput.value);
+    }
+    
+    // อัพเดทข้อความตัวอย่าง
+    updateExampleText();
 }
 
 // ยืนยันการตั้งค่าเวลา
@@ -3372,7 +3462,13 @@ function showTemperatureAlert(pondNum, temp, type) {
     }, 10000);
 }
 // ฟังก์ชันตรวจสอบอุณหภูมิขณะปลูก
+// ฟังก์ชันตรวจสอบอุณหภูมิขณะปลูก
 function checkGrowingTemperatures() {
+    // เช็คว่าเปิดการแจ้งเตือนหรือไม่
+    if (!notificationSettings.temperature) {
+        return; // ถ้าปิดไว้ ไม่ต้องเช็ค
+    }
+    
     for (let i = 1; i <= 3; i++) {
         // เช็คเฉพาะกระบะที่กำลังปลูกอยู่
         if (!growingStatus[i].active) {
@@ -3399,21 +3495,24 @@ function checkGrowingTemperatures() {
             
             let warningMessage = '';
             let icon = '🌡️';
+            let type = 'cold';
             
             if (temp < 20) {
-                warningMessage = `กระบะที่ ${i}: อุณหภูมิต่ำ ${temp}°C\n(ต่ำกว่า 20°C)\n\nอาจส่งผลต่อการเจริญเติบโต`;
+                warningMessage = `กระบะที่ ${i}: อุณหภูมิต่ำ ${temp}°C (ต่ำกว่า 20°C)\n\nอาจส่งผลต่อการเจริญเติบโต`;
                 icon = '❄️';
+                type = 'cold';
             } else if (temp > 28) {
-                warningMessage = `กระบะที่ ${i}: อุณหภูมิสูง ${temp}°C\n(สูงกว่า 28°C)\n\nอาจส่งผลต่อการเจริญเติบโต`;
+                warningMessage = `กระบะที่ ${i}: อุณหภูมิสูง ${temp}°C (สูงกว่า 28°C)\n\nอาจส่งผลต่อการเจริญเติบโต`;
                 icon = '🔥';
+                type = 'hot';
             }
             
             console.log(`🌡️ [แจ้งเตือนอุณหภูมิ] ${warningMessage}`);
             
-            // แสดงแจ้งเตือนแบบ Alert Banner
-            showTemperatureAlert(i, temp, temp < 20 ? 'cold' : 'hot');
+            // 1️⃣ แสดงแจ้งเตือนแบบ Alert Banner
+            showTemperatureAlert(i, temp, type);
             
-            // ส่ง Web Notification
+            // 2️⃣ ส่ง Web Notification
             if (notificationSettings.webNotification) {
                 sendWebNotification(
                     `${icon} อุณหภูมิผิดปกติ!`,
@@ -3422,7 +3521,7 @@ function checkGrowingTemperatures() {
                 );
             }
             
-            // เล่นเสียงแจ้งเตือน
+            // 3️⃣ เล่นเสียงแจ้งเตือน
             if (notificationSettings.sound) {
                 playNotificationSound();
             }
@@ -3432,6 +3531,31 @@ function checkGrowingTemperatures() {
         if (!isOutOfRange && temperatureWarnings[i].shown) {
             temperatureWarnings[i].shown = false;
             console.log(`✅ อุณหภูมิกระบะที่ ${i} กลับมาปกติ: ${temp}°C`);
+            
+            // แจ้งเตือนกลับมาปกติ
+            const container = document.getElementById('alert-container');
+            const alertId = `temp-normal-${i}`;
+            
+            const alertHtml = `
+                <div class="alert-banner harvest" id="${alertId}" style="animation: slideIn 0.3s;">
+                    <div class="alert-icon">✅</div>
+                    <div class="alert-content">
+                        <div class="alert-title">อุณหภูมิปกติแล้ว - กระบะที่ ${i}</div>
+                        <div class="alert-text">อุณหภูมิกลับมาที่ ${temp}°C</div>
+                    </div>
+                    <button class="alert-close" onclick="document.getElementById('${alertId}').remove()">×</button>
+                </div>
+            `;
+            
+            container.insertAdjacentHTML('beforeend', alertHtml);
+            
+            setTimeout(() => {
+                const alert = document.getElementById(alertId);
+                if (alert) {
+                    alert.style.animation = 'slideIn 0.3s reverse';
+                    setTimeout(() => alert.remove(), 300);
+                }
+            }, 5000);
         }
     }
 }
@@ -3599,27 +3723,97 @@ async function confirmTimeSettings() {
         }, 3000);
     }
 }
-// โหลดข้อมูลก่อนเริ่มระบบ
-loadDarkMode(); 
-loadGrowingData();
-loadHistory();
-loadFertilizerHistory();
-updateTime();
-loadNotificationSettings();
-loadTimeSettings();
-loadNotificationState();
+// ============================================
+// 🔔 เพิ่มระบบ Web Notification ให้ทำงานเต็มที่
+// ============================================
 
-// ตั้งค่า intervals
-setInterval(updateTime, 1000);
-setInterval(updateGrowingTimers, 1000);
-setInterval(checkNotifications, 3000);
-checkNotifications();
-setInterval(checkGrowingTemperatures, 5000); // ตรวจสอบทุก 5 วินาที
-checkGrowingTemperatures();
-// Event Listeners สำหรับอัพเดทตัวอย่างเมื่อเปลี่ยนค่า
-// Event Listeners สำหรับอัพเดทตัวอย่างเมื่อเปลี่ยนค่า
-document.addEventListener('DOMContentLoaded', function() {
-    // เพิ่ม Event Listeners สำหรับ input time
+// ขอสิทธิ์ทันทีเมื่อโหลดหน้า (ถ้ายังไม่เคยขอ)
+// ขอสิทธิ์ทันทีเมื่อโหลดหน้า (ถ้ายังไม่เคยขอ)
+async function initializeNotifications() {
+    console.log('🔔 เริ่มต้นระบบ Web Notification...');
+    
+    if (!('Notification' in window)) {
+        console.log('❌ เบราว์เซอร์นี้ไม่รองรับ Web Notification');
+        notificationSettings.webNotification = false;
+        saveNotificationSettings();
+        return;
+    }
+    
+    console.log('📊 สถานะ Permission ปัจจุบัน:', Notification.permission);
+    
+    // ถ้าได้รับสิทธิ์แล้ว
+    if (Notification.permission === 'granted') {
+        notificationPermission = 'granted';
+        console.log('✅ Web Notification พร้อมใช้งาน');
+        
+        // ถ้าเปิดการตั้งค่าไว้ ส่งการแจ้งเตือนทดสอบ
+        if (notificationSettings.webNotification) {
+            sendWebNotification(
+                '✅ Web Notification พร้อมใช้งาน',
+                'ระบบแจ้งเตือนทำงานปกติ',
+                '🔔'
+            );
+        }
+        return;
+    }
+    
+    // ถ้ายังไม่เคยขอ และมีการเปิด Web Notification ไว้
+    if (Notification.permission === 'default') {
+        console.log('⚠️ ยังไม่ได้ขอสิทธิ์ Web Notification');
+        
+        if (notificationSettings.webNotification) {
+            console.log('🔔 กำลังขอสิทธิ์ Web Notification...');
+            const granted = await requestNotificationPermission();
+            
+            if (granted) {
+                console.log('✅ ได้รับสิทธิ์ Web Notification แล้ว');
+                sendWebNotification(
+                    '✅ เปิด Web Notification สำเร็จ',
+                    'ระบบจะแจ้งเตือนคุณแม้ปิดหน้านี้แล้ว',
+                    '🔔'
+                );
+            } else {
+                console.log('❌ ไม่ได้รับสิทธิ์ Web Notification');
+                notificationSettings.webNotification = false;
+                const toggle = document.getElementById('web-notif-toggle');
+                if (toggle) toggle.classList.remove('active');
+                saveNotificationSettings();
+            }
+        }
+        return;
+    }
+    
+    // ถ้าถูกปฏิเสธ
+    if (Notification.permission === 'denied') {
+        console.log('🚫 Web Notification ถูกบล็อก');
+        notificationSettings.webNotification = false;
+        const toggle = document.getElementById('web-notif-toggle');
+        if (toggle) toggle.classList.remove('active');
+        saveNotificationSettings();
+    }
+}
+
+document.addEventListener('DOMContentLoaded', async function() {
+    console.log('📱 กำลังโหลดระบบ...');
+    
+    // 🔄 เคลียร์ข้อมูลเก่า (ทำครั้งเดียว)
+    resetTimeSettingsOnce();
+    
+    
+    // 1️⃣ โหลดการตั้งค่าพื้นฐาน
+    loadDarkMode(); 
+    loadGrowingData();
+    loadHistory();
+    loadFertilizerHistory();
+    updateTime();
+    loadNotificationSettings();
+    loadTimeSettings(); // <- จะโหลดค่าที่บันทึกถูกต้องแล้ว
+    loadNotificationState();
+    
+    // 2️⃣ เริ่มต้นระบบ Web Notification
+    await initializeNotifications();
+    
+    // 3️⃣ เพิ่ม Event Listeners สำหรับอัพเดทตัวอย่างเวลา
     const harvestTimeInput = document.getElementById('harvest-time');
     const fertilizerTimeInput = document.getElementById('fertilizer-time');
     const harvestDaysSelect = document.getElementById('harvest-days');
@@ -3630,20 +3824,30 @@ document.addEventListener('DOMContentLoaded', function() {
     if (harvestDaysSelect) harvestDaysSelect.addEventListener('change', updateExampleText);
     if (fertilizerDaysSelect) fertilizerDaysSelect.addEventListener('change', updateExampleText);
     
-    // อัพเดทครั้งแรก
     updateExampleText();
+    
+    // 4️⃣ เริ่มต้นเชื่อมต่อ Blynk
+    console.log('🚀 กำลังเชื่อมต่อ Blynk...');
+    fetchBlynkData();
+    
+    // 5️⃣ ตั้งค่า intervals
+    setInterval(updateTime, 1000);
+    setInterval(updateGrowingTimers, 1000);
+    setInterval(checkNotifications, 3000);
+    setInterval(checkGrowingTemperatures, 5000);
+    
+    setInterval(() => {
+        if (!demoMode) {
+            fetchBlynkData();
+        }
+    }, 2000);
+    
+    // 6️⃣ เรียกใช้ครั้งแรก
+    checkNotifications();
+    checkGrowingTemperatures();
+    
+    console.log('✅ ระบบพร้อมใช้งาน');
 });
-
-// เริ่มต้นเชื่อมต่อ Blynk
-console.log('🚀 กำลังเชื่อมต่อ Blynk...');
-fetchBlynkData();
-
-// ตั้งค่า interval สำหรับอัพเดทข้อมูล
-setInterval(() => {
-    if (!demoMode) {
-        fetchBlynkData();
-    }
-}, 2000);
     </script>
 </body>
 </html>
