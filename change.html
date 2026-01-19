@@ -596,7 +596,35 @@ body {
             font-size: 12px;
             opacity: 0.9;
             font-weight: 600;
-        }.led-item {
+        }
+		/* เพิ่มหลัง .temp-unit */
+.temp-item.cold {
+    background: linear-gradient(135deg, #64B5F6 0%, #42A5F5 100%);
+    box-shadow: 0 4px 12px rgba(66, 165, 245, 0.35);
+}
+
+.temp-item.cold:hover {
+    box-shadow: 0 6px 16px rgba(66, 165, 245, 0.45);
+}
+
+.temp-item.hot {
+    background: linear-gradient(135deg, #EF5350 0%, #E53935 100%);
+    box-shadow: 0 4px 12px rgba(239, 83, 80, 0.35);
+}
+
+.temp-item.hot:hover {
+    box-shadow: 0 6px 16px rgba(239, 83, 80, 0.45);
+}
+
+/* Dark Mode */
+body.dark-mode .temp-item.cold {
+    box-shadow: 0 4px 12px rgba(66, 165, 245, 0.5);
+}
+
+body.dark-mode .temp-item.hot {
+    box-shadow: 0 4px 12px rgba(239, 83, 80, 0.5);
+}
+		.led-item {
             display: flex;
             align-items: center;
             justify-content: space-between;
@@ -999,7 +1027,7 @@ body {
 }
 
 body.dark-mode {
-    background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+    background: url('https://i.ibb.co/whQnMYfV/dark-black-gray-blurred-background-has-little-abstract-light-soft-background-wallpaperdesigngraphic.avif') center/cover fixed;
 }
 
 body.dark-mode .confirm-overlay {
@@ -1007,8 +1035,10 @@ body.dark-mode .confirm-overlay {
 }
 
 body.dark-mode .confirm-dialog {
-    background: linear-gradient(135deg, #2a2a3e 0%, #1f1f2e 100%);
-    border: 1px solid rgba(255, 255, 255, 0.1);
+    background: rgba(0, 0, 0, 0.3);
+    backdrop-filter: blur(30px);
+    -webkit-backdrop-filter: blur(30px);
+    border: 1px solid rgba(255, 255, 255, 0.25);
 }
 
 body.dark-mode .confirm-title {
@@ -1035,8 +1065,10 @@ body.dark-mode .header {
 
 body.dark-mode .card,
 body.dark-mode .timer-card {
-    background: rgba(42, 42, 62, 0.85);
-    border: 1px solid rgba(255, 255, 255, 0.1);
+    background: rgba(0, 0, 0, 0.2);
+    backdrop-filter: blur(15px);
+    -webkit-backdrop-filter: blur(15px);
+    border: 1px solid rgba(255, 255, 255, 0.2);
 }
 
 body.dark-mode .card-header,
@@ -1046,17 +1078,24 @@ body.dark-mode .sidebar-header {
 }
 
 body.dark-mode .sidebar {
-    background: rgba(42, 42, 62, 0.98);
-    border-right-color: rgba(255, 255, 255, 0.1);
+    background: rgba(0, 0, 0, 0.25);
+    backdrop-filter: blur(25px);
+    -webkit-backdrop-filter: blur(25px);
+    border-right-color: rgba(255, 255, 255, 0.2);
 }
 
 body.dark-mode .sidebar-menu-item {
-    background: linear-gradient(135deg, #2a2a3e 0%, #1f1f2e 100%);
+    background: rgba(0, 0, 0, 0.2);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
     color: #ffffff;
+    border: 1px solid rgba(255, 255, 255, 0.15);
 }
 
 body.dark-mode .sidebar-menu-item:hover {
-    background: linear-gradient(135deg, #3a4a3e 0%, #2a3a2e 100%);
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(15px);
+    -webkit-backdrop-filter: blur(15px);
 }
 
 body.dark-mode .sidebar-menu-item.active {
@@ -1064,8 +1103,10 @@ body.dark-mode .sidebar-menu-item.active {
 }
 
 body.dark-mode .hamburger-btn {
-    background: rgba(42, 42, 62, 0.95);
-    border-color: rgba(255, 255, 255, 0.2);
+    background: rgba(0, 0, 0, 0.3);
+    backdrop-filter: blur(15px);
+    -webkit-backdrop-filter: blur(15px);
+    border-color: rgba(255, 255, 255, 0.3);
 }
 
 body.dark-mode .hamburger-line {
@@ -1093,12 +1134,16 @@ body.dark-mode .info-text {
 }
 
 body.dark-mode .timer-item {
-    background: linear-gradient(135deg, #3a4a3e 0%, #2a3a2e 100%);
+    background: rgba(0, 0, 0, 0.2);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
     border-color: #4CAF50;
 }
 
 body.dark-mode .timer-item.inactive {
-    background: linear-gradient(135deg, #2a2a3e 0%, #1f1f2e 100%);
+    background: rgba(0, 0, 0, 0.15);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
     border-color: #555;
 }
 
@@ -1119,8 +1164,10 @@ body.dark-mode .grow-btn.growing {
 }
 
 body.dark-mode .led-item {
-    background: linear-gradient(135deg, #2a2a3e 0%, #1f1f2e 100%);
-    border-color: rgba(255, 255, 255, 0.1);
+    background: rgba(0, 0, 0, 0.2);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border-color: rgba(255, 255, 255, 0.15);
 }
 
 body.dark-mode .led-status {
@@ -1134,7 +1181,9 @@ body.dark-mode .led-status.off {
 }
 
 body.dark-mode .switch-item {
-    background: linear-gradient(135deg, #3a3a2e 0%, #2a2a1e 100%);
+    background: rgba(0, 0, 0, 0.2);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
     border-color: rgba(255, 224, 130, 0.3);
 }
 
@@ -1292,8 +1341,10 @@ body.dark-mode .confirm-time-btn:hover {
 }
 
 body.dark-mode .settings-item {
-    background: linear-gradient(135deg, #2a2a3e 0%, #1f1f2e 100%);
-    border-color: rgba(255, 255, 255, 0.1);
+    background: rgba(0, 0, 0, 0.2);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border-color: rgba(255, 255, 255, 0.15);
 }
 
 body.dark-mode .settings-item:hover {
@@ -1309,7 +1360,9 @@ body.dark-mode .settings-desc {
 }
 
 body.dark-mode .settings-option {
-    background: rgba(42, 42, 62, 0.5);
+    background: rgba(0, 0, 0, 0.15);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
 }
 
 body.dark-mode .settings-option-label {
@@ -1388,33 +1441,31 @@ body.dark-mode .settings-content {
                     <span>การควบคุม</span>
                 </div>
                 
-                <div class="switch-item light" style="margin-bottom: 12px;">
-                    <div class="switch-left">
-                        <div class="led-circle off" id="light-led-menu"></div>
-                        <div class="switch-icon">💡</div>
-                        <div class="switch-info">
-                            <div class="switch-label">ไฟ</div>
-                            <div class="switch-pin"><span id="light-mode-menu">Auto</span></div>
-                        </div>
-                    </div>
-                    <div class="toggle light" id="light-toggle-menu" onclick="toggleLightMenu()" style="cursor: pointer;">
-                        <div class="toggle-thumb"></div>
-                    </div>
-                </div>
+<div class="switch-item light" style="margin-bottom: 12px;">
+    <div class="switch-left">
+        <div class="led-circle off" id="light-led-menu"></div>
+        <div class="switch-icon">💡</div>
+        <div class="switch-info">
+            <div class="switch-label">ไฟ</div>
+        </div>
+    </div>
+    <div class="toggle light" id="light-toggle-menu" onclick="toggleLightMenu()" style="cursor: pointer;">
+        <div class="toggle-thumb"></div>
+    </div>
+</div>
 
-                <div class="switch-item oxygen" style="margin-bottom: 12px;">
-                    <div class="switch-left">
-                        <div class="led-circle" id="oxygen-led-menu"></div>
-                        <div class="switch-icon">💨</div>
-                        <div class="switch-info">
-                            <div class="switch-label">ออกซิเจน</div>
-                            <div class="switch-pin"><span id="oxygen-mode-menu">Auto</span></div>
-                        </div>
-                    </div>
-                    <div class="toggle oxygen active" id="oxygen-toggle-menu" onclick="toggleOxygenMenu()" style="cursor: pointer;">
-                        <div class="toggle-thumb"></div>
-                    </div>
-                </div>
+<div class="switch-item oxygen" style="margin-bottom: 12px;">
+    <div class="switch-left">
+        <div class="led-circle" id="oxygen-led-menu"></div>
+        <div class="switch-icon">💨</div>
+        <div class="switch-info">
+            <div class="switch-label">ออกซิเจน</div>
+        </div>
+    </div>
+    <div class="toggle oxygen active" id="oxygen-toggle-menu" onclick="toggleOxygenMenu()" style="cursor: pointer;">
+        <div class="toggle-thumb"></div>
+    </div>
+</div>
             </div>
 
             <!-- ตั้งค่า -->
@@ -1489,9 +1540,7 @@ body.dark-mode .settings-content {
     🌡️ <strong>แจ้งเตือนอุณหภูมิ</strong> จะแจ้งเมื่ออุณหภูมิต่ำกว่า 20°C หรือสูงกว่า 28°C
 </div>
                     </div>
-					<div class="settings-option">
-
-</div>
+                </div>
 					
 
 <!-- ตั้งค่าระยะเวลา -->
@@ -1625,10 +1674,8 @@ body.dark-mode .settings-content {
         </button>
     </div>
 </div>
-</div>
-</div>
 
-                <!-- ข้อมูลระบบ -->
+<!-- ข้อมูลระบบ -->
                 <div class="settings-item" onclick="toggleSettingsItem(this)">
                     <div class="settings-item-header">
                         <div class="settings-item-left">
@@ -1844,7 +1891,6 @@ body.dark-mode .settings-content {
                     <div class="switch-icon">💧</div>
                     <div class="switch-info">
                         <div class="switch-label">กระบะที่ 1</div>
-                        <div class="switch-pin"><span id="pump1-mode">Auto</span></div>
                     </div>
                 </div>
                 <div class="toggle pump" id="pump1-toggle" onclick="togglePump(1)">
@@ -1857,7 +1903,6 @@ body.dark-mode .settings-content {
                     <div class="switch-icon">💧</div>
                     <div class="switch-info">
                         <div class="switch-label">กระบะที่ 2</div>
-                        <div class="switch-pin"><span id="pump2-mode">Auto</span></div>
                     </div>
                 </div>
                 <div class="toggle pump" id="pump2-toggle" onclick="togglePump(2)">
@@ -1870,7 +1915,6 @@ body.dark-mode .settings-content {
                     <div class="switch-icon">💧</div>
                     <div class="switch-info">
                         <div class="switch-label">กระบะที่ 3</div>
-                        <div class="switch-pin"><span id="pump3-mode">Auto</span></div>
                     </div>
                 </div>
                 <div class="toggle pump" id="pump3-toggle" onclick="togglePump(3)">
@@ -1910,12 +1954,11 @@ let notifications = {
 		2: null,
 		3: null
 		};
-		let temperatureWarnings = {
-		1: { shown: false, lastTemp: null },
-		2: { shown: false, lastTemp: null },
-		3: { shown: false, lastTemp: null }
-		};
-
+let temperatureWarnings = {
+1: { shown: false, lastTemp: null, lastNotifyTime: 0 },
+2: { shown: false, lastTemp: null, lastNotifyTime: 0 },
+3: { shown: false, lastTemp: null, lastNotifyTime: 0 }
+};
         // ตั้งค่าการแจ้งเตือน
 let notificationSettings = {
     sound: false,
@@ -2780,6 +2823,19 @@ function loadNotificationState() {
         console.log('📂 โหลดสถานะการแจ้งเตือน:', notifications);
     }
 }
+// บันทึก/โหลดสถานะการแจ้งเตือนอุณหภูมิ
+function saveTemperatureWarnings() {
+    localStorage.setItem('temperatureWarnings', JSON.stringify(temperatureWarnings));
+    console.log('💾 บันทึกสถานะการแจ้งเตือนอุณหภูมิ:', temperatureWarnings);
+}
+
+function loadTemperatureWarnings() {
+    const saved = localStorage.getItem('temperatureWarnings');
+    if (saved) {
+        temperatureWarnings = JSON.parse(saved);
+        console.log('📂 โหลดสถานะการแจ้งเตือนอุณหภูมิ:', temperatureWarnings);
+    }
+}
 		// บันทึกและแสดงประวัติ
         function addFertilizerRecord(pondNum) {
             const now = new Date();
@@ -3179,23 +3235,24 @@ if (oxygenToggle && oxygenMode) {
 
 function displayData(data) {
     // อัพเดทและเก็บค่าอุณหภูมิ
-	const temp1 = data.V7 !== undefined ? parseFloat(data.V7) : null;
-	const temp2 = data.V6 !== undefined ? parseFloat(data.V6) : null;
-	const temp3 = data.V5 !== undefined ? parseFloat(data.V5) : null;
+    const temp1 = data.V7 !== undefined ? parseFloat(data.V7) : null;
+    const temp2 = data.V6 !== undefined ? parseFloat(data.V6) : null;
+    const temp3 = data.V5 !== undefined ? parseFloat(data.V5) : null;
     
     currentTemperatures[1] = temp1;
     currentTemperatures[2] = temp2;
     currentTemperatures[3] = temp3;
     
-    document.getElementById('temp1').textContent = temp1 !== null ? temp1.toFixed(1) : '--';
-    document.getElementById('temp2').textContent = temp2 !== null ? temp2.toFixed(1) : '--';
-    document.getElementById('temp3').textContent = temp3 !== null ? temp3.toFixed(1) : '--';
+    // ⭐ อัพเดทค่าและสีอุณหภูมิ
+    updateTemperatureDisplay(1, temp1);
+    updateTemperatureDisplay(2, temp2);
+    updateTemperatureDisplay(3, temp3);
     
     // ส่วนที่เหลือของฟังก์ชันเหมือนเดิม...
-	updateWaterStatus(1, data.V15);
-	updateWaterStatus(2, data.V16);
-	updateWaterStatus(3, data.V17);
-	updateWaterStatus(4, data.V2);
+    updateWaterStatus(1, data.V15);
+    updateWaterStatus(2, data.V16);
+    updateWaterStatus(3, data.V17);
+    updateWaterStatus(4, data.V2);
     
     updateLEDStatus(data);
     syncInitialState(data);
@@ -3269,7 +3326,33 @@ function displayData(data) {
                 }
             }
         }
-
+// ⭐ ฟังก์ชันอัพเดทการแสดงผลอุณหภูมิพร้อมเปลี่ยนสี
+function updateTemperatureDisplay(pondNum, temp) {
+    const tempElement = document.getElementById(`temp${pondNum}`);
+    const tempItem = tempElement.closest('.temp-item');
+    
+    // อัพเดทค่าอุณหภูมิ
+    if (temp !== null && !isNaN(temp)) {
+        tempElement.textContent = temp.toFixed(1);
+        
+        // ลบ class เก่าออกก่อน
+        tempItem.classList.remove('cold', 'hot');
+        
+        // เพิ่ม class ตามช่วงอุณหภูมิ
+        if (temp < 20) {
+            tempItem.classList.add('cold');
+            console.log(`❄️ กระบะ ${pondNum}: ${temp}°C (ต่ำ)`);
+        } else if (temp > 28) {
+            tempItem.classList.add('hot');
+            console.log(`🔥 กระบะ ${pondNum}: ${temp}°C (สูง)`);
+        } else {
+            console.log(`✅ กระบะ ${pondNum}: ${temp}°C (ปกติ)`);
+        }
+    } else {
+        tempElement.textContent = '--';
+        tempItem.classList.remove('cold', 'hot');
+    }
+}
 function getPumpPin(pondNum) {
     const pins = { 1: 'V10', 2: 'V11', 3: 'V12' };
     return pins[pondNum];
@@ -3465,15 +3548,22 @@ function showTemperatureAlert(pondNum, temp, type) {
 function checkGrowingTemperatures() {
     // เช็คว่าเปิดการแจ้งเตือนหรือไม่
     if (!notificationSettings.temperature) {
-        return; // ถ้าปิดไว้ ไม่ต้องเช็ค
+        return;
     }
+    
+    const now = Date.now();
+    const NOTIFY_INTERVAL = 30 * 60 * 1000; // 30 นาที
     
     for (let i = 1; i <= 3; i++) {
         // เช็คเฉพาะกระบะที่กำลังปลูกอยู่
         if (!growingStatus[i].active) {
             // ถ้าหยุดปลูกแล้ว รีเซ็ตสถานะการแจ้งเตือน
-            temperatureWarnings[i].shown = false;
-            temperatureWarnings[i].lastTemp = null;
+            if (temperatureWarnings[i].shown) {
+                temperatureWarnings[i].shown = false;
+                temperatureWarnings[i].lastTemp = null;
+                temperatureWarnings[i].lastNotifyTime = 0;
+                saveTemperatureWarnings();
+            }
             continue;
         }
         
@@ -3485,13 +3575,17 @@ function checkGrowingTemperatures() {
         }
         
         const isOutOfRange = temp < 20 || temp > 28;
-        const tempChanged = temperatureWarnings[i].lastTemp !== temp;
+        const timeSinceLastNotify = now - temperatureWarnings[i].lastNotifyTime;
+        const shouldNotify = timeSinceLastNotify >= NOTIFY_INTERVAL;
         
-        // แจ้งเตือนเมื่อ: อุณหภูมิผิดปกติ และ (ยังไม่เคยแจ้ง หรือ อุณหภูมิเปลี่ยน)
-        if (isOutOfRange && (!temperatureWarnings[i].shown || tempChanged)) {
-            temperatureWarnings[i].shown = true;
-            temperatureWarnings[i].lastTemp = temp;
-            
+        // เช็คว่าอุณหภูมิเปลี่ยนจาก "ปกติ" เป็น "ผิดปกติ" หรือไม่
+        const wasNormal = !temperatureWarnings[i].shown;
+        const isNowAbnormal = isOutOfRange;
+        
+        // แจ้งเตือนเมื่อ:
+        // 1. อุณหภูมิผิดปกติ และยังไม่เคยแจ้ง (ครั้งแรก)
+        // 2. อุณหภูมิผิดปกติ และครบ 30 นาทีแล้ว (แจ้งซ้ำ)
+        if (isNowAbnormal && (wasNormal || shouldNotify)) {
             let warningMessage = '';
             let icon = '🌡️';
             let type = 'cold';
@@ -3507,6 +3601,12 @@ function checkGrowingTemperatures() {
             }
             
             console.log(`🌡️ [แจ้งเตือนอุณหภูมิ] ${warningMessage}`);
+            
+            // อัพเดทสถานะก่อนแจ้งเตือน
+            temperatureWarnings[i].shown = true;
+            temperatureWarnings[i].lastTemp = temp;
+            temperatureWarnings[i].lastNotifyTime = now;
+            saveTemperatureWarnings();
             
             // 1️⃣ แสดงแจ้งเตือนแบบ Alert Banner
             showTemperatureAlert(i, temp, type);
@@ -3526,9 +3626,12 @@ function checkGrowingTemperatures() {
             }
         }
         
-        // ถ้าอุณหภูมิกลับมาปกติแล้ว รีเซ็ตสถานะ
+        // ถ้าอุณหภูมิกลับมาปกติแล้ว
         if (!isOutOfRange && temperatureWarnings[i].shown) {
             temperatureWarnings[i].shown = false;
+            temperatureWarnings[i].lastNotifyTime = 0;
+            saveTemperatureWarnings();
+            
             console.log(`✅ อุณหภูมิกระบะที่ ${i} กลับมาปกติ: ${temp}°C`);
             
             // แจ้งเตือนกลับมาปกติ
@@ -3620,13 +3723,19 @@ if (confirmed) {
             { icon: '⚠️', type: 'warning', confirmType: 'danger' }
         );
         
-        if (confirmed) {
+if (confirmed) {
             status.active = false;
             status.startTime = null;
             status.minutes = 0;
             
             updateGrowingUI(pondNum, false);
             saveGrowingData();
+            
+            // ⭐ รีเซ็ตสถานะการแจ้งเตือนอุณหภูมิ
+            temperatureWarnings[pondNum].shown = false;
+            temperatureWarnings[pondNum].lastTemp = null;
+            temperatureWarnings[pondNum].lastNotifyTime = 0;
+            saveTemperatureWarnings();
             
             const growPins = { 1: 'V22', 2: 'V21', 3: 'V20' };
             await sendToBlynk(growPins[pondNum], 0);
@@ -3808,6 +3917,7 @@ document.addEventListener('DOMContentLoaded', async function() {
     loadNotificationSettings();
     loadTimeSettings(); // <- จะโหลดค่าที่บันทึกถูกต้องแล้ว
     loadNotificationState();
+	loadTemperatureWarnings();
     
     // 2️⃣ เริ่มต้นระบบ Web Notification
     await initializeNotifications();
