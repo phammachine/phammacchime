@@ -2780,6 +2780,7 @@ function resetTimeSettingsOnce() {
 }
 // ฟังก์ชันอัพเดทข้อความตัวอย่าง
 // ฟังก์ชันอัพเดทข้อความตัวอย่าง (เวอร์ชันสุดท้าย)
+// หาบรรทัดนี้ (ประมาณบรรทัด 480-520)
 function updateExampleText() {
     const harvestDays = document.getElementById('harvest-days');
     const harvestTime = document.getElementById('harvest-time');
@@ -2794,7 +2795,7 @@ function updateExampleText() {
         !fertilizerDays || !fertilizerTime ||
         !harvestExampleText || !fertilizerExampleText) {
         console.log('⏳ รอ elements โหลด...');
-        return;
+        return; // ถ้ายังไม่พร้อม ให้หยุดการทำงาน
     }
     
     // ✅ อัพเดทข้อความตัวอย่างทันที
@@ -2817,6 +2818,7 @@ function toggleTemperatureNotif() {
     console.log('🌡️ แจ้งเตือนอุณหภูมิ:', notificationSettings.temperature ? 'เปิด' : 'ปิด');
 }
 // โหลดการตั้งค่าระยะเวลา
+// หาบรรทัดนี้ (ประมาณบรรทัด 560-610)
 function loadTimeSettings() {
     const saved = localStorage.getItem('timeSettings');
     
@@ -2824,7 +2826,6 @@ function loadTimeSettings() {
         try {
             const savedData = JSON.parse(saved);
             
-            // โหลดค่าทั้งหมดจาก localStorage
             timeSettings.harvestDays = savedData.harvestDays !== undefined ? savedData.harvestDays : 7;
             timeSettings.harvestTime = savedData.harvestTime || '12:00';
             timeSettings.fertilizerDays = savedData.fertilizerDays !== undefined ? savedData.fertilizerDays : 7;
@@ -2833,7 +2834,6 @@ function loadTimeSettings() {
             console.log('✅ โหลดการตั้งค่าเวลาสำเร็จ:', timeSettings);
         } catch (error) {
             console.error('❌ โหลด timeSettings ไม่สำเร็จ:', error);
-            // ถ้า error ให้ใช้ค่า default
             timeSettings = {
                 harvestDays: 7,
                 harvestTime: '12:00',
@@ -2845,34 +2845,36 @@ function loadTimeSettings() {
         console.log('ℹ️ ไม่มีข้อมูล timeSettings ใช้ค่า default');
     }
     
-    // อัพเดท UI
-    const harvestDaysInput = document.getElementById('harvest-days');
-    const harvestTimeInput = document.getElementById('harvest-time');
-    const fertilizerDaysInput = document.getElementById('fertilizer-days');
-    const fertilizerTimeInput = document.getElementById('fertilizer-time');
-    
-    if (harvestDaysInput) {
-        harvestDaysInput.value = timeSettings.harvestDays;
-        console.log('📅 ตั้งค่าวันเก็บเกี่ยว:', harvestDaysInput.value);
-    }
-    
-    if (harvestTimeInput) {
-        harvestTimeInput.value = timeSettings.harvestTime;
-        console.log('🕐 ตั้งค่าเวลาเก็บเกี่ยว:', harvestTimeInput.value);
-    }
-    
-    if (fertilizerDaysInput) {
-        fertilizerDaysInput.value = timeSettings.fertilizerDays;
-        console.log('📅 ตั้งค่าวันใส่ปุ๋ย:', fertilizerDaysInput.value);
-    }
-    
-    if (fertilizerTimeInput) {
-        fertilizerTimeInput.value = timeSettings.fertilizerTime;
-        console.log('🕐 ตั้งค่าเวลาใส่ปุ๋ย:', fertilizerTimeInput.value);
-    }
-    
-    // อัพเดทข้อความตัวอย่าง
-    updateExampleText();
+    // ⭐ เพิ่ม setTimeout เพื่อให้แน่ใจว่า DOM โหลดเสร็จ
+    setTimeout(() => {
+        const harvestDaysInput = document.getElementById('harvest-days');
+        const harvestTimeInput = document.getElementById('harvest-time');
+        const fertilizerDaysInput = document.getElementById('fertilizer-days');
+        const fertilizerTimeInput = document.getElementById('fertilizer-time');
+        
+        if (harvestDaysInput) {
+            harvestDaysInput.value = timeSettings.harvestDays;
+            console.log('📅 ตั้งค่าวันเก็บเกี่ยว:', harvestDaysInput.value);
+        }
+        
+        if (harvestTimeInput) {
+            harvestTimeInput.value = timeSettings.harvestTime;
+            console.log('🕐 ตั้งค่าเวลาเก็บเกี่ยว:', harvestTimeInput.value);
+        }
+        
+        if (fertilizerDaysInput) {
+            fertilizerDaysInput.value = timeSettings.fertilizerDays;
+            console.log('📅 ตั้งค่าวันใส่ปุ๋ย:', fertilizerDaysInput.value);
+        }
+        
+        if (fertilizerTimeInput) {
+            fertilizerTimeInput.value = timeSettings.fertilizerTime;
+            console.log('🕐 ตั้งค่าเวลาใส่ปุ๋ย:', fertilizerTimeInput.value);
+        }
+        
+        // อัพเดทข้อความตัวอย่าง
+        updateExampleText();
+    }, 200); // รอ 200ms ให้ DOM พร้อม
 }
 
 // ยืนยันการตั้งค่าเวลา
@@ -4653,6 +4655,7 @@ async function sendWiFiToESP32(ssid, password) {
         return false;
     }
 }
+// หาบรรทัดนี้ (ด้านล่างสุดของโค้ด)
 document.addEventListener('DOMContentLoaded', async function() {
     console.log('📱 กำลังโหลดระบบ...');
     
@@ -4660,13 +4663,19 @@ document.addEventListener('DOMContentLoaded', async function() {
     
     // 1️⃣ โหลดการตั้งค่าพื้นฐาน
     loadDarkMode(); 
-	loadWiFiSettings();
+    loadWiFiSettings();
     loadGrowingData();
     loadHistory();
     loadFertilizerHistory();
     updateTime();
     loadNotificationSettings();
-    loadTimeSettings();
+    
+    // ⭐ รอให้ DOM พร้อมก่อนโหลด Time Settings
+    setTimeout(() => {
+        loadTimeSettings();
+        console.log('✅ โหลด Time Settings เสร็จสิ้น');
+    }, 100);
+    
     loadNotificationState();
     loadTemperatureWarnings();
     
@@ -4706,12 +4715,6 @@ document.addEventListener('DOMContentLoaded', async function() {
             updateExampleText();
         });
     }
-    
-    // ⭐ เรียกใช้ครั้งแรกหลังจาก elements พร้อม
-    setTimeout(() => {
-        updateExampleText();
-        console.log('✅ อัพเดทข้อความตัวอย่างครั้งแรก');
-    }, 100);
     
     // 4️⃣ เริ่มต้นเชื่อมต่อ Blynk
     console.log('🚀 กำลังเชื่อมต่อ Blynk...');
