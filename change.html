@@ -1283,7 +1283,20 @@ body.dark-mode .temp-item:not(.cold):not(.hot) {
 }
 
 body.dark-mode {
-    background: url('https://i.ibb.co/HTk3YNtv/images.jpg') center/cover fixed;
+    background: url('https://i.ibb.co/qFpvskFp/dark-green-blue-grainy-gradient-260nw-2628008543.jpg') center/cover fixed;
+    position: relative;
+}
+
+body.dark-mode::before {
+    content: '';
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: url('https://i.ibb.co/qFpvskFp/dark-green-blue-grainy-gradient-260nw-2628008543.jpg') center/cover fixed;
+    filter: blur(20px);
+    z-index: -1;
 }
 
 body.dark-mode .confirm-overlay {
@@ -1315,8 +1328,11 @@ body.dark-mode .confirm-btn.cancel:hover {
 }
 
 body.dark-mode .header {
-    background: linear-gradient(135deg, rgba(46, 125, 50, 0.95) 0%, rgba(76, 175, 80, 0.95) 100%),
+    background: linear-gradient(135deg, rgba(46, 125, 50, 0.75) 0%, rgba(76, 175, 80, 0.75) 100%), 
                 url('https://i.ibb.co/MkmmJcxW/your-image.jpg') 0% center/cover no-repeat;
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border: 1px solid rgba(255, 255, 255, 0.3);
 }
 
 /* ===================================
@@ -2189,66 +2205,7 @@ body.dark-mode .settings-content {
         </button>
     </div>
 </div>
-<!-- ตั้งค่า WiFi -->
-<div class="settings-item" onclick="toggleSettingsItem(this)">
-    <div class="settings-item-header">
-        <div class="settings-item-left">
-            <div class="settings-icon">📡</div>
-            <div>
-                <div class="settings-label">ตั้งค่า WiFi</div>
-                <div class="settings-desc">เชื่อมต่อเครือข่าย WiFi</div>
-            </div>
-        </div>
-        <div class="settings-arrow">›</div>
-    </div>
-    <div class="settings-content">
-        <div class="settings-option" style="margin-bottom: 12px;">
-            <span class="settings-option-label">📶 WiFi ปัจจุบัน</span>
-            <span class="settings-value" id="current-wifi">--</span>
-        </div>
-        
-        <div style="background: linear-gradient(135deg, #E3F2FD 0%, #BBDEFB 100%); border-radius: 10px; padding: 12px; margin-bottom: 12px;">
-            <div style="font-size: 13px; font-weight: 700; color: #1976D2; margin-bottom: 10px;">
-                📡 เชื่อมต่อ WiFi ใหม่
-            </div>
-            
-            <div style="margin-bottom: 10px;">
-                <label style="display: block; font-size: 12px; color: #1976D2; margin-bottom: 4px; font-weight: 600;">
-                    ชื่อเครือข่าย (SSID)
-                </label>
-                <input type="text" id="wifi-ssid" 
-                       placeholder="ระบุชื่อ WiFi"
-                       onclick="event.stopPropagation();"
-                       style="width: 100%; padding: 10px; border: 2px solid #2196F3; border-radius: 8px; font-size: 14px; background: white;">
-            </div>
-            
-            <div style="margin-bottom: 10px;">
-                <label style="display: block; font-size: 12px; color: #1976D2; margin-bottom: 4px; font-weight: 600;">
-                    รหัสผ่าน
-                </label>
-                <div style="position: relative;">
-                    <input type="password" id="wifi-password" 
-                           placeholder="ระบุรหัสผ่าน WiFi"
-                           onclick="event.stopPropagation();"
-                           style="width: 100%; padding: 10px 40px 10px 10px; border: 2px solid #2196F3; border-radius: 8px; font-size: 14px; background: white;">
-                    <button onclick="event.stopPropagation(); togglePasswordVisibility();" 
-                            style="position: absolute; right: 8px; top: 50%; transform: translateY(-50%); background: none; border: none; cursor: pointer; font-size: 18px;">
-                        👁️
-                    </button>
-                </div>
-            </div>
-        </div>
 
-        <button class="confirm-time-btn" onclick="event.stopPropagation(); saveWiFiSettings();">
-            <span>📡</span>
-            <span>บันทึกและเชื่อมต่อ</span>
-        </button>
-
-        <div style="margin-top: 12px; padding: 10px; background: linear-gradient(135deg, #FFF3E0 0%, #FFE0B2 100%); border-radius: 8px; font-size: 11px; color: #E65100; line-height: 1.6;">
-            ⚠️ <strong>หมายเหตุ:</strong> การเปลี่ยน WiFi จะส่งข้อมูลไปยัง ESP32 และระบบจะรีสตาร์ท
-        </div>
-    </div>
-</div>
 <!-- ข้อมูลระบบ -->
                 <div class="settings-item" onclick="toggleSettingsItem(this)">
                     <div class="settings-item-header">
@@ -2541,12 +2498,7 @@ let notificationSettings = {
     webNotification: false,
     temperature: true  // ← เพิ่มนี้
 };
-// ตั้งค่า WiFi
-let wifiSettings = {
-    ssid: '',
-    password: '',
-    currentSSID: ''
-};
+
         // ตั้งค่าระยะเวลา
 let timeSettings = {
     harvestDays: 7,
@@ -3364,48 +3316,36 @@ function closeAlert(alertId, type, pondNum) {
 
 function checkNotifications() {
     const now = Date.now();
+    const CHECK_INTERVAL = 60000; // 1 นาที
     
     for (let i = 1; i <= 3; i++) {
         const status = growingStatus[i];
         
-        // เช็คว่ากำลังปลูกอยู่หรือไม่
-        if (!status.active || !status.startTime) {
-            continue;
-        }
+        if (!status.active || !status.startTime) continue;
+        
+        const startDate = new Date(status.startTime);
         
         // ===============================
         // 🌱 เช็คเวลาเก็บเกี่ยว
         // ===============================
-        const startDate = new Date(status.startTime);
-        
-        // คำนวณเวลาเก็บเกี่ยว
         const harvestDate = new Date(startDate);
         harvestDate.setDate(harvestDate.getDate() + timeSettings.harvestDays);
         
         const [harvestHours, harvestMinutes] = timeSettings.harvestTime.split(':').map(Number);
-        harvestDate.setHours(harvestHours);
-        harvestDate.setMinutes(harvestMinutes);
-        harvestDate.setSeconds(0);
-        harvestDate.setMilliseconds(0);
+        harvestDate.setHours(harvestHours, harvestMinutes, 0, 0);
         
         const harvestTime = harvestDate.getTime();
+        const lastNotifyTime = notifications.harvestNotified[i] || 0;
+        const timeSinceLastNotify = now - lastNotifyTime;
+        const shouldNotifyHarvest = now >= harvestTime && timeSinceLastNotify >= CHECK_INTERVAL;
         
-        // เช็คว่าเคยแจ้งไปแล้วหรือยัง
-        const alreadyNotifiedHarvest = notifications.harvestNotified[i] === status.startTime;
-        const shouldNotifyHarvest = now >= harvestTime && !alreadyNotifiedHarvest;
-        
-        // 🔔 แจ้งเตือนเก็บเกี่ยว
         if (shouldNotifyHarvest) {
             const elapsed = now - status.startTime;
             const days = Math.floor(elapsed / (24 * 60 * 60 * 1000));
             const hours = Math.floor((elapsed % (24 * 60 * 60 * 1000)) / (60 * 60 * 1000));
             const minutes = Math.floor((elapsed % (60 * 60 * 1000)) / (60 * 1000));
             
-            console.log(`🔔 [เก็บเกี่ยว] กระบะที่ ${i} ถึงเวลาแล้ว!`, {
-                startTime: new Date(status.startTime).toLocaleString('th-TH'),
-                harvestTime: new Date(harvestTime).toLocaleString('th-TH'),
-                now: new Date(now).toLocaleString('th-TH')
-            });
+            console.log(`🔔 [เก็บเกี่ยว] กระบะที่ ${i} ถึงเวลา!`);
             
             showAlert('harvest', i, 
                 `กระบะที่ ${i} ปลูกมา ${days} วัน ${hours}:${String(minutes).padStart(2, '0')} น. แล้ว\n` +
@@ -3415,7 +3355,7 @@ function checkNotifications() {
             if (!notifications.harvest.includes(i)) {
                 notifications.harvest.push(i);
             }
-            notifications.harvestNotified[i] = status.startTime;
+            notifications.harvestNotified[i] = now;
             saveNotificationState();
         }
         
@@ -3426,28 +3366,20 @@ function checkNotifications() {
         fertilizerDate.setDate(fertilizerDate.getDate() + timeSettings.fertilizerDays);
         
         const [fertilizerHours, fertilizerMinutes] = timeSettings.fertilizerTime.split(':').map(Number);
-        fertilizerDate.setHours(fertilizerHours);
-        fertilizerDate.setMinutes(fertilizerMinutes);
-        fertilizerDate.setSeconds(0);
-        fertilizerDate.setMilliseconds(0);
+        fertilizerDate.setHours(fertilizerHours, fertilizerMinutes, 0, 0);
         
         const fertilizerTime = fertilizerDate.getTime();
+        const lastFertilizerNotify = notifications.fertilizerNotified[i] || 0;
+        const timeSinceFertilizer = now - lastFertilizerNotify;
+        const shouldNotifyFertilizer = now >= fertilizerTime && timeSinceFertilizer >= CHECK_INTERVAL;
         
-        const alreadyNotifiedFertilizer = notifications.fertilizerNotified[i] === status.startTime;
-        const shouldNotifyFertilizer = now >= fertilizerTime && !alreadyNotifiedFertilizer;
-        
-        // 🔔 แจ้งเตือนใส่ปุ๋ย
         if (shouldNotifyFertilizer) {
             const elapsed = now - status.startTime;
             const days = Math.floor(elapsed / (24 * 60 * 60 * 1000));
             const hours = Math.floor((elapsed % (24 * 60 * 60 * 1000)) / (60 * 60 * 1000));
             const minutes = Math.floor((elapsed % (60 * 60 * 1000)) / (60 * 1000));
             
-            console.log(`🔔 [ใส่ปุ๋ย] กระบะที่ ${i} ถึงเวลาแล้ว!`, {
-                startTime: new Date(status.startTime).toLocaleString('th-TH'),
-                fertilizerTime: new Date(fertilizerTime).toLocaleString('th-TH'),
-                now: new Date(now).toLocaleString('th-TH')
-            });
+            console.log(`🔔 [ใส่ปุ๋ย] กระบะที่ ${i} ถึงเวลา!`);
             
             showAlert('fertilizer', i, 
                 `กระบะที่ ${i} ปลูกมา ${days} วัน ${hours}:${String(minutes).padStart(2, '0')} น. แล้ว\n` +
@@ -3458,7 +3390,7 @@ function checkNotifications() {
             if (!alreadyInList) {
                 notifications.fertilizer.push({ pondNum: i, time: now });
             }
-            notifications.fertilizerNotified[i] = status.startTime;
+            notifications.fertilizerNotified[i] = now;
             saveNotificationState();
             updateFertilizerBadge();
         }
@@ -4189,21 +4121,15 @@ function showTemperatureAlert(pondNum, temp, type) {
         }
     }, 10000);
 }
-// ฟังก์ชันตรวจสอบอุณหภูมิขณะปลูก
-// ฟังก์ชันตรวจสอบอุณหภูมิขณะปลูก
 function checkGrowingTemperatures() {
-    // เช็คว่าเปิดการแจ้งเตือนหรือไม่
-    if (!notificationSettings.temperature) {
-        return;
-    }
+    if (!notificationSettings.temperature) return;
     
     const now = Date.now();
     const NOTIFY_INTERVAL = 30 * 60 * 1000; // 30 นาที
+    const MIN_NOTIFY_INTERVAL = 60000; // 1 นาที (ป้องกันแจ้งซ้ำ)
     
     for (let i = 1; i <= 3; i++) {
-        // เช็คเฉพาะกระบะที่กำลังปลูกอยู่
         if (!growingStatus[i].active) {
-            // ถ้าหยุดปลูกแล้ว รีเซ็ตสถานะการแจ้งเตือน
             if (temperatureWarnings[i].shown) {
                 temperatureWarnings[i].shown = false;
                 temperatureWarnings[i].lastTemp = null;
@@ -4214,24 +4140,16 @@ function checkGrowingTemperatures() {
         }
         
         const temp = currentTemperatures[i];
-        
-        // ข้ามถ้าไม่มีข้อมูลอุณหภูมิ
-        if (temp === null || temp === undefined || isNaN(temp)) {
-            continue;
-        }
+        if (temp === null || temp === undefined || isNaN(temp)) continue;
         
         const isOutOfRange = temp < 20 || temp > 28;
         const timeSinceLastNotify = now - temperatureWarnings[i].lastNotifyTime;
-        const shouldNotify = timeSinceLastNotify >= NOTIFY_INTERVAL;
         
-        // เช็คว่าอุณหภูมิเปลี่ยนจาก "ปกติ" เป็น "ผิดปกติ" หรือไม่
+        // ✅ ต้องผ่าน 1 นาทีขั้นต่ำ หรือ 30 นาทีสำหรับแจ้งซ้ำ
+        const shouldNotify = timeSinceLastNotify >= Math.max(NOTIFY_INTERVAL, MIN_NOTIFY_INTERVAL);
         const wasNormal = !temperatureWarnings[i].shown;
-        const isNowAbnormal = isOutOfRange;
         
-        // แจ้งเตือนเมื่อ:
-        // 1. อุณหภูมิผิดปกติ และยังไม่เคยแจ้ง (ครั้งแรก)
-        // 2. อุณหภูมิผิดปกติ และครบ 30 นาทีแล้ว (แจ้งซ้ำ)
-        if (isNowAbnormal && (wasNormal || shouldNotify)) {
+        if (isOutOfRange && (wasNormal || shouldNotify)) {
             let warningMessage = '';
             let icon = '🌡️';
             let type = 'cold';
@@ -4248,31 +4166,22 @@ function checkGrowingTemperatures() {
             
             console.log(`🌡️ [แจ้งเตือนอุณหภูมิ] ${warningMessage}`);
             
-            // อัพเดทสถานะก่อนแจ้งเตือน
             temperatureWarnings[i].shown = true;
             temperatureWarnings[i].lastTemp = temp;
             temperatureWarnings[i].lastNotifyTime = now;
             saveTemperatureWarnings();
             
-            // 1️⃣ แสดงแจ้งเตือนแบบ Alert Banner
             showTemperatureAlert(i, temp, type);
             
-            // 2️⃣ ส่ง Web Notification
             if (notificationSettings.webNotification) {
-                sendWebNotification(
-                    `${icon} อุณหภูมิผิดปกติ!`,
-                    warningMessage,
-                    icon
-                );
+                sendWebNotification(`${icon} อุณหภูมิผิดปกติ!`, warningMessage, icon);
             }
             
-            // 3️⃣ เล่นเสียงแจ้งเตือน
             if (notificationSettings.sound) {
                 playNotificationSound();
             }
         }
         
-        // ถ้าอุณหภูมิกลับมาปกติแล้ว
         if (!isOutOfRange && temperatureWarnings[i].shown) {
             temperatureWarnings[i].shown = false;
             temperatureWarnings[i].lastNotifyTime = 0;
@@ -4280,7 +4189,6 @@ function checkGrowingTemperatures() {
             
             console.log(`✅ อุณหภูมิกระบะที่ ${i} กลับมาปกติ: ${temp}°C`);
             
-            // แจ้งเตือนกลับมาปกติ
             const container = document.getElementById('alert-container');
             const alertId = `temp-normal-${i}`;
             
@@ -4525,136 +4433,7 @@ async function initializeNotifications() {
         saveNotificationSettings();
     }
 }
-// ============================================
-// 📡 ระบบจัดการ WiFi
-// ============================================
 
-function togglePasswordVisibility() {
-    const passwordInput = document.getElementById('wifi-password');
-    if (passwordInput.type === 'password') {
-        passwordInput.type = 'text';
-    } else {
-        passwordInput.type = 'password';
-    }
-}
-
-function loadWiFiSettings() {
-    const saved = localStorage.getItem('wifiSettings');
-    if (saved) {
-        wifiSettings = JSON.parse(saved);
-        
-        const ssidInput = document.getElementById('wifi-ssid');
-        const passwordInput = document.getElementById('wifi-password');
-        const currentWifi = document.getElementById('current-wifi');
-        
-        if (ssidInput) ssidInput.value = wifiSettings.ssid || '';
-        if (passwordInput) passwordInput.value = wifiSettings.password || '';
-        if (currentWifi) currentWifi.textContent = wifiSettings.currentSSID || 'ไม่ทราบ';
-    }
-}
-
-function saveWiFiSettingsToStorage() {
-    localStorage.setItem('wifiSettings', JSON.stringify(wifiSettings));
-}
-
-async function saveWiFiSettings() {
-    const ssid = document.getElementById('wifi-ssid').value.trim();
-    const password = document.getElementById('wifi-password').value;
-    
-    if (!ssid) {
-        alert('❌ กรุณาระบุชื่อ WiFi (SSID)');
-        return;
-    }
-    
-    if (!password) {
-        const confirmNoPassword = await showConfirm(
-            '⚠️ ไม่มีรหัสผ่าน',
-            'คุณต้องการเชื่อมต่อ WiFi โดยไม่มีรหัสผ่านใช่หรือไม่?',
-            { icon: '⚠️', type: 'warning' }
-        );
-        
-        if (!confirmNoPassword) return;
-    }
-    
-    const confirmed = await showConfirm(
-        '📡 เปลี่ยน WiFi',
-        `คุณต้องการเชื่อมต่อไปยัง:\n\n` +
-        `📶 SSID: ${ssid}\n` +
-        `🔐 Password: ${password ? '••••••••' : '(ไม่มี)'}\n\n` +
-        `⚠️ ESP32 จะรีสตาร์ทและอาจใช้เวลา 10-30 วินาที`,
-        { icon: '📡', type: 'warning' }
-    );
-    
-    if (!confirmed) return;
-    
-    // บันทึกข้อมูล WiFi
-    wifiSettings.ssid = ssid;
-    wifiSettings.password = password;
-    saveWiFiSettingsToStorage();
-    
-    // ส่งข้อมูล WiFi ไปยัง ESP32 ผ่าน Blynk
-    const success = await sendWiFiToESP32(ssid, password);
-    
-    if (success) {
-        wifiSettings.currentSSID = ssid;
-        saveWiFiSettingsToStorage();
-        
-        const currentWifi = document.getElementById('current-wifi');
-        if (currentWifi) currentWifi.textContent = ssid;
-        
-        alert('✅ ส่งข้อมูล WiFi สำเร็จ!\n\nESP32 กำลังรีสตาร์ทและเชื่อมต่อ WiFi ใหม่\n\nกรุณารอสักครู่...');
-        
-        // รอ ESP32 รีสตาร์ท
-        setTimeout(() => {
-            location.reload();
-        }, 15000);
-    } else {
-        alert('❌ ส่งข้อมูล WiFi ไม่สำเร็จ\n\nกรุณาลองอีกครั้งหรือตรวจสอบการเชื่อมต่อ');
-    }
-}
-
-async function sendWiFiToESP32(ssid, password) {
-    if (demoMode) {
-        console.log(`[Demo Mode] ส่ง WiFi: SSID=${ssid}, Password=${password}`);
-        return true;
-    }
-    
-    try {
-        // ส่ง SSID ไปที่ V30
-        const ssidResponse = await fetch(
-            `${BLYNK_SERVER}/external/api/update?token=${BLYNK_AUTH}&V30=${encodeURIComponent(ssid)}`,
-            { method: 'GET' }
-        );
-        
-        // ส่ง Password ไปที่ V31
-        const passResponse = await fetch(
-            `${BLYNK_SERVER}/external/api/update?token=${BLYNK_AUTH}&V31=${encodeURIComponent(password)}`,
-            { method: 'GET' }
-        );
-        
-        // ส่งสัญญาณให้ ESP32 รีสตาร์ทและเชื่อมต่อ WiFi ใหม่ (V32)
-        const restartResponse = await fetch(
-            `${BLYNK_SERVER}/external/api/update?token=${BLYNK_AUTH}&V32=1`,
-            { method: 'GET' }
-        );
-        
-        const success = ssidResponse.ok && passResponse.ok && restartResponse.ok;
-        
-        console.log('📡 ส่งข้อมูล WiFi:', {
-            ssid: ssid,
-            ssidOk: ssidResponse.ok,
-            passOk: passResponse.ok,
-            restartOk: restartResponse.ok,
-            success: success
-        });
-        
-        return success;
-        
-    } catch (error) {
-        console.error('❌ Error sending WiFi:', error);
-        return false;
-    }
-}
 // หาบรรทัดนี้ (ด้านล่างสุดของโค้ด)
 document.addEventListener('DOMContentLoaded', async function() {
     console.log('📱 กำลังโหลดระบบ...');
@@ -4663,7 +4442,6 @@ document.addEventListener('DOMContentLoaded', async function() {
     
     // 1️⃣ โหลดการตั้งค่าพื้นฐาน
     loadDarkMode(); 
-    loadWiFiSettings();
     loadGrowingData();
     loadHistory();
     loadFertilizerHistory();
@@ -4723,8 +4501,8 @@ document.addEventListener('DOMContentLoaded', async function() {
     // 5️⃣ ตั้งค่า intervals
     setInterval(updateTime, 1000);
     setInterval(updateGrowingTimers, 1000);
-    setInterval(checkNotifications, 3000);
-    setInterval(checkGrowingTemperatures, 5000);
+	setInterval(checkNotifications, 10000);  // ← เปลี่ยนเป็น 10 วินาที
+	setInterval(checkGrowingTemperatures, 30000);  // ← เปลี่ยนเป็น 30 วินาที
     
     setInterval(() => {
         if (!demoMode) {
