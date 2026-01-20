@@ -2167,7 +2167,66 @@ body.dark-mode .settings-content {
         </button>
     </div>
 </div>
+<!-- ตั้งค่า WiFi -->
+<div class="settings-item" onclick="toggleSettingsItem(this)">
+    <div class="settings-item-header">
+        <div class="settings-item-left">
+            <div class="settings-icon">📡</div>
+            <div>
+                <div class="settings-label">ตั้งค่า WiFi</div>
+                <div class="settings-desc">เชื่อมต่อเครือข่าย WiFi</div>
+            </div>
+        </div>
+        <div class="settings-arrow">›</div>
+    </div>
+    <div class="settings-content">
+        <div class="settings-option" style="margin-bottom: 12px;">
+            <span class="settings-option-label">📶 WiFi ปัจจุบัน</span>
+            <span class="settings-value" id="current-wifi">--</span>
+        </div>
+        
+        <div style="background: linear-gradient(135deg, #E3F2FD 0%, #BBDEFB 100%); border-radius: 10px; padding: 12px; margin-bottom: 12px;">
+            <div style="font-size: 13px; font-weight: 700; color: #1976D2; margin-bottom: 10px;">
+                📡 เชื่อมต่อ WiFi ใหม่
+            </div>
+            
+            <div style="margin-bottom: 10px;">
+                <label style="display: block; font-size: 12px; color: #1976D2; margin-bottom: 4px; font-weight: 600;">
+                    ชื่อเครือข่าย (SSID)
+                </label>
+                <input type="text" id="wifi-ssid" 
+                       placeholder="ระบุชื่อ WiFi"
+                       onclick="event.stopPropagation();"
+                       style="width: 100%; padding: 10px; border: 2px solid #2196F3; border-radius: 8px; font-size: 14px; background: white;">
+            </div>
+            
+            <div style="margin-bottom: 10px;">
+                <label style="display: block; font-size: 12px; color: #1976D2; margin-bottom: 4px; font-weight: 600;">
+                    รหัสผ่าน
+                </label>
+                <div style="position: relative;">
+                    <input type="password" id="wifi-password" 
+                           placeholder="ระบุรหัสผ่าน WiFi"
+                           onclick="event.stopPropagation();"
+                           style="width: 100%; padding: 10px 40px 10px 10px; border: 2px solid #2196F3; border-radius: 8px; font-size: 14px; background: white;">
+                    <button onclick="event.stopPropagation(); togglePasswordVisibility();" 
+                            style="position: absolute; right: 8px; top: 50%; transform: translateY(-50%); background: none; border: none; cursor: pointer; font-size: 18px;">
+                        👁️
+                    </button>
+                </div>
+            </div>
+        </div>
 
+        <button class="confirm-time-btn" onclick="event.stopPropagation(); saveWiFiSettings();">
+            <span>📡</span>
+            <span>บันทึกและเชื่อมต่อ</span>
+        </button>
+
+        <div style="margin-top: 12px; padding: 10px; background: linear-gradient(135deg, #FFF3E0 0%, #FFE0B2 100%); border-radius: 8px; font-size: 11px; color: #E65100; line-height: 1.6;">
+            ⚠️ <strong>หมายเหตุ:</strong> การเปลี่ยน WiFi จะส่งข้อมูลไปยัง ESP32 และระบบจะรีสตาร์ท
+        </div>
+    </div>
+</div>
 <!-- ข้อมูลระบบ -->
                 <div class="settings-item" onclick="toggleSettingsItem(this)">
                     <div class="settings-item-header">
@@ -2459,6 +2518,12 @@ let notificationSettings = {
     fertilizer: true,
     webNotification: false,
     temperature: true  // ← เพิ่มนี้
+};
+// ตั้งค่า WiFi
+let wifiSettings = {
+    ssid: '',
+    password: '',
+    currentSSID: ''
 };
         // ตั้งค่าระยะเวลา
 let timeSettings = {
@@ -4282,7 +4347,136 @@ async function initializeNotifications() {
         saveNotificationSettings();
     }
 }
+// ============================================
+// 📡 ระบบจัดการ WiFi
+// ============================================
 
+function togglePasswordVisibility() {
+    const passwordInput = document.getElementById('wifi-password');
+    if (passwordInput.type === 'password') {
+        passwordInput.type = 'text';
+    } else {
+        passwordInput.type = 'password';
+    }
+}
+
+function loadWiFiSettings() {
+    const saved = localStorage.getItem('wifiSettings');
+    if (saved) {
+        wifiSettings = JSON.parse(saved);
+        
+        const ssidInput = document.getElementById('wifi-ssid');
+        const passwordInput = document.getElementById('wifi-password');
+        const currentWifi = document.getElementById('current-wifi');
+        
+        if (ssidInput) ssidInput.value = wifiSettings.ssid || '';
+        if (passwordInput) passwordInput.value = wifiSettings.password || '';
+        if (currentWifi) currentWifi.textContent = wifiSettings.currentSSID || 'ไม่ทราบ';
+    }
+}
+
+function saveWiFiSettingsToStorage() {
+    localStorage.setItem('wifiSettings', JSON.stringify(wifiSettings));
+}
+
+async function saveWiFiSettings() {
+    const ssid = document.getElementById('wifi-ssid').value.trim();
+    const password = document.getElementById('wifi-password').value;
+    
+    if (!ssid) {
+        alert('❌ กรุณาระบุชื่อ WiFi (SSID)');
+        return;
+    }
+    
+    if (!password) {
+        const confirmNoPassword = await showConfirm(
+            '⚠️ ไม่มีรหัสผ่าน',
+            'คุณต้องการเชื่อมต่อ WiFi โดยไม่มีรหัสผ่านใช่หรือไม่?',
+            { icon: '⚠️', type: 'warning' }
+        );
+        
+        if (!confirmNoPassword) return;
+    }
+    
+    const confirmed = await showConfirm(
+        '📡 เปลี่ยน WiFi',
+        `คุณต้องการเชื่อมต่อไปยัง:\n\n` +
+        `📶 SSID: ${ssid}\n` +
+        `🔐 Password: ${password ? '••••••••' : '(ไม่มี)'}\n\n` +
+        `⚠️ ESP32 จะรีสตาร์ทและอาจใช้เวลา 10-30 วินาที`,
+        { icon: '📡', type: 'warning' }
+    );
+    
+    if (!confirmed) return;
+    
+    // บันทึกข้อมูล WiFi
+    wifiSettings.ssid = ssid;
+    wifiSettings.password = password;
+    saveWiFiSettingsToStorage();
+    
+    // ส่งข้อมูล WiFi ไปยัง ESP32 ผ่าน Blynk
+    const success = await sendWiFiToESP32(ssid, password);
+    
+    if (success) {
+        wifiSettings.currentSSID = ssid;
+        saveWiFiSettingsToStorage();
+        
+        const currentWifi = document.getElementById('current-wifi');
+        if (currentWifi) currentWifi.textContent = ssid;
+        
+        alert('✅ ส่งข้อมูล WiFi สำเร็จ!\n\nESP32 กำลังรีสตาร์ทและเชื่อมต่อ WiFi ใหม่\n\nกรุณารอสักครู่...');
+        
+        // รอ ESP32 รีสตาร์ท
+        setTimeout(() => {
+            location.reload();
+        }, 15000);
+    } else {
+        alert('❌ ส่งข้อมูล WiFi ไม่สำเร็จ\n\nกรุณาลองอีกครั้งหรือตรวจสอบการเชื่อมต่อ');
+    }
+}
+
+async function sendWiFiToESP32(ssid, password) {
+    if (demoMode) {
+        console.log(`[Demo Mode] ส่ง WiFi: SSID=${ssid}, Password=${password}`);
+        return true;
+    }
+    
+    try {
+        // ส่ง SSID ไปที่ V30
+        const ssidResponse = await fetch(
+            `${BLYNK_SERVER}/external/api/update?token=${BLYNK_AUTH}&V30=${encodeURIComponent(ssid)}`,
+            { method: 'GET' }
+        );
+        
+        // ส่ง Password ไปที่ V31
+        const passResponse = await fetch(
+            `${BLYNK_SERVER}/external/api/update?token=${BLYNK_AUTH}&V31=${encodeURIComponent(password)}`,
+            { method: 'GET' }
+        );
+        
+        // ส่งสัญญาณให้ ESP32 รีสตาร์ทและเชื่อมต่อ WiFi ใหม่ (V32)
+        const restartResponse = await fetch(
+            `${BLYNK_SERVER}/external/api/update?token=${BLYNK_AUTH}&V32=1`,
+            { method: 'GET' }
+        );
+        
+        const success = ssidResponse.ok && passResponse.ok && restartResponse.ok;
+        
+        console.log('📡 ส่งข้อมูล WiFi:', {
+            ssid: ssid,
+            ssidOk: ssidResponse.ok,
+            passOk: passResponse.ok,
+            restartOk: restartResponse.ok,
+            success: success
+        });
+        
+        return success;
+        
+    } catch (error) {
+        console.error('❌ Error sending WiFi:', error);
+        return false;
+    }
+}
 document.addEventListener('DOMContentLoaded', async function() {
     console.log('📱 กำลังโหลดระบบ...');
     
@@ -4290,6 +4484,7 @@ document.addEventListener('DOMContentLoaded', async function() {
     
     // 1️⃣ โหลดการตั้งค่าพื้นฐาน
     loadDarkMode(); 
+	loadWiFiSettings();
     loadGrowingData();
     loadHistory();
     loadFertilizerHistory();
