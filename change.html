@@ -3993,6 +3993,7 @@ async function togglePump(pumpNum) {
     const isActive = toggle.classList.contains('active');
     const pumpItem = toggle.closest('.switch-item');
     
+    // เช็คเงื่อนไข: ต้องมีน้ำ + ต้องปลูกอยู่
     if (pumpItem.classList.contains('disabled') && !isActive) {
         if (!growingStatus[pumpNum].active) {
             alert(`❌ ไม่สามารถเก็บเกี่ยวได้\n\nต้องเริ่มปลูกในกระบะที่ ${pumpNum} ก่อน`);
@@ -4005,11 +4006,19 @@ async function togglePump(pumpNum) {
     const pins = { 1: 'V10', 2: 'V11', 3: 'V12' };
     
     if (!isActive) {
-        console.log(`💧 Pump ${pumpNum}: เปิดปั๊มดูดน้ำ`);
-        syncControls('main', true, `pump${pumpNum}`);
+        // กดครั้งที่ 1: เปิดปั๊มปล่อยน้ำ
+        console.log(`💧 Pump ${pumpNum}: เริ่มเก็บเกี่ยว - เปิดปั๊มปล่อยน้ำ`);
+        
+        toggle.classList.add('active');
+        const mode = document.getElementById(`pump${pumpNum}-mode`);
+        if (mode) mode.textContent = 'กำลังเก็บ...';
+        
         await sendToBlynk(pins[pumpNum], 1);
+        console.log(`📤 ส่งคำสั่งเปิดปั๊ม ${pumpNum}`);
+        
     } else {
-        console.log(`💧 Pump ${pumpNum}: ปิดปั๊ม + สิ้นสุดการปลูก`);
+        // กดครั้งที่ 2: ปิดปั๊ม + เก็บเกี่ยวสำเร็จ
+        console.log(`💧 Pump ${pumpNum}: เก็บเสร็จ - ปิดปั๊ม + หยุดปลูก`);
         
         const confirmed = await showConfirm(
             '✅ เก็บเกี่ยวสำเร็จ',
@@ -4018,16 +4027,22 @@ async function togglePump(pumpNum) {
         );
         
         if (confirmed) {
-            syncControls('main', false, `pump${pumpNum}`);
+            // 1. ปิด UI Toggle
+            toggle.classList.remove('active');
+            const mode = document.getElementById(`pump${pumpNum}-mode`);
+            if (mode) mode.textContent = 'Auto';
             
-            const success = await sendToBlynk(pins[pumpNum], 0);
-            console.log(`📤 ส่งคำสั่งปิดปั๊ม ${pumpNum}:`, success ? '✅' : '❌');
+            // 2. ส่งคำสั่งปิดปั๊ม
+            const pumpSuccess = await sendToBlynk(pins[pumpNum], 0);
+            console.log(`📤 ส่งคำสั่งปิดปั๊ม ${pumpNum}:`, pumpSuccess ? '✅' : '❌');
             
             await new Promise(resolve => setTimeout(resolve, 500));
             
-            if (success) {
+            if (pumpSuccess) {
+                // 3. บันทึกประวัติการเก็บเกี่ยว
                 addHarvestRecord(pumpNum);
                 
+                // 4. หยุดการปลูก
                 if (growingStatus[pumpNum].active) {
                     growingStatus[pumpNum].active = false;
                     growingStatus[pumpNum].startTime = null;
@@ -4036,15 +4051,17 @@ async function togglePump(pumpNum) {
                     updateGrowingUI(pumpNum, false);
                     saveGrowingData();
                     
+                    // ส่งคำสั่งหยุดเซนเซอร์
                     const growPins = { 1: 'V22', 2: 'V21', 3: 'V20' };
                     await sendToBlynk(growPins[pumpNum], 0);
                     console.log(`🛑 หยุดเซนเซอร์กระบะที่ ${pumpNum}`);
                     
+                    // ลบการแจ้งเตือน
                     notifications.harvest = notifications.harvest.filter(n => n !== pumpNum);
                     saveNotificationState();
                 }
                 
-                // ✅ เช็คว่าไม่มีกระบะใดปลูกอยู่แล้ว
+                // 5. เช็คว่าไม่มีกระบะใดปลูกอยู่แล้ว
                 const anyPondActive = Object.values(growingStatus).some(s => s.active);
                 
                 console.log('🔍 ตรวจสอบกระบะที่ยังปลูกอยู่:', {
@@ -4055,39 +4072,74 @@ async function togglePump(pumpNum) {
                 });
                 
                 if (!anyPondActive) {
-                    console.log('🛑 ไม่มีกระบะปลูกอยู่เลย -> ปิดออกซิเจน');
+                    console.log('🛑 ไม่มีกระบะปลูกอยู่เลย -> เริ่มปิดออกซิเจน + ไฟ');
                     
-                    // ✅ ส่งคำสั่ง MANUAL OFF (0) แทน AUTO (2)
-                    await sendToBlynk('V25', 0);
-                    console.log('📤 ส่งคำสั่งปิดออกซิเจน (V25 = 0)');
+                    // 1. ปิดออกซิเจนก่อน
+                    console.log('📤 [1/4] ส่งคำสั่งปิดออกซิเจน...');
+                    const oxygenSuccess = await sendToBlynk('V25', 0);
+                    console.log(`   ผลลัพธ์: ${oxygenSuccess ? '✅ สำเร็จ' : '❌ ล้มเหลว'}`);
                     
-                    // อัพเดท UI
-                    oxygenMode = 'MANUAL_OFF';
-                    updateOxygenModeUI();
-                    
-                    // รอ 1 วินาที แล้วค่อยเปลี่ยนกลับเป็น AUTO
-                    setTimeout(async () => {
-                        oxygenMode = 'AUTO';
-                        await sendToBlynk('V25', 2);
+                    if (oxygenSuccess) {
+                        oxygenMode = 'MANUAL_OFF';
                         updateOxygenModeUI();
-                        console.log('🔄 เปลี่ยนกลับเป็นโหมด AUTO');
-                    }, 1000);
+                    }
+                    
+                    // รอ 500ms
+                    await new Promise(resolve => setTimeout(resolve, 500));
+                    
+                    // 2. ปิดไฟ
+                    console.log('📤 [2/4] ส่งคำสั่งปิดไฟ...');
+                    const lightSuccess = await sendToBlynk('V24', 0);
+                    console.log(`   ผลลัพธ์: ${lightSuccess ? '✅ สำเร็จ' : '❌ ล้มเหลว'}`);
+                    
+                    if (lightSuccess) {
+                        lightMode = 'MANUAL_OFF';
+                        updateLightModeUI();
+                    }
+                    
+                    // รอ 3 วินาที (ให้ Arduino ทำงานจริงๆ)
+                    console.log('⏳ รอ 3 วินาที ให้อุปกรณ์ปิดจริง...');
+                    await new Promise(resolve => setTimeout(resolve, 3000));
+                    
+                    // 3. เปลี่ยนออกซิเจนกลับเป็น AUTO
+                    console.log('📤 [3/4] เปลี่ยนออกซิเจนกลับเป็น AUTO...');
+                    const oxygenAutoSuccess = await sendToBlynk('V25', 2);
+                    console.log(`   ผลลัพธ์: ${oxygenAutoSuccess ? '✅ สำเร็จ' : '❌ ล้มเหลว'}`);
+                    
+                    if (oxygenAutoSuccess) {
+                        oxygenMode = 'AUTO';
+                        updateOxygenModeUI();
+                    }
+                    
+                    // รอ 500ms
+                    await new Promise(resolve => setTimeout(resolve, 500));
+                    
+                    // 4. เปลี่ยนไฟกลับเป็น AUTO
+                    console.log('📤 [4/4] เปลี่ยนไฟกลับเป็น AUTO...');
+                    const lightAutoSuccess = await sendToBlynk('V24', 2);
+                    console.log(`   ผลลัพธ์: ${lightAutoSuccess ? '✅ สำเร็จ' : '❌ ล้มเหลว'}`);
+                    
+                    if (lightAutoSuccess) {
+                        lightMode = 'AUTO';
+                        updateLightModeUI();
+                    }
+                    
+                    console.log('✅ เสร็จสิ้นกระบวนการปิดอุปกรณ์');
                     
                 } else {
-                    console.log('✅ ยังมีกระบะปลูกอยู่ -> ออกซิเจนทำงานต่อ');
+                    console.log('✅ ยังมีกระบะปลูกอยู่ -> ออกซิเจน + ไฟ ทำงานต่อ');
                 }
                 
             } else {
                 console.error('❌ ไม่สามารถส่งคำสั่งปิดปั๊มได้');
                 alert('⚠️ เกิดข้อผิดพลาด\n\nไม่สามารถส่งคำสั่งปิดปั๊มได้\nกรุณาลองอีกครั้ง');
+                
+                // คืนค่า UI กลับ
                 toggle.classList.add('active');
-                const mode = document.getElementById(`pump${pumpNum}-mode`);
-                if (mode) mode.textContent = 'บังคับเปิด';
+                if (mode) mode.textContent = 'กำลังเก็บ...';
             }
         } else {
-            toggle.classList.add('active');
-            const mode = document.getElementById(`pump${pumpNum}-mode`);
-            if (mode) mode.textContent = 'บังคับเปิด';
+            console.log('❌ ยกเลิกการเก็บเกี่ยว');
         }
     }
 }
