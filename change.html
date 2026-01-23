@@ -3295,7 +3295,7 @@ async function confirmTimeSettings() {
             oxygenToggle.classList.remove('active');
         }
     }
-}
+
         // เล่นเสียงแจ้งเตือน
         function playNotificationSound() {
             if (notificationSettings.sound) {
@@ -4505,12 +4505,12 @@ if (confirmed) {
     updateGrowingUI(pondNum, true);
     saveGrowingData();
     
-	const growPins = { 1: 'V22', 2: 'V21', 3: 'V20' };
-	await sendToBlynk(growPins[pondNum], 1);
+    const growPins = { 1: 'V22', 2: 'V21', 3: 'V20' };
+    await sendToBlynk(growPins[pondNum], 1);
     
     console.log(`🌱 เริ่มปลูกกระบะที่ ${pondNum}`);
 }
-    } else {
+} else {
         // หยุดปลูก
         const confirmed = await showConfirm(
             '⚠️ หยุดการปลูก',
@@ -4518,7 +4518,7 @@ if (confirmed) {
             { icon: '⚠️', type: 'warning', confirmType: 'danger' }
         );
         
-if (confirmed) {
+        if (confirmed) {
             status.active = false;
             status.startTime = null;
             status.minutes = 0;
@@ -4697,6 +4697,7 @@ async function initializeNotifications() {
 }
 
 // หาบรรทัดนี้ (ด้านล่างสุดของโค้ด)
+// หาบรรทัดนี้ (ด้านล่างสุดของโค้ด)
 document.addEventListener('DOMContentLoaded', async function() {
     console.log('📱 กำลังโหลดระบบ...');
     
@@ -4763,8 +4764,8 @@ document.addEventListener('DOMContentLoaded', async function() {
     // 5️⃣ ตั้งค่า intervals
     setInterval(updateTime, 1000);
     setInterval(updateGrowingTimers, 1000);
-	setInterval(checkNotifications, 10000);  // ← เปลี่ยนเป็น 10 วินาที
-	setInterval(checkGrowingTemperatures, 30000);  // ← เปลี่ยนเป็น 30 วินาที
+    setInterval(checkNotifications, 10000);
+    setInterval(checkGrowingTemperatures, 30000);
     
     setInterval(() => {
         if (!demoMode) {
@@ -4781,6 +4782,5 @@ document.addEventListener('DOMContentLoaded', async function() {
     </script>
 </body>
 </html>
-
 
 
