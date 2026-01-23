@@ -1976,63 +1976,60 @@ body.dark-mode .switch-item button:hover {
         <span>การควบคุม</span>
     </div>
     
-    <!-- แสดงสถานะอุปกรณ์ -->
-    <div class="led-item" style="margin-bottom: 12px;">
-        <div class="led-left">
+    <!-- ไฟ -->
+    <div class="switch-item light" style="margin-bottom: 12px;">
+        <div class="switch-left">
             <div class="led-circle off" id="light-led-menu"></div>
-            <div class="led-info">
-                <div class="led-label">💡 ไฟ</div>
-                <div style="font-size: 12px; color: #666; margin-top: 4px;" id="light-mode-display">โหมด: AUTO</div>
+            <div class="switch-icon">💡</div>
+            <div class="switch-info">
+                <div class="switch-label">ไฟ</div>
+                <div class="switch-pin" id="light-mode-display">โหมด: AUTO</div>
             </div>
         </div>
+        
+        <!-- ปุ่มสลับโหมด -->
         <button onclick="toggleLightMode()" 
-                style="padding: 8px 16px; 
-                       background: linear-gradient(135deg, #64B5F6 0%, #42A5F5 100%); 
+                style="padding: 10px 20px; 
+                       background: linear-gradient(135deg, #FDD835 0%, #F9A825 100%); 
                        color: white; 
                        border: none; 
-                       border-radius: 8px; 
-                       font-weight: 600; 
-                       font-size: 12px; 
+                       border-radius: 10px; 
+                       font-weight: 700; 
+                       font-size: 13px; 
                        cursor: pointer; 
-                       box-shadow: 0 2px 8px rgba(100, 181, 246, 0.4);
+                       box-shadow: 0 4px 12px rgba(253, 216, 53, 0.4);
                        transition: all 0.3s;">
             <span id="light-mode-btn">AUTO</span>
         </button>
     </div>
 
-    <div class="led-item">
-        <div class="led-left">
+    <!-- ออกซิเจน -->
+    <div class="switch-item oxygen" style="margin-bottom: 12px;">
+        <div class="switch-left">
             <div class="led-circle" id="oxygen-led-menu"></div>
-            <div class="led-info">
-                <div class="led-label">💨 ออกซิเจน</div>
-                <div style="font-size: 12px; color: #666; margin-top: 4px;" id="oxygen-mode-display">โหมด: AUTO</div>
+            <div class="switch-icon">💨</div>
+            <div class="switch-info">
+                <div class="switch-label">ออกซิเจน</div>
+                <div class="switch-pin" id="oxygen-mode-display">โหมด: AUTO</div>
             </div>
         </div>
+        
+        <!-- ปุ่มสลับโหมด -->
         <button onclick="toggleOxygenMode()" 
-                style="padding: 8px 16px; 
-                       background: linear-gradient(135deg, #64B5F6 0%, #42A5F5 100%); 
+                style="padding: 10px 20px; 
+                       background: linear-gradient(135deg, #4CAF50 0%, #388E3C 100%); 
                        color: white; 
                        border: none; 
-                       border-radius: 8px; 
-                       font-weight: 600; 
-                       font-size: 12px; 
+                       border-radius: 10px; 
+                       font-weight: 700; 
+                       font-size: 13px; 
                        cursor: pointer;
-                       box-shadow: 0 2px 8px rgba(100, 181, 246, 0.4);
+                       box-shadow: 0 4px 12px rgba(76, 175, 80, 0.4);
                        transition: all 0.3s;">
             <span id="oxygen-mode-btn">AUTO</span>
         </button>
     </div>
-    
-    <div style="margin-top: 16px; padding: 12px; background: linear-gradient(135deg, #E3F2FD 0%, #BBDEFB 100%); border-radius: 10px; border: 2px solid #64B5F6;">
-        <div style="font-size: 11px; color: #1976D2; line-height: 1.6;">
-            💡 <strong>คำแนะนำ:</strong><br>
-            • <strong>AUTO</strong>: ควบคุมอัตโนมัติตามเงื่อนไข<br>
-            • <strong>เปิด</strong>: บังคับเปิดตลอดเวลา<br>
-            • <strong>ปิด</strong>: บังคับปิดตลอดเวลา
-        </div>
-    </div>
 </div>
-
 
             <!-- ตั้งค่า -->
             <div class="sidebar-section" id="section-settings">
@@ -2435,16 +2432,15 @@ body.dark-mode .switch-item button:hover {
                 </div>
                 <div class="led-status" id="water3-status">น้ำเต็ม</div>
             </div>
-<div class="led-item">
-    <div class="led-left">
-        <div class="led-circle" id="water4-led"></div>
-        <div class="led-info">
-            <div class="led-label">🪣 ถังพักน้ำ</div>
-        </div>
-    </div>
-    <div class="led-status" id="water4-status">น้ำเต็ม</div>
-</div>
-
+            <div class="led-item">
+                <div class="led-left">
+                    <div class="led-circle" id="water4-led"></div>
+                    <div class="led-info">
+                        <div class="led-label">🪣 ถังพักน้ำ</div>
+                    </div>
+                </div>
+                <div class="led-status" id="water4-status">น้ำเต็ม</div>
+            </div>
         </div>
 
         <div class="card">
@@ -3591,8 +3587,69 @@ function loadTemperatureWarnings() {
             event.target.closest('.sidebar-menu-item').classList.add('active');
         }
 
+        function syncControls(source, isActive, type) {
+            if (type === 'light') {
+                const menuToggle = document.getElementById('light-toggle-menu');
+                const menuMode = document.getElementById('light-mode-menu');
+                
+                menuToggle.classList.toggle('active', isActive);
+                menuMode.textContent = isActive ? 'Manual' : 'Auto';
+} else if (type === 'oxygen') {
+    const menuToggle = document.getElementById('oxygen-toggle-menu');
+    const menuMode = document.getElementById('oxygen-mode-menu');
+    
+    menuToggle.classList.toggle('active', isActive);
+    menuMode.textContent = isActive ? 'เปิด' : 'ปิด';  // ← แก้เป็น "เปิด/ปิด"
+}
+		else if (type.startsWith('pump')) {
+                const pumpNum = type.replace('pump', '');
+                const mainToggle = document.getElementById(`pump${pumpNum}-toggle`);
+                const mainMode = document.getElementById(`pump${pumpNum}-mode`);
+                
+                mainToggle.classList.toggle('active', isActive);
+                mainMode.textContent = isActive ? 'บังคับเปิด' : 'Auto';
+            }
+        }
 
+        function toggleLightMenu() {
+            if (emergencyStop) return;
+            
+            const toggle = document.getElementById('light-toggle-menu');
+            const menuMode = document.getElementById('light-mode-menu');
+            
+            toggle.classList.toggle('active');
+            
+            if (toggle.classList.contains('active')) {
+                menuMode.textContent = 'Manual';
+                sendToBlynk('V24', 1);
+            } else {
+                menuMode.textContent = 'Auto';
+                sendToBlynk('V24', 0);
+            }
+            
+            console.log('💡 ไฟ:', toggle.classList.contains('active') ? 'เปิด' : 'ปิด');
+        }
 
+        function toggleOxygenMenu() {
+            if (emergencyStop) return;
+            
+            const toggle = document.getElementById('oxygen-toggle-menu');
+            const menuMode = document.getElementById('oxygen-mode-menu');
+            const isCurrentlyActive = toggle.classList.contains('active');
+            
+            toggle.classList.toggle('active');
+            const newState = !isCurrentlyActive;
+            
+if (newState) {
+    menuMode.textContent = 'เปิด';  // ← เปลี่ยนเป็น "เปิด"
+    sendToBlynk('V25', 1);
+    console.log('💨 ออกซิเจน: บังคับเปิด');  // ← ข้อความใหม่
+} else {
+    menuMode.textContent = 'ปิด';   // ← เปลี่ยนเป็น "ปิด"
+    sendToBlynk('V25', 0);
+    console.log('💨 ออกซิเจน: ปิด');  // ← ข้อความใหม่
+}
+        }
 
 const demoData = {
     V2: 1,
@@ -3677,13 +3734,12 @@ const demoData = {
             }
         }
 
-async function fetchBlynkData() {
+        async function fetchBlynkData() {
     try {
-        const pins = ['V2', 'V7', 'V6', 'V5', 'V17', 'V16', 'V15', 'V24', 'V25', 'V12', 'V11', 'V10', 'V0', 'V1', 'V22', 'V21', 'V20'];
-        
-        // ✅ เพิ่ม timeout 5 วินาที
-        const controller = new AbortController();
-        const timeoutId = setTimeout(() => controller.abort(), 5000);
+		const pins = ['V2', 'V7', 'V6', 'V5', 'V17', 'V16', 'V15', 'V24', 'V25', 'V12', 'V11', 'V10', 'V0', 'V1', 'V22', 'V21', 'V20'];        
+        // เพิ่ม timeout 5 วินาที
+const controller = new AbortController();
+const timeoutId = setTimeout(() => controller.abort(), 15000); 
         
         const response = await fetch(
             `${BLYNK_SERVER}/external/api/get?token=${BLYNK_AUTH}&${pins.join('&')}`,
@@ -3915,43 +3971,24 @@ function getPumpPin(pondNum) {
     return pins[pondNum];
 }
 
-async function sendToBlynk(pin, value) {
-    if (emergencyStop && value === 1) {
-        console.log('🛑 Emergency Stop - ไม่ส่งคำสั่ง');
-        return false;
-    }
-    
-    if (demoMode) {
-        console.log(`[Demo Mode] ส่งคำสั่ง ${pin} = ${value}`);
-        return true;
-    }
-    
-    try {
-        const url = `${BLYNK_SERVER}/external/api/update?token=${BLYNK_AUTH}&${pin}=${value}`;
-        console.log(`📤 ส่งคำสั่ง: ${pin} = ${value}`);
-        console.log(`🌐 URL: ${url}`);
-        
-        const response = await fetch(url, {
-            method: 'GET',
-            mode: 'cors',
-            cache: 'no-cache',
-            headers: {
-                'Accept': 'application/json'
+        async function sendToBlynk(pin, value) {
+            if (emergencyStop && value === 1) return false;
+            if (demoMode) {
+                console.log(`[Demo Mode] ส่งคำสั่ง ${pin} = ${value}`);
+                return true;
             }
-        });
-        
-        if (response.ok) {
-            console.log(`✅ ส่งคำสั่งสำเร็จ: ${pin} = ${value}`);
-            return true;
-        } else {
-            console.error(`❌ ส่งคำสั่งล้มเหลว: HTTP ${response.status}`);
-            return false;
+            
+            try {
+                const response = await fetch(
+                    `${BLYNK_SERVER}/external/api/update?token=${BLYNK_AUTH}&${pin}=${value}`,
+                    { method: 'GET' }
+                );
+                return response.ok;
+            } catch (error) {
+                console.error('Error sending to Blynk:', error);
+                return false;
+            }
         }
-    } catch (error) {
-        console.error(`❌ Error sending to Blynk: ${pin}`, error);
-        return false;
-    }
-}
 
 async function togglePump(pumpNum) {
     if (emergencyStop) return;
@@ -4183,7 +4220,7 @@ function checkGrowingTemperatures() {
         const timeSinceLastNotify = now - temperatureWarnings[i].lastNotifyTime;
         
         // ✅ ต้องผ่าน 1 นาทีขั้นต่ำ หรือ 30 นาทีสำหรับแจ้งซ้ำ
-        const shouldNotify = timeSinceLastNotify >= NOTIFY_INTERVAL;
+        const shouldNotify = timeSinceLastNotify >= Math.max(NOTIFY_INTERVAL, MIN_NOTIFY_INTERVAL);
         const wasNormal = !temperatureWarnings[i].shown;
         
         if (isOutOfRange && (wasNormal || shouldNotify)) {
@@ -4545,7 +4582,7 @@ document.addEventListener('DOMContentLoaded', async function() {
         if (!demoMode) {
             fetchBlynkData();
         }
-    }, 5000);
+    }, 2000);
     
     // 6️⃣ เรียกใช้ครั้งแรก
     checkNotifications();
