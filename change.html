@@ -3681,65 +3681,45 @@ async function fetchBlynkData() {
     try {
         const pins = ['V2', 'V7', 'V6', 'V5', 'V17', 'V16', 'V15', 'V24', 'V25', 'V12', 'V11', 'V10', 'V0', 'V1', 'V22', 'V21', 'V20'];
         
-        // ⭐ เพิ่ม timeout เป็น 10 วินาที (เดิม 5 วินาที)
+        // ✅ เพิ่ม timeout 5 วินาที
         const controller = new AbortController();
-        const timeoutId = setTimeout(() => controller.abort(), 10000);
+        const timeoutId = setTimeout(() => controller.abort(), 5000);
         
-        // ⭐ วิธีที่ 1: ดึงข้อมูลทีละ pin (แนะนำ)
-        const data = {};
-        let successCount = 0;
-        
-        for (const pin of pins) {
-            try {
-                const response = await fetch(
-                    `${BLYNK_SERVER}/external/api/get?token=${BLYNK_AUTH}&${pin}`,
-                    { 
-                        method: 'GET',
-                        signal: controller.signal,
-                        mode: 'cors',
-                        headers: {
-                            'Content-Type': 'application/json'
-                        }
-                    }
-                );
-                
-                if (response.ok) {
-                    const value = await response.json();
-                    data[pin] = value;
-                    successCount++;
-                    console.log(`✅ ${pin}: ${value}`);
-                } else {
-                    console.warn(`⚠️ ${pin}: HTTP ${response.status}`);
-                    data[pin] = 0; // ใช้ค่า default
-                }
-            } catch (error) {
-                console.warn(`⚠️ ${pin}: ${error.message}`);
-                data[pin] = 0; // ใช้ค่า default
+        const response = await fetch(
+            `${BLYNK_SERVER}/external/api/get?token=${BLYNK_AUTH}&${pins.join('&')}`,
+            { 
+                method: 'GET',
+                signal: controller.signal
             }
-            
-            // หน่วงเวลา 50ms ระหว่าง request เพื่อไม่ให้ถูก rate limit
-            await new Promise(resolve => setTimeout(resolve, 50));
-        }
+        );
         
         clearTimeout(timeoutId);
         
-        // ✅ ถ้าได้ข้อมูลอย่างน้อย 50% ถือว่าสำเร็จ
-        if (successCount >= pins.length * 0.5) {
-            if (demoMode) {
-                demoMode = false;
-                console.log(`✅ เชื่อมต่อ Blynk สำเร็จ! (ได้ ${successCount}/${pins.length} pins)`);
-            }
-            displayData(data);
-        } else {
-            throw new Error(`Failed to fetch enough data (${successCount}/${pins.length} pins)`);
+        if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
+        
+        const data = await response.json();
+        
+        // ตรวจสอบว่าได้ข้อมูลมาจริง
+        if (!data || Object.keys(data).length === 0) {
+            throw new Error('No data received');
         }
+        
+        // เชื่อมต่อสำเร็จ
+        if (demoMode) {
+            demoMode = false;
+            console.log('✅ เชื่อมต่อ Blynk สำเร็จ!');
+        }
+        
+        displayData(data);
         
     } catch (error) {
         console.error('❌ Error fetching Blynk data:', error.message);
         
+        // ถ้ายังไม่เคยเข้า demo mode ให้เข้าเลย
         if (!demoMode) {
             enterDemoMode();
         } else {
+            // ถ้าอยู่ demo mode แล้ว ให้อัพเดทข้อมูลสุ่ม
             displayData(demoData);
         }
     }
@@ -3935,24 +3915,43 @@ function getPumpPin(pondNum) {
     return pins[pondNum];
 }
 
-        async function sendToBlynk(pin, value) {
-            if (emergencyStop && value === 1) return false;
-            if (demoMode) {
-                console.log(`[Demo Mode] ส่งคำสั่ง ${pin} = ${value}`);
-                return true;
+async function sendToBlynk(pin, value) {
+    if (emergencyStop && value === 1) {
+        console.log('🛑 Emergency Stop - ไม่ส่งคำสั่ง');
+        return false;
+    }
+    
+    if (demoMode) {
+        console.log(`[Demo Mode] ส่งคำสั่ง ${pin} = ${value}`);
+        return true;
+    }
+    
+    try {
+        const url = `${BLYNK_SERVER}/external/api/update?token=${BLYNK_AUTH}&${pin}=${value}`;
+        console.log(`📤 ส่งคำสั่ง: ${pin} = ${value}`);
+        console.log(`🌐 URL: ${url}`);
+        
+        const response = await fetch(url, {
+            method: 'GET',
+            mode: 'cors',
+            cache: 'no-cache',
+            headers: {
+                'Accept': 'application/json'
             }
-            
-            try {
-                const response = await fetch(
-                    `${BLYNK_SERVER}/external/api/update?token=${BLYNK_AUTH}&${pin}=${value}`,
-                    { method: 'GET' }
-                );
-                return response.ok;
-            } catch (error) {
-                console.error('Error sending to Blynk:', error);
-                return false;
-            }
+        });
+        
+        if (response.ok) {
+            console.log(`✅ ส่งคำสั่งสำเร็จ: ${pin} = ${value}`);
+            return true;
+        } else {
+            console.error(`❌ ส่งคำสั่งล้มเหลว: HTTP ${response.status}`);
+            return false;
         }
+    } catch (error) {
+        console.error(`❌ Error sending to Blynk: ${pin}`, error);
+        return false;
+    }
+}
 
 async function togglePump(pumpNum) {
     if (emergencyStop) return;
@@ -4546,7 +4545,7 @@ document.addEventListener('DOMContentLoaded', async function() {
         if (!demoMode) {
             fetchBlynkData();
         }
-    }, 2000);
+    }, 5000);
     
     // 6️⃣ เรียกใช้ครั้งแรก
     checkNotifications();
