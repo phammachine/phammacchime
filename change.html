@@ -4493,11 +4493,6 @@ if (confirmed) {
     status.startTime = Date.now();
     status.minutes = 0;
     
-if (confirmed) {
-    status.active = true;
-    status.startTime = Date.now();
-    status.minutes = 0;
-    
     // ✅ เคลียร์การแจ้งเตือนเก่า
     delete notifications.harvestNotified[pondNum];
     delete notifications.fertilizerNotified[pondNum];
@@ -4523,7 +4518,8 @@ if (confirmed) {
     
     console.log(`🌱 เริ่มปลูกกระบะที่ ${pondNum}`);
 }
-} else {
+    } else {
+
         // หยุดปลูก
         const confirmed = await showConfirm(
             '⚠️ หยุดการปลูก',
@@ -4795,4 +4791,3 @@ document.addEventListener('DOMContentLoaded', async function() {
     </script>
 </body>
 </html>
-
