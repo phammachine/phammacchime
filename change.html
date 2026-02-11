@@ -2075,121 +2075,121 @@ body.dark-mode div[style*="linear-gradient(135deg, rgba(232, 245, 233"] div {
         <span>การควบคุม</span>
     </div>
     
-    <!-- ✅ ระบบควบคุมไฟ - 3 ปุ่มแยก -->
-    <div style="padding: 16px; background: linear-gradient(135deg, rgba(255, 249, 196, 0.35) 0%, rgba(255, 245, 157, 0.35) 100%); 
-                border: 2px solid rgba(253, 216, 53, 0.5); border-radius: 16px; margin-bottom: 12px;
-                backdrop-filter: blur(20px) saturate(150%); -webkit-backdrop-filter: blur(20px) saturate(150%);
-                box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08), inset 0 1px 1px rgba(255, 255, 255, 0.5);">
-        
-        <!-- Header ไฟ -->
-        <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 12px;">
-            <div class="led-circle off" id="light-led-menu" 
-                 style="width: 40px; height: 40px; border-radius: 50%; display: flex; align-items: center; justify-content: center;
-                        box-shadow: 0 0 20px rgba(253, 216, 53, 0.8), inset 0 2px 8px rgba(255, 255, 255, 0.3);">
-            </div>
-            <div style="flex: 1;">
-                <div style="font-size: 16px; font-weight: 700; color: #333; margin-bottom: 2px;">💡 ไฟ</div>
-                <div style="font-size: 12px; color: #666;" id="light-mode-display">โหมด: AUTO</div>
-            </div>
+<!-- ✅ ระบบควบคุมไฟ - 3 ปุ่มแยก -->
+<div style="padding: 16px; background: linear-gradient(135deg, rgba(255, 249, 196, 0.35) 0%, rgba(255, 245, 157, 0.35) 100%); 
+            border: 2px solid rgba(253, 216, 53, 0.5); border-radius: 16px; margin-bottom: 12px;
+            backdrop-filter: blur(20px) saturate(150%); -webkit-backdrop-filter: blur(20px) saturate(150%);
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08), inset 0 1px 1px rgba(255, 255, 255, 0.5);">
+    
+    <!-- Header ไฟ -->
+    <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 12px;">
+        <div class="led-circle off" id="light-led-menu" 
+             style="width: 40px; height: 40px; border-radius: 50%; display: flex; align-items: center; justify-content: center;
+                    box-shadow: 0 0 20px rgba(253, 216, 53, 0.8), inset 0 2px 8px rgba(255, 255, 255, 0.3);">
         </div>
-        
-        <!-- 3 ปุ่มโหมด -->
-        <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px;">
-            <!-- ปุ่ม AUTO -->
-            <button onclick="setLightMode('AUTO', event)" id="light-btn-auto"
-                    class="mode-btn mode-btn-active"
-                    style="padding: 10px 8px; border: none; border-radius: 10px; font-weight: 700; 
-                           font-size: 13px; cursor: pointer; transition: all 0.3s;
-                           background: linear-gradient(135deg, #64B5F6 0%, #42A5F5 100%);
-                           color: white; box-shadow: 0 3px 10px rgba(66, 165, 245, 0.4);
-                           display: flex; flex-direction: column; align-items: center; gap: 4px;">
-                <span style="font-size: 16px;">🔄</span>
-                <span>AUTO</span>
-            </button>
-            
-            <!-- ปุ่ม ON -->
-            <button onclick="setLightMode('ON', event)" id="light-btn-on"
-                    class="mode-btn"
-                    style="padding: 10px 8px; border: none; border-radius: 10px; font-weight: 700; 
-                           font-size: 13px; cursor: pointer; transition: all 0.3s;
-                           background: linear-gradient(135deg, #E0E0E0 0%, #BDBDBD 100%);
-                           color: #666; box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
-                           display: flex; flex-direction: column; align-items: center; gap: 4px;">
-                <span style="font-size: 16px;">💡</span>
-                <span>เปิด</span>
-            </button>
-            
-            <!-- ปุ่ม OFF -->
-            <button onclick="setLightMode('OFF', event)" id="light-btn-off"
-                    class="mode-btn"
-                    style="padding: 10px 8px; border: none; border-radius: 10px; font-weight: 700; 
-                           font-size: 13px; cursor: pointer; transition: all 0.3s;
-                           background: linear-gradient(135deg, #E0E0E0 0%, #BDBDBD 100%);
-                           color: #666; box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
-                           display: flex; flex-direction: column; align-items: center; gap: 4px;">
-                <span style="font-size: 16px;">🌑</span>
-                <span>ปิด</span>
-            </button>
+        <div style="flex: 1;">
+            <div style="font-size: 16px; font-weight: 700; color: #333; margin-bottom: 2px;">💡 ไฟ</div>
+            <div style="font-size: 12px; color: #666;" id="light-mode-display">โหมด: AUTO</div>
         </div>
     </div>
+    
+    <!-- 3 ปุ่มโหมด -->
+    <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px;">
+        <!-- ปุ่ม AUTO -->
+        <button onclick="setLightMode('AUTO'); event.stopPropagation();" id="light-btn-auto"
+                class="mode-btn mode-btn-active"
+                style="padding: 10px 8px; border: none; border-radius: 10px; font-weight: 700; 
+                       font-size: 13px; cursor: pointer; transition: all 0.3s;
+                       background: linear-gradient(135deg, #64B5F6 0%, #42A5F5 100%);
+                       color: white; box-shadow: 0 3px 10px rgba(66, 165, 245, 0.4);
+                       display: flex; flex-direction: column; align-items: center; gap: 4px;">
+            <span style="font-size: 16px;">🔄</span>
+            <span>AUTO</span>
+        </button>
+        
+        <!-- ปุ่ม ON -->
+        <button onclick="setLightMode('ON'); event.stopPropagation();" id="light-btn-on"
+                class="mode-btn"
+                style="padding: 10px 8px; border: none; border-radius: 10px; font-weight: 700; 
+                       font-size: 13px; cursor: pointer; transition: all 0.3s;
+                       background: linear-gradient(135deg, #E0E0E0 0%, #BDBDBD 100%);
+                       color: #666; box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+                       display: flex; flex-direction: column; align-items: center; gap: 4px;">
+            <span style="font-size: 16px;">💡</span>
+            <span>เปิด</span>
+        </button>
+        
+        <!-- ปุ่ม OFF -->
+        <button onclick="setLightMode('OFF'); event.stopPropagation();" id="light-btn-off"
+                class="mode-btn"
+                style="padding: 10px 8px; border: none; border-radius: 10px; font-weight: 700; 
+                       font-size: 13px; cursor: pointer; transition: all 0.3s;
+                       background: linear-gradient(135deg, #E0E0E0 0%, #BDBDBD 100%);
+                       color: #666; box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+                       display: flex; flex-direction: column; align-items: center; gap: 4px;">
+            <span style="font-size: 16px;">🌑</span>
+            <span>ปิด</span>
+        </button>
+    </div>
+</div>
 
-    <!-- ✅ ระบบควบคุมออกซิเจน - 3 ปุ่มแยก -->
-    <div style="padding: 16px; background: linear-gradient(135deg, rgba(232, 245, 233, 0.35) 0%, rgba(200, 230, 201, 0.35) 100%); 
-                border: 2px solid rgba(129, 199, 132, 0.5); border-radius: 16px; margin-bottom: 12px;
-                backdrop-filter: blur(20px) saturate(150%); -webkit-backdrop-filter: blur(20px) saturate(150%);
-                box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08), inset 0 1px 1px rgba(255, 255, 255, 0.5);">
-        
-        <!-- Header ออกซิเจน -->
-        <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 12px;">
-            <div class="led-circle off" id="oxygen-led-menu" 
-                 style="width: 40px; height: 40px; border-radius: 50%; display: flex; align-items: center; justify-content: center;
-                        box-shadow: 0 0 20px rgba(76, 175, 80, 0.8), inset 0 2px 8px rgba(255, 255, 255, 0.3);">
-            </div>
-            <div style="flex: 1;">
-                <div style="font-size: 16px; font-weight: 700; color: #333; margin-bottom: 2px;">💨 ออกซิเจน</div>
-                <div style="font-size: 12px; color: #666;" id="oxygen-mode-display">โหมด: AUTO</div>
-            </div>
+<!-- ✅ ระบบควบคุมออกซิเจน - 3 ปุ่มแยก -->
+<div style="padding: 16px; background: linear-gradient(135deg, rgba(232, 245, 233, 0.35) 0%, rgba(200, 230, 201, 0.35) 100%); 
+            border: 2px solid rgba(129, 199, 132, 0.5); border-radius: 16px; margin-bottom: 12px;
+            backdrop-filter: blur(20px) saturate(150%); -webkit-backdrop-filter: blur(20px) saturate(150%);
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08), inset 0 1px 1px rgba(255, 255, 255, 0.5);">
+    
+    <!-- Header ออกซิเจน -->
+    <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 12px;">
+        <div class="led-circle off" id="oxygen-led-menu" 
+             style="width: 40px; height: 40px; border-radius: 50%; display: flex; align-items: center; justify-content: center;
+                    box-shadow: 0 0 20px rgba(76, 175, 80, 0.8), inset 0 2px 8px rgba(255, 255, 255, 0.3);">
         </div>
-        
-        <!-- 3 ปุ่มโหมด -->
-        <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px;">
-            <!-- ปุ่ม AUTO -->
-            <button onclick="setOxygenMode('AUTO', event)" id="oxygen-btn-auto"
-                    class="mode-btn mode-btn-active"
-                    style="padding: 10px 8px; border: none; border-radius: 10px; font-weight: 700; 
-                           font-size: 13px; cursor: pointer; transition: all 0.3s;
-                           background: linear-gradient(135deg, #64B5F6 0%, #42A5F5 100%);
-                           color: white; box-shadow: 0 3px 10px rgba(66, 165, 245, 0.4);
-                           display: flex; flex-direction: column; align-items: center; gap: 4px;">
-                <span style="font-size: 16px;">🔄</span>
-                <span>AUTO</span>
-            </button>
-            
-            <!-- ปุ่ม ON -->
-            <button onclick="setOxygenMode('ON', event)" id="oxygen-btn-on"
-                    class="mode-btn"
-                    style="padding: 10px 8px; border: none; border-radius: 10px; font-weight: 700; 
-                           font-size: 13px; cursor: pointer; transition: all 0.3s;
-                           background: linear-gradient(135deg, #E0E0E0 0%, #BDBDBD 100%);
-                           color: #666; box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
-                           display: flex; flex-direction: column; align-items: center; gap: 4px;">
-                <span style="font-size: 16px;">💨</span>
-                <span>เปิด</span>
-            </button>
-            
-            <!-- ปุ่ม OFF -->
-            <button onclick="setOxygenMode('OFF', event)" id="oxygen-btn-off"
-                    class="mode-btn"
-                    style="padding: 10px 8px; border: none; border-radius: 10px; font-weight: 700; 
-                           font-size: 13px; cursor: pointer; transition: all 0.3s;
-                           background: linear-gradient(135deg, #E0E0E0 0%, #BDBDBD 100%);
-                           color: #666; box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
-                           display: flex; flex-direction: column; align-items: center; gap: 4px;">
-                <span style="font-size: 16px;">🌑</span>
-                <span>ปิด</span>
-            </button>
+        <div style="flex: 1;">
+            <div style="font-size: 16px; font-weight: 700; color: #333; margin-bottom: 2px;">💨 ออกซิเจน</div>
+            <div style="font-size: 12px; color: #666;" id="oxygen-mode-display">โหมด: AUTO</div>
         </div>
     </div>
+    
+    <!-- 3 ปุ่มโหมด -->
+    <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px;">
+        <!-- ปุ่ม AUTO -->
+        <button onclick="setOxygenMode('AUTO'); event.stopPropagation();" id="oxygen-btn-auto"
+                class="mode-btn mode-btn-active"
+                style="padding: 10px 8px; border: none; border-radius: 10px; font-weight: 700; 
+                       font-size: 13px; cursor: pointer; transition: all 0.3s;
+                       background: linear-gradient(135deg, #64B5F6 0%, #42A5F5 100%);
+                       color: white; box-shadow: 0 3px 10px rgba(66, 165, 245, 0.4);
+                       display: flex; flex-direction: column; align-items: center; gap: 4px;">
+            <span style="font-size: 16px;">🔄</span>
+            <span>AUTO</span>
+        </button>
+        
+        <!-- ปุ่ม ON -->
+        <button onclick="setOxygenMode('ON'); event.stopPropagation();" id="oxygen-btn-on"
+                class="mode-btn"
+                style="padding: 10px 8px; border: none; border-radius: 10px; font-weight: 700; 
+                       font-size: 13px; cursor: pointer; transition: all 0.3s;
+                       background: linear-gradient(135deg, #E0E0E0 0%, #BDBDBD 100%);
+                       color: #666; box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+                       display: flex; flex-direction: column; align-items: center; gap: 4px;">
+            <span style="font-size: 16px;">💨</span>
+            <span>เปิด</span>
+        </button>
+        
+        <!-- ปุ่ม OFF -->
+        <button onclick="setOxygenMode('OFF'); event.stopPropagation();" id="oxygen-btn-off"
+                class="mode-btn"
+                style="padding: 10px 8px; border: none; border-radius: 10px; font-weight: 700; 
+                       font-size: 13px; cursor: pointer; transition: all 0.3s;
+                       background: linear-gradient(135deg, #E0E0E0 0%, #BDBDBD 100%);
+                       color: #666; box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+                       display: flex; flex-direction: column; align-items: center; gap: 4px;">
+            <span style="font-size: 16px;">🌑</span>
+            <span>ปิด</span>
+        </button>
+    </div>
+</div>
 </div>
 
             <!-- ตั้งค่า -->
@@ -2730,13 +2730,11 @@ let timeSettings = {
         }
 		
 		
-function setLightMode(mode, event) {
-	console.log('🔥 setLightMode ถูกเรียก:', mode); // ← เพิ่มนี้
-
-    if (event) event.stopPropagation();
+function setLightMode(mode) {
+    console.log('🔥 setLightMode ถูกเรียก:', mode);
+    
     if (emergencyStop) return;
-	
-    // ส่งคำสั่งไป Arduino
+    
     if (mode === 'AUTO') {
         lightMode = 'AUTO';
         sendToBlynk('V24', 2);
@@ -2784,11 +2782,9 @@ function updateLightModeUI() {
 // 🎮 ฟังก์ชันควบคุมโหมดออกซิเจน (3 ปุ่ม)
 // ===================================
 
-function setOxygenMode(mode, event) {
-    if (event) event.stopPropagation();
+function setOxygenMode(mode) {
     if (emergencyStop) return;
     
-    // ส่งคำสั่งไป Arduino
     if (mode === 'AUTO') {
         oxygenMode = 'AUTO';
         sendToBlynk('V25', 2);
