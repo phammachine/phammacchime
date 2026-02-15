@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>รักเค้ามั้ยน้องลูกบัว? 💕</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #ff9a9e 0%, #fecfef 50%, #ffdde1 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
+        }
+
+        .container {
+            text-align: center;
+            background: rgba(255, 255, 255, 0.95);
+            padding: 60px 40px;
+            border-radius: 30px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            max-width: 500px;
+            position: relative;
+        }
+
+        h1 {
+            font-size: 3em;
+            margin-bottom: 20px;
+            color: #e91e63;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .question {
+            font-size: 1.8em;
+            margin-bottom: 40px;
+            color: #333;
+        }
+
+        .buttons {
+            display: flex;
+            gap: 20px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        button {
+            padding: 15px 40px;
+            font-size: 1.3em;
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-weight: bold;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        .yes-btn {
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            color: white;
+        }
+
+        .yes-btn:hover {
+            transform: scale(1.1);
+            box-shadow: 0 6px 20px rgba(245, 87, 108, 0.4);
+        }
+
+        .no-btn {
+            background: linear-gradient(135deg, #a8edea 0%, #fed6e3 100%);
+            color: #666;
+            position: relative;
+        }
+
+        .result {
+            display: none;
+            animation: fadeIn 1s;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: scale(0.8); }
+            to { opacity: 1; transform: scale(1); }
+        }
+
+        .flower-container {
+            margin-top: 30px;
+            position: relative;
+            min-height: 200px;
+        }
+
+        .flower {
+            font-size: 5em;
+            display: inline-block;
+            animation: bloom 0.8s ease-out forwards;
+            margin: 10px;
+        }
+
+        @keyframes bloom {
+            0% {
+                transform: scale(0) rotate(0deg);
+                opacity: 0;
+            }
+            50% {
+                transform: scale(1.2) rotate(180deg);
+            }
+            100% {
+                transform: scale(1) rotate(360deg);
+                opacity: 1;
+            }
+        }
+
+        .heart {
+            position: absolute;
+            font-size: 2em;
+            animation: float 3s infinite ease-in-out;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0) rotate(0deg); }
+            50% { transform: translateY(-20px) rotate(10deg); }
+        }
+
+        .love-message {
+            font-size: 1.5em;
+            color: #e91e63;
+            margin: 20px 0;
+            font-weight: bold;
+        }
+
+        .confetti {
+            position: fixed;
+            width: 10px;
+            height: 10px;
+            background: #f0f;
+            position: absolute;
+            animation: confetti-fall 3s linear infinite;
+        }
+
+        @keyframes confetti-fall {
+            to {
+                transform: translateY(100vh) rotate(360deg);
+                opacity: 0;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div id="question-screen">
+            <h1>💕 รักเค้ามั้ยน้องลูกบัว? 💕</h1>
+            <p class="question">🥰</p>
+            <div class="buttons">
+                <button class="yes-btn" onclick="sayYes()">รัก! 💖</button>
+                <button class="no-btn" id="noBtn" onmouseover="moveButton()" onclick="forceYes()">ไม่รัก</button>
+            </div>
+        </div>
+
+        <div id="result-screen" class="result">
+            <h1>🎉 รู้แล้วว่ารัก! 🎉</h1>
+            <p class="love-message">พี่ก็รักน้องลูกบัวเหมือนกันครับ 💕✨</p>
+            
+            <div class="flower-container" id="flowers"></div>
+            
+            <div style="background: rgba(255, 255, 255, 0.9); padding: 20px; border-radius: 20px; margin-top: 30px; text-align: left;">
+                <h3 style="color: #e91e63; text-align: center; margin-bottom: 15px;">💌 จากแบงค์ถึงลูกบัว 💌</h3>
+                <p style="color: #333; line-height: 1.8; font-size: 1.1em;">
+                    ลูกบัวคนสวยของพี่แบงค์ ❤️<br><br>
+                    
+                    พี่อยากบอกว่า... จากวันที่เราได้รู้จักกันมา พี่รู้สึกโชคดีมากๆ ที่ได้เจอคนดีๆ อย่างลูกบัว 🌸<br><br>
+                    
+                    ทุกครั้งที่ได้เห็นรอยยิ้มของลูกบัว หัวใจพี่ก็เต้นแรงขึ้นทุกที ลูกบัวทำให้ทุกวันของพี่สดใสและมีความสุขมากขึ้น 💖<br><br>
+                    
+                    พี่อยากดูแลลูกบัว อยากเห็นลูกบัวยิ้ม อยากให้ลูกบัวมีความสุขทุกวัน และพี่จะพยายามทำให้ลูกบัวเป็นคนที่มีความสุขที่สุดในโลก 🌟<br><br>
+                    
+                    พี่รักลูกบัวมากกก มากจนบอกไม่ถูกเลยค่ะ 💕💕💕<br><br>
+                    
+                    <span style="text-align: right; display: block; font-weight: bold; color: #e91e63;">
+                        รักเสมอ พี่แบงค์ 💗
+                    </span>
+                </p>
+            </div>
+            
+            <button class="yes-btn" style="margin-top: 30px;" onclick="reset()">เล่นอีกครั้ง</button>
+        </div>
+    </div>
+
+    <script>
+        let moveCount = 0;
+        const noBtn = document.getElementById('noBtn');
+
+        function moveButton() {
+            moveCount++;
+            
+            // ปุ่มจะวิ่งหนี
+            const maxX = window.innerWidth - noBtn.offsetWidth - 100;
+            const maxY = window.innerHeight - noBtn.offsetHeight - 100;
+            
+            const randomX = Math.floor(Math.random() * maxX);
+            const randomY = Math.floor(Math.random() * maxY);
+            
+            noBtn.style.position = 'fixed';
+            noBtn.style.left = randomX + 'px';
+            noBtn.style.top = randomY + 'px';
+            
+            // หลังจากวิ่งหนี 3 ครั้ง ให้เปลี่ยนข้อความ
+            if (moveCount === 3) {
+                noBtn.textContent = 'ไม่มีทางเลย!';
+            } else if (moveCount === 5) {
+                noBtn.textContent = 'บอกว่าไม่มีแล้ว!';
+            } else if (moveCount === 7) {
+                noBtn.textContent = 'กดรักเลย! 💕';
+            }
+        }
+
+        function forceYes() {
+            // ถ้าพยายามกดปุ่มไม่รัก ก็จะบังคับให้ตอบรัก
+            sayYes();
+        }
+
+        function sayYes() {
+            document.getElementById('question-screen').style.display = 'none';
+            document.getElementById('result-screen').style.display = 'block';
+            
+            // สร้างดอกไม้เยอะๆ
+            createFlowers();
+            createConfetti();
+            
+            // เล่นเสียง (ถ้ามี)
+            playHearts();
+        }
+
+        function createFlowers() {
+            const container = document.getElementById('flowers');
+            
+            // สร้างช่อดอกไม้ใหญ่ๆ อันเดียว
+            const bouquet = document.createElement('div');
+            bouquet.className = 'flower';
+            bouquet.textContent = '💐';
+            bouquet.style.fontSize = '15em';
+            container.appendChild(bouquet);
+        }
+
+        function createConfetti() {
+            const colors = ['#ff0000', '#ff69b4', '#ff1493', '#ffc0cb', '#ff69b4'];
+            
+            for (let i = 0; i < 50; i++) {
+                setTimeout(() => {
+                    const confetti = document.createElement('div');
+                    confetti.style.position = 'fixed';
+                    confetti.style.left = Math.random() * 100 + '%';
+                    confetti.style.top = '-10px';
+                    confetti.style.width = '10px';
+                    confetti.style.height = '10px';
+                    confetti.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+                    confetti.style.animation = `confetti-fall ${2 + Math.random() * 2}s linear`;
+                    document.body.appendChild(confetti);
+                    
+                    setTimeout(() => confetti.remove(), 4000);
+                }, i * 50);
+            }
+        }
+
+        function playHearts() {
+            const hearts = ['💕', '💖', '💗', '💓', '💝'];
+            
+            for (let i = 0; i < 10; i++) {
+                setTimeout(() => {
+                    const heart = document.createElement('div');
+                    heart.className = 'heart';
+                    heart.textContent = hearts[Math.floor(Math.random() * hearts.length)];
+                    heart.style.left = Math.random() * 80 + 10 + '%';
+                    heart.style.animationDelay = Math.random() * 2 + 's';
+                    document.querySelector('.container').appendChild(heart);
+                    
+                    setTimeout(() => heart.remove(), 3000);
+                }, i * 300);
+            }
+        }
+
+        function reset() {
+            document.getElementById('question-screen').style.display = 'block';
+            document.getElementById('result-screen').style.display = 'none';
+            document.getElementById('flowers').innerHTML = '';
+            
+            // รีเซ็ตปุ่มไม่รัก
+            noBtn.style.position = 'relative';
+            noBtn.style.left = '0';
+            noBtn.style.top = '0';
+            noBtn.textContent = 'ไม่รัก';
+            moveCount = 0;
+        }
+    </script>
+</body>
+</html>
