@@ -3,307 +3,784 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>รักเค้ามั้ยน้องลูกบัว? 💕</title>
+    <title>แบบสอบถามเรื่องแมว 🐱</title>
+    <link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;600;700&family=Playfair+Display:ital,wght@0,700;1,400&display=swap" rel="stylesheet">
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
+        *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+        :root {
+            --cream: #fdf6ee;
+            --warm: #f5ede0;
+            --border: #e8d5c0;
+            --text: #3d2c1e;
+            --text-light: #7a5c45;
+            --accent: #c0714a;
+            --accent-light: #e8956d;
+            --pink: #e91e8c;
+            --pink-light: #f48fb1;
         }
 
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: linear-gradient(135deg, #ff9a9e 0%, #fecfef 50%, #ffdde1 100%);
+            font-family: 'Sarabun', sans-serif;
+            background-color: var(--cream);
             min-height: 100vh;
             display: flex;
             justify-content: center;
-            align-items: center;
+            align-items: flex-start;
+            padding: 40px 20px;
+            background-image:
+                radial-gradient(circle at 10% 20%, rgba(192,113,74,0.06) 0%, transparent 50%),
+                radial-gradient(circle at 90% 80%, rgba(192,113,74,0.06) 0%, transparent 50%);
+        }
+
+        /* ===== QUIZ SCREEN ===== */
+        .quiz-wrapper {
+            width: 100%;
+            max-width: 680px;
+            transition: opacity 0.5s, transform 0.5s;
+        }
+
+        .quiz-header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .quiz-header .cat-icon {
+            font-size: 3.5em;
+            display: inline-block;
+            animation: sway 3s ease-in-out infinite;
+        }
+
+        @keyframes sway {
+            0%, 100% { transform: rotate(-5deg); }
+            50% { transform: rotate(5deg); }
+        }
+
+        .quiz-header h1 {
+            font-family: 'Playfair Display', serif;
+            font-size: 2.2em;
+            color: var(--text);
+            margin: 10px 0 8px;
+            letter-spacing: -0.5px;
+        }
+
+        .quiz-header p {
+            color: var(--text-light);
+            font-size: 1em;
+            font-weight: 300;
+        }
+
+        .progress-bar {
+            background: var(--border);
+            height: 4px;
+            border-radius: 2px;
+            margin-bottom: 30px;
             overflow: hidden;
         }
 
-        .container {
-            text-align: center;
-            background: rgba(255, 255, 255, 0.95);
-            padding: 60px 40px;
-            border-radius: 30px;
-            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
-            max-width: 500px;
-            position: relative;
+        .progress-fill {
+            height: 100%;
+            background: var(--accent);
+            border-radius: 2px;
+            transition: width 0.4s ease;
+            width: 0%;
         }
 
-        h1 {
-            font-size: 3em;
-            margin-bottom: 20px;
-            color: #e91e63;
-            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+        .question-card {
+            background: white;
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            padding: 28px 32px;
+            margin-bottom: 16px;
+            box-shadow: 0 2px 12px rgba(61,44,30,0.06);
+            transition: box-shadow 0.2s;
         }
 
-        .question {
-            font-size: 1.8em;
-            margin-bottom: 40px;
-            color: #333;
+        .question-card:hover {
+            box-shadow: 0 4px 20px rgba(61,44,30,0.1);
         }
 
-        .buttons {
+        .question-number {
+            font-size: 0.75em;
+            font-weight: 600;
+            color: var(--accent);
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
+            margin-bottom: 8px;
+        }
+
+        .question-text {
+            font-size: 1.1em;
+            color: var(--text);
+            font-weight: 600;
+            line-height: 1.6;
+            margin-bottom: 18px;
+        }
+
+        .options {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+        }
+
+        .option-label {
             display: flex;
-            gap: 20px;
-            justify-content: center;
-            flex-wrap: wrap;
+            align-items: center;
+            gap: 10px;
+            padding: 12px 16px;
+            border: 1.5px solid var(--border);
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.2s;
+            font-size: 0.95em;
+            color: var(--text-light);
+            background: var(--cream);
         }
 
-        button {
-            padding: 15px 40px;
-            font-size: 1.3em;
+        .option-label:hover {
+            border-color: var(--accent-light);
+            background: #fef5ee;
+            color: var(--text);
+        }
+
+        .option-label input[type="radio"] {
+            display: none;
+        }
+
+        .option-label.selected {
+            border-color: var(--accent);
+            background: #fef0e6;
+            color: var(--text);
+            font-weight: 600;
+        }
+
+        .option-dot {
+            width: 18px;
+            height: 18px;
+            border-radius: 50%;
+            border: 2px solid var(--border);
+            flex-shrink: 0;
+            transition: all 0.2s;
+        }
+
+        .option-label.selected .option-dot {
+            background: var(--accent);
+            border-color: var(--accent);
+        }
+
+        .question-card.open-ended textarea {
+            width: 100%;
+            border: 1.5px solid var(--border);
+            border-radius: 10px;
+            padding: 14px;
+            font-family: 'Sarabun', sans-serif;
+            font-size: 0.95em;
+            color: var(--text);
+            resize: vertical;
+            min-height: 80px;
+            background: var(--cream);
+            outline: none;
+            transition: border-color 0.2s;
+        }
+
+        .question-card.open-ended textarea:focus {
+            border-color: var(--accent);
+        }
+
+        .submit-section {
+            text-align: center;
+            margin-top: 30px;
+            padding-bottom: 40px;
+        }
+
+        .submit-btn {
+            background: var(--accent);
+            color: white;
             border: none;
+            padding: 16px 56px;
+            font-size: 1.1em;
+            font-family: 'Sarabun', sans-serif;
+            font-weight: 700;
             border-radius: 50px;
             cursor: pointer;
-            transition: all 0.3s;
-            font-weight: bold;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+            letter-spacing: 0.5px;
+            box-shadow: 0 4px 20px rgba(192,113,74,0.35);
+            transition: all 0.25s;
         }
 
-        .yes-btn {
-            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
-            color: white;
+        .submit-btn:hover {
+            background: var(--accent-light);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 28px rgba(192,113,74,0.45);
         }
 
-        .yes-btn:hover {
-            transform: scale(1.1);
-            box-shadow: 0 6px 20px rgba(245, 87, 108, 0.4);
+        .submit-btn:active {
+            transform: translateY(0);
         }
 
-        .no-btn {
-            background: linear-gradient(135deg, #a8edea 0%, #fed6e3 100%);
-            color: #666;
-            position: relative;
-        }
-
-        .result {
+        /* ===== LOVE SCREEN ===== */
+        #love-screen {
             display: none;
-            animation: fadeIn 1s;
+            width: 100%;
+            max-width: 680px;
         }
 
-        @keyframes fadeIn {
-            from { opacity: 0; transform: scale(0.8); }
-            to { opacity: 1; transform: scale(1); }
+        #love-screen.show {
+            display: block;
+            animation: fadeUp 0.8s ease forwards;
         }
 
-        .flower-container {
-            margin-top: 30px;
+        @keyframes fadeUp {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .love-card {
+            background: white;
+            border-radius: 24px;
+            overflow: hidden;
+            box-shadow: 0 8px 50px rgba(233,30,140,0.12);
             position: relative;
-            min-height: 200px;
         }
 
-        .flower {
+        .love-top {
+            background: linear-gradient(135deg, #f8bbd0, #fce4ec, #f48fb1);
+            padding: 50px 40px 40px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .love-top::before {
+            content: '';
+            position: absolute;
+            width: 300px; height: 300px;
+            background: rgba(255,255,255,0.2);
+            border-radius: 50%;
+            top: -100px; right: -80px;
+        }
+
+        .love-top::after {
+            content: '';
+            position: absolute;
+            width: 200px; height: 200px;
+            background: rgba(255,255,255,0.15);
+            border-radius: 50%;
+            bottom: -60px; left: -50px;
+        }
+
+        .love-icon-big {
             font-size: 5em;
+            display: block;
+            animation: heartbeat 1.2s ease-in-out infinite;
+            position: relative;
+            z-index: 1;
+        }
+
+        @keyframes heartbeat {
+            0%, 100% { transform: scale(1); }
+            25% { transform: scale(1.15); }
+            50% { transform: scale(1); }
+            75% { transform: scale(1.08); }
+        }
+
+        .love-top h1 {
+            font-family: 'Playfair Display', serif;
+            font-size: 2.4em;
+            color: #880e4f;
+            margin: 16px 0 8px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .love-top .subtitle {
+            color: #c2185b;
+            font-size: 1.1em;
+            font-weight: 300;
+            position: relative;
+            z-index: 1;
+        }
+
+        .photo-frame {
+            position: relative;
+            z-index: 1;
+            margin-top: 24px;
             display: inline-block;
-            animation: bloom 0.8s ease-out forwards;
-            margin: 10px;
         }
 
-        @keyframes bloom {
-            0% {
-                transform: scale(0) rotate(0deg);
-                opacity: 0;
-            }
-            50% {
-                transform: scale(1.2) rotate(180deg);
-            }
-            100% {
-                transform: scale(1) rotate(360deg);
-                opacity: 1;
-            }
+        .photo-frame img {
+            width: 180px;
+            height: 220px;
+            object-fit: cover;
+            border-radius: 16px;
+            border: 6px solid white;
+            box-shadow: 0 8px 30px rgba(136,14,79,0.25);
+            display: block;
         }
 
-        .heart {
+        .photo-frame .hearts-around {
             position: absolute;
-            font-size: 2em;
-            animation: float 3s infinite ease-in-out;
+            top: -10px; right: -10px;
+            font-size: 1.8em;
+            animation: float-heart 2s ease-in-out infinite;
         }
 
-        @keyframes float {
-            0%, 100% { transform: translateY(0) rotate(0deg); }
-            50% { transform: translateY(-20px) rotate(10deg); }
+        @keyframes float-heart {
+            0%, 100% { transform: translateY(0) scale(1); }
+            50% { transform: translateY(-8px) scale(1.1); }
         }
 
-        .love-message {
-            font-size: 1.5em;
-            color: #e91e63;
-            margin: 20px 0;
-            font-weight: bold;
+        .love-body {
+            padding: 36px 40px;
         }
 
-        .confetti {
+        .letter-header {
+            text-align: center;
+            margin-bottom: 24px;
+        }
+
+        .letter-header span {
+            display: inline-block;
+            background: linear-gradient(135deg, #fce4ec, #f8bbd0);
+            color: #880e4f;
+            padding: 6px 20px;
+            border-radius: 50px;
+            font-size: 0.85em;
+            font-weight: 600;
+            letter-spacing: 1px;
+        }
+
+        .love-letter {
+            background: #fffdf5;
+            border: 1px solid #f8d7e3;
+            border-radius: 16px;
+            padding: 28px 32px;
+            line-height: 2;
+            color: var(--text);
+            font-size: 1.05em;
+            position: relative;
+        }
+
+        .love-letter::before {
+            content: '"';
+            font-family: 'Playfair Display', serif;
+            font-size: 5em;
+            color: #f8bbd0;
+            position: absolute;
+            top: -10px; left: 12px;
+            line-height: 1;
+        }
+
+        .love-letter p {
+            padding-top: 8px;
+        }
+
+        .love-letter .signature {
+            text-align: right;
+            margin-top: 16px;
+            font-weight: 700;
+            color: var(--pink);
+        }
+
+        .floating-hearts {
             position: fixed;
-            width: 10px;
-            height: 10px;
-            background: #f0f;
-            position: absolute;
-            animation: confetti-fall 3s linear infinite;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            pointer-events: none;
+            z-index: 9999;
         }
 
-        @keyframes confetti-fall {
-            to {
-                transform: translateY(100vh) rotate(360deg);
-                opacity: 0;
-            }
+        .fh {
+            position: absolute;
+            font-size: 1.5em;
+            animation: fh-rise linear forwards;
+            opacity: 0;
+        }
+
+        @keyframes fh-rise {
+            0% { transform: translateY(100vh) scale(0.5); opacity: 1; }
+            80% { opacity: 1; }
+            100% { transform: translateY(-10vh) scale(1); opacity: 0; }
+        }
+
+        .replay-btn {
+            display: block;
+            margin: 28px auto 0;
+            background: transparent;
+            border: 2px solid var(--pink);
+            color: var(--pink);
+            padding: 12px 40px;
+            border-radius: 50px;
+            font-family: 'Sarabun', sans-serif;
+            font-size: 1em;
+            cursor: pointer;
+            transition: all 0.25s;
+        }
+
+        .replay-btn:hover {
+            background: var(--pink);
+            color: white;
+            transform: scale(1.04);
+        }
+
+        /* ===== RESPONSIVE ===== */
+        @media (max-width: 500px) {
+            .options { grid-template-columns: 1fr; }
+            .love-body { padding: 28px 24px; }
+            .love-top { padding: 40px 24px 32px; }
+            .love-letter { padding: 20px 20px; }
         }
     </style>
 </head>
 <body>
-    <div class="container">
-        <div id="question-screen">
-            <h1>💕 รักเค้ามั้ยน้องลูกบัว? 💕</h1>
-            <p class="question">🥰</p>
-            <div class="buttons">
-                <button class="yes-btn" onclick="sayYes()">รัก! 💖</button>
-                <button class="no-btn" id="noBtn" onmouseover="moveButton()" onclick="forceYes()">ไม่รัก</button>
-            </div>
-        </div>
 
-        <div id="result-screen" class="result">
-            <h1>💖 Happy Valentine's Day 💖</h1>
-            <p class="love-message">พี่ก็รักน้องลูกบัวเหมือนกันครับ 💕✨</p>
-            
-            <div class="flower-container" id="flowers">
-                <div style="position: relative; display: inline-block;">
-                    <img src="https://i.ibb.co/Z6MJLRv4/IMG-20260212-000544-686.jpg" 
-                         alt="รูปคู่" 
-                         style="width: 200px; height: 250px; object-fit: cover; border-radius: 20px; border: 8px solid #fff; box-shadow: 0 10px 30px rgba(0,0,0,0.3); animation: fadeIn 1s; display: block; margin: 0 auto 20px auto;">
-                </div>
-            </div>
-            
-            <div style="background: rgba(255, 255, 255, 0.9); padding: 20px; border-radius: 20px; margin-top: 30px; text-align: left;">
-                <h3 style="color: #e91e63; text-align: center; margin-bottom: 15px;">💌 จากแบงค์ถึงลูกบัว 💌</h3>
-                <p style="color: #333; line-height: 1.8; font-size: 1.1em;">
-                    ลูกบัวคนสวยของพี่แบงค์ ❤️<br><br>
-                    
-                    พี่อยากบอกว่า... จากวันที่เราได้รู้จักกันมา พี่รู้สึกโชคดีมากๆ ที่ได้เจอคนดีๆ อย่างลูกบัว 🌸<br><br>
-                    
-                    ทุกครั้งที่ได้เห็นรอยยิ้มของลูกบัว หัวใจพี่ก็เต้นแรงขึ้นทุกที ลูกบัวทำให้ทุกวันของพี่สดใสและมีความสุขมากขึ้น 💖<br><br>
-                    
-                    พี่อยากดูแลลูกบัว อยากเห็นลูกบัวยิ้ม อยากให้ลูกบัวมีความสุขทุกวัน และพี่จะพยายามทำให้ลูกบัวเป็นคนที่มีความสุขที่สุดในโลก 🌟<br><br>
-                    
-                    พี่รักลูกบัวมากกก มากจนบอกไม่ถูกเลยค่ะ 💕💕💕<br><br>
-                    
-                    <span style="text-align: right; display: block; font-weight: bold; color: #e91e63;">
-                        รักเสมอ พี่แบงค์ 💗
-                    </span>
-                </p>
-            </div>
-            
-            <button class="yes-btn" style="margin-top: 30px;" onclick="reset()">เล่นอีกครั้ง</button>
-        </div>
+<!-- QUIZ SCREEN -->
+<div class="quiz-wrapper" id="quiz-screen">
+    <div class="quiz-header">
+        <div class="cat-icon">🐱</div>
+        <h1>แบบสอบถามเรื่องแมว</h1>
+        <p>ตอบคำถาม 10 ข้อเกี่ยวกับน้องแมวที่คุณรัก</p>
     </div>
 
-    <script>
-        let moveCount = 0;
-        const noBtn = document.getElementById('noBtn');
+    <div class="progress-bar">
+        <div class="progress-fill" id="progress-fill"></div>
+    </div>
 
-        function moveButton() {
-            moveCount++;
-            
-            // ปุ่มจะวิ่งหนี
-            const maxX = window.innerWidth - noBtn.offsetWidth - 100;
-            const maxY = window.innerHeight - noBtn.offsetHeight - 100;
-            
-            const randomX = Math.floor(Math.random() * maxX);
-            const randomY = Math.floor(Math.random() * maxY);
-            
-            noBtn.style.position = 'fixed';
-            noBtn.style.left = randomX + 'px';
-            noBtn.style.top = randomY + 'px';
-            
-            // หลังจากวิ่งหนี 3 ครั้ง ให้เปลี่ยนข้อความ
-            if (moveCount === 3) {
-                noBtn.textContent = 'ไม่มีทางเลย!';
-            } else if (moveCount === 5) {
-                noBtn.textContent = 'บอกว่าไม่มีแล้ว!';
-            } else if (moveCount === 7) {
-                noBtn.textContent = 'กดรักเลย! 💕';
-            }
-        }
+    <form id="cat-form">
 
-        function forceYes() {
-            // ถ้าพยายามกดปุ่มไม่รัก ก็จะบังคับให้ตอบรัก
-            sayYes();
-        }
+        <!-- Q1 -->
+        <div class="question-card">
+            <div class="question-number">ข้อ 1</div>
+            <div class="question-text">คุณเลี้ยงแมวอยู่ที่บ้านหรือเปล่า?</div>
+            <div class="options">
+                <label class="option-label" onclick="selectOption(this)">
+                    <input type="radio" name="q1" value="a">
+                    <div class="option-dot"></div> เลี้ยงอยู่ค่ะ/ครับ
+                </label>
+                <label class="option-label" onclick="selectOption(this)">
+                    <input type="radio" name="q1" value="b">
+                    <div class="option-dot"></div> ยังไม่ได้เลี้ยง
+                </label>
+                <label class="option-label" onclick="selectOption(this)">
+                    <input type="radio" name="q1" value="c">
+                    <div class="option-dot"></div> เคยเลี้ยงแต่เลิกแล้ว
+                </label>
+                <label class="option-label" onclick="selectOption(this)">
+                    <input type="radio" name="q1" value="d">
+                    <div class="option-dot"></div> เลี้ยงหลายตัวเลย
+                </label>
+            </div>
+        </div>
 
-        function sayYes() {
-            document.getElementById('question-screen').style.display = 'none';
-            document.getElementById('result-screen').style.display = 'block';
-            
-            // สร้างดอกไม้เยอะๆ
-            createFlowers();
-            createConfetti();
-            
-            // เล่นเสียง (ถ้ามี)
-            playHearts();
-        }
+        <!-- Q2 -->
+        <div class="question-card">
+            <div class="question-number">ข้อ 2</div>
+            <div class="question-text">สายพันธุ์แมวที่คุณชื่นชอบมากที่สุดคือสายพันธุ์ใด?</div>
+            <div class="options">
+                <label class="option-label" onclick="selectOption(this)">
+                    <input type="radio" name="q2" value="a">
+                    <div class="option-dot"></div> เปอร์เซีย 🐈
+                </label>
+                <label class="option-label" onclick="selectOption(this)">
+                    <input type="radio" name="q2" value="b">
+                    <div class="option-dot"></div> สก็อตติชโฟลด์
+                </label>
+                <label class="option-label" onclick="selectOption(this)">
+                    <input type="radio" name="q2" value="c">
+                    <div class="option-dot"></div> แมวไทย / วิเชียรมาศ
+                </label>
+                <label class="option-label" onclick="selectOption(this)">
+                    <input type="radio" name="q2" value="d">
+                    <div class="option-dot"></div> แมวบ้านสายเลือดไม่ชัด 🐱
+                </label>
+            </div>
+        </div>
 
-        function createFlowers() {
-            const container = document.getElementById('flowers');
-            
-            // สร้างช่อดอกไม้ใหญ่ๆ ด้านหน้ารูป
-            const bouquet = document.createElement('div');
-            bouquet.className = 'flower';
-            bouquet.textContent = '💐';
-            bouquet.style.fontSize = '10em';
-            bouquet.style.marginTop = '20px';
-            bouquet.style.position = 'relative';
-            bouquet.style.zIndex = '10';
-            container.appendChild(bouquet);
-        }
+        <!-- Q3 -->
+        <div class="question-card">
+            <div class="question-number">ข้อ 3</div>
+            <div class="question-text">แมวชอบกินอาหารประเภทใดมากกว่ากัน?</div>
+            <div class="options">
+                <label class="option-label" onclick="selectOption(this)">
+                    <input type="radio" name="q3" value="a">
+                    <div class="option-dot"></div> อาหารเม็ดแห้ง
+                </label>
+                <label class="option-label" onclick="selectOption(this)">
+                    <input type="radio" name="q3" value="b">
+                    <div class="option-dot"></div> อาหารเปียก / กระป๋อง
+                </label>
+                <label class="option-label" onclick="selectOption(this)">
+                    <input type="radio" name="q3" value="c">
+                    <div class="option-dot"></div> ชอบทั้งสองอย่าง
+                </label>
+                <label class="option-label" onclick="selectOption(this)">
+                    <input type="radio" name="q3" value="d">
+                    <div class="option-dot"></div> ชอบกินของคน 😅
+                </label>
+            </div>
+        </div>
 
-        function createConfetti() {
-            const colors = ['#ff0000', '#ff69b4', '#ff1493', '#ffc0cb', '#ff69b4'];
-            
-            for (let i = 0; i < 50; i++) {
-                setTimeout(() => {
-                    const confetti = document.createElement('div');
-                    confetti.style.position = 'fixed';
-                    confetti.style.left = Math.random() * 100 + '%';
-                    confetti.style.top = '-10px';
-                    confetti.style.width = '10px';
-                    confetti.style.height = '10px';
-                    confetti.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
-                    confetti.style.animation = `confetti-fall ${2 + Math.random() * 2}s linear`;
-                    document.body.appendChild(confetti);
-                    
-                    setTimeout(() => confetti.remove(), 4000);
-                }, i * 50);
-            }
-        }
+        <!-- Q4 -->
+        <div class="question-card">
+            <div class="question-number">ข้อ 4</div>
+            <div class="question-text">แมวมักจะนอนที่ไหนในบ้านบ่อยที่สุด?</div>
+            <div class="options">
+                <label class="option-label" onclick="selectOption(this)">
+                    <input type="radio" name="q4" value="a">
+                    <div class="option-dot"></div> บนเตียงนอน
+                </label>
+                <label class="option-label" onclick="selectOption(this)">
+                    <input type="radio" name="q4" value="b">
+                    <div class="option-dot"></div> บนโซฟา
+                </label>
+                <label class="option-label" onclick="selectOption(this)">
+                    <input type="radio" name="q4" value="c">
+                    <div class="option-dot"></div> ที่กล่องหรือมุมเฉพาะของมัน
+                </label>
+                <label class="option-label" onclick="selectOption(this)">
+                    <input type="radio" name="q4" value="d">
+                    <div class="option-dot"></div> บนตักเจ้าของเลย 🥰
+                </label>
+            </div>
+        </div>
 
-        function playHearts() {
-            const hearts = ['💕', '💖', '💗', '💓', '💝'];
-            
-            for (let i = 0; i < 10; i++) {
-                setTimeout(() => {
-                    const heart = document.createElement('div');
-                    heart.className = 'heart';
-                    heart.textContent = hearts[Math.floor(Math.random() * hearts.length)];
-                    heart.style.left = Math.random() * 80 + 10 + '%';
-                    heart.style.animationDelay = Math.random() * 2 + 's';
-                    document.querySelector('.container').appendChild(heart);
-                    
-                    setTimeout(() => heart.remove(), 3000);
-                }, i * 300);
-            }
-        }
+        <!-- Q5 -->
+        <div class="question-card">
+            <div class="question-number">ข้อ 5</div>
+            <div class="question-text">คุณคิดว่าแมวเป็นสัตว์ที่มีนิสัยอย่างไรมากกว่ากัน?</div>
+            <div class="options">
+                <label class="option-label" onclick="selectOption(this)">
+                    <input type="radio" name="q5" value="a">
+                    <div class="option-dot"></div> เป็นอิสระ ไม่พึ่งคนมาก
+                </label>
+                <label class="option-label" onclick="selectOption(this)">
+                    <input type="radio" name="q5" value="b">
+                    <div class="option-dot"></div> ขี้อ้อน ชอบให้โอ๋
+                </label>
+                <label class="option-label" onclick="selectOption(this)">
+                    <input type="radio" name="q5" value="c">
+                    <div class="option-dot"></div> ขี้อิจฉา ต้องการความสนใจ
+                </label>
+                <label class="option-label" onclick="selectOption(this)">
+                    <input type="radio" name="q5" value="d">
+                    <div class="option-dot"></div> ขึ้นอยู่กับตัวแมวเลย
+                </label>
+            </div>
+        </div>
 
-        function reset() {
-            document.getElementById('question-screen').style.display = 'block';
-            document.getElementById('result-screen').style.display = 'none';
-            document.getElementById('flowers').innerHTML = '';
-            
-            // รีเซ็ตปุ่มไม่รัก
-            noBtn.style.position = 'relative';
-            noBtn.style.left = '0';
-            noBtn.style.top = '0';
-            noBtn.textContent = 'ไม่รัก';
-            moveCount = 0;
+        <!-- Q6 -->
+        <div class="question-card">
+            <div class="question-number">ข้อ 6</div>
+            <div class="question-text">แมวส่งเสียงร้องมากน้อยแค่ไหนในชีวิตประจำวัน?</div>
+            <div class="options">
+                <label class="option-label" onclick="selectOption(this)">
+                    <input type="radio" name="q6" value="a">
+                    <div class="option-dot"></div> แทบไม่ร้องเลย เงียบมาก
+                </label>
+                <label class="option-label" onclick="selectOption(this)">
+                    <input type="radio" name="q6" value="b">
+                    <div class="option-dot"></div> ร้องบ้างพอเหมาะ
+                </label>
+                <label class="option-label" onclick="selectOption(this)">
+                    <input type="radio" name="q6" value="c">
+                    <div class="option-dot"></div> ร้องบ่อย ชอบคุยกับเจ้าของ
+                </label>
+                <label class="option-label" onclick="selectOption(this)">
+                    <input type="radio" name="q6" value="d">
+                    <div class="option-dot"></div> ร้องแบบไม่มีสาเหตุตอนดึก 😂
+                </label>
+            </div>
+        </div>
+
+        <!-- Q7 -->
+        <div class="question-card">
+            <div class="question-number">ข้อ 7</div>
+            <div class="question-text">คุณพาแมวไปตรวจสุขภาพกับสัตวแพทย์บ่อยแค่ไหน?</div>
+            <div class="options">
+                <label class="option-label" onclick="selectOption(this)">
+                    <input type="radio" name="q7" value="a">
+                    <div class="option-dot"></div> ทุก 6 เดือน – 1 ปี
+                </label>
+                <label class="option-label" onclick="selectOption(this)">
+                    <input type="radio" name="q7" value="b">
+                    <div class="option-dot"></div> เมื่อมีอาการเจ็บป่วยเท่านั้น
+                </label>
+                <label class="option-label" onclick="selectOption(this)">
+                    <input type="radio" name="q7" value="c">
+                    <div class="option-dot"></div> ยังไม่เคยพาไปเลย
+                </label>
+                <label class="option-label" onclick="selectOption(this)">
+                    <input type="radio" name="q7" value="d">
+                    <div class="option-dot"></div> พาบ่อยกว่าพาตัวเองไปหมอ
+                </label>
+            </div>
+        </div>
+
+        <!-- Q8 -->
+        <div class="question-card">
+            <div class="question-number">ข้อ 8</div>
+            <div class="question-text">ของเล่นประเภทใดที่แมวชอบเล่นมากที่สุดในความคิดของคุณ?</div>
+            <div class="options">
+                <label class="option-label" onclick="selectOption(this)">
+                    <input type="radio" name="q8" value="a">
+                    <div class="option-dot"></div> ไม้ตกแมว / เส้นไหม
+                </label>
+                <label class="option-label" onclick="selectOption(this)">
+                    <input type="radio" name="q8" value="b">
+                    <div class="option-dot"></div> ลูกบอล / ของกลิ้ง
+                </label>
+                <label class="option-label" onclick="selectOption(this)">
+                    <input type="radio" name="q8" value="c">
+                    <div class="option-dot"></div> ของเล่นมีเสียง / กริ๊งกร๊าง
+                </label>
+                <label class="option-label" onclick="selectOption(this)">
+                    <input type="radio" name="q8" value="d">
+                    <div class="option-dot"></div> กล่องกระดาษเปล่าเลย 📦
+                </label>
+            </div>
+        </div>
+
+        <!-- Q9 -->
+        <div class="question-card">
+            <div class="question-number">ข้อ 9</div>
+            <div class="question-text">คุณคิดว่าแมวเข้าใจคำพูดของเจ้าของได้มากน้อยแค่ไหน?</div>
+            <div class="options">
+                <label class="option-label" onclick="selectOption(this)">
+                    <input type="radio" name="q9" value="a">
+                    <div class="option-dot"></div> เข้าใจได้มาก รู้ทุกอย่าง
+                </label>
+                <label class="option-label" onclick="selectOption(this)">
+                    <input type="radio" name="q9" value="b">
+                    <div class="option-dot"></div> เข้าใจคำง่ายๆ บ้าง เช่น ชื่อตัวเอง
+                </label>
+                <label class="option-label" onclick="selectOption(this)">
+                    <input type="radio" name="q9" value="c">
+                    <div class="option-dot"></div> ได้ยินแต่ทำเป็นไม่สนใจ 😆
+                </label>
+                <label class="option-label" onclick="selectOption(this)">
+                    <input type="radio" name="q9" value="d">
+                    <div class="option-dot"></div> แมวไม่สนใจคนเลย
+                </label>
+            </div>
+        </div>
+
+        <!-- Q10 (open-ended) -->
+        <div class="question-card open-ended">
+            <div class="question-number">ข้อ 10</div>
+            <div class="question-text">ถ้าต้องอธิบายแมวของคุณในหนึ่งประโยค คุณจะพูดว่าอะไร?</div>
+            <textarea name="q10" placeholder="เช่น น้องขี้อ้อนมากแต่แกล้งทำเป็นหยิ่ง..." id="q10-input"></textarea>
+        </div>
+
+        <div class="submit-section">
+            <button type="button" class="submit-btn" onclick="submitForm()">ส่งคำตอบ 🐾</button>
+        </div>
+    </form>
+</div>
+
+<!-- LOVE SCREEN -->
+<div id="love-screen">
+    <div class="love-card">
+        <div class="love-top">
+            <span class="love-icon-big">💖</span>
+            <h1>รักนะค้าบเบบี๋ของเค้า</h1>
+            <p class="subtitle">หนึ่งคนที่ทำให้หัวใจเต้นแรงทุกวัน 🌸</p>
+            <div class="photo-frame">
+                <img src="https://i.ibb.co/Z6MJLRv4/IMG-20260212-000544-686.jpg" alt="รูปคู่">
+                <div class="hearts-around">💕</div>
+            </div>
+        </div>
+
+        <div class="love-body">
+            <div class="letter-header">
+                <span>💌 จากแบงค์ถึงเบบี๋ที่รัก 💌</span>
+            </div>
+
+            <div class="love-letter">
+                <p>
+                    เบบี๋ที่รักของเค้าเลย 🥺💕<br><br>
+                    จริงๆ แล้วไม่ใช่แบบสอบถามเรื่องแมวหรอกนะ...<br>
+                    เค้าแค่อยากให้เบบี๋หยุดสักครู่ แล้วรับรู้ว่าเค้ารู้สึกอะไรอยู่ 🌸<br><br>
+                    ทุกเช้าที่ตื่นขึ้นมา ความคิดแรกที่ผ่านหัวเสมอ...ก็คือเบบี๋ 💭<br>
+                    เบบี๋ทำให้วันธรรมดาของเค้ากลายเป็นวันพิเศษได้โดยไม่ต้องทำอะไรเลย<br>
+                    แค่มีอยู่ แค่ยิ้ม แค่เป็นตัวเอง ก็ทำให้หัวใจเค้าอุ่นแล้ว 🤍<br><br>
+                    รู้มั้ยว่าทุกครั้งที่เบบี๋ส่งข้อความมา เค้ายิ้มโดยไม่รู้ตัวเลย 😊<br>
+                    ทุกครั้งที่ได้อยู่ด้วยกัน เค้าแอบอยากให้เวลามันหยุดนิ่งสักพัก...<br>
+                    เพราะช่วงเวลาพวกนั้นมันดีงามเกินไปเลยจริงๆ ✨<br><br>
+                    เค้าอาจจะไม่ได้พูดบ่อยนัก แต่เค้าอยากให้เบบี๋รู้ว่า...<br>
+                    เค้าใส่ใจทุกสิ่งเล็กๆ น้อยๆ ของเบบี๋เสมอ ทั้งความสุข ความเศร้า<br>
+                    และทุกความรู้สึกที่เบบี๋ไม่ได้พูดออกมา เค้ารับรู้ได้หมดเลยนะ 🫶<br><br>
+                    เบบี๋คือคนที่ทำให้เค้าอยากเป็นคนที่ดีขึ้นทุกวัน<br>
+                    และเค้าจะดูแลเบบี๋ด้วยหัวใจที่เต็มเปี่ยมนี้ตลอดไปเลยนะ 💖<br><br>
+                    รักเบบี๋มากที่สุดในโลกเลยค้าบบบ 💕💕💕
+                </p>
+                <div class="signature">รักนะคับน้องลูกบัว 🥰 — แบงค์</div>
+            </div>
+
+            <button class="replay-btn" onclick="resetQuiz()">🔄 ทำแบบสอบถามอีกครั้ง</button>
+        </div>
+    </div>
+</div>
+
+<!-- Floating Hearts Layer -->
+<div class="floating-hearts" id="floating-hearts"></div>
+
+<script>
+    function selectOption(label) {
+        const name = label.querySelector('input').getAttribute('name');
+        document.querySelectorAll(`input[name="${name}"]`).forEach(inp => {
+            inp.parentElement.classList.remove('selected');
+        });
+        label.classList.add('selected');
+        label.querySelector('input').checked = true;
+        updateProgress();
+    }
+
+    function updateProgress() {
+        const total = 9; // radio questions
+        let answered = 0;
+        ['q1','q2','q3','q4','q5','q6','q7','q8','q9'].forEach(name => {
+            if (document.querySelector(`input[name="${name}"]:checked`)) answered++;
+        });
+        const pct = (answered / total) * 100;
+        document.getElementById('progress-fill').style.width = pct + '%';
+    }
+
+    function submitForm() {
+        // Just show the love screen regardless
+        document.getElementById('quiz-screen').style.opacity = '0';
+        document.getElementById('quiz-screen').style.transform = 'translateY(-20px)';
+        document.getElementById('quiz-screen').style.transition = 'all 0.5s ease';
+
+        setTimeout(() => {
+            document.getElementById('quiz-screen').style.display = 'none';
+            const loveScreen = document.getElementById('love-screen');
+            loveScreen.classList.add('show');
+            launchHearts();
+        }, 500);
+    }
+
+    function launchHearts() {
+        const emojis = ['💕','💖','💗','💓','💝','🌸','✨','💌'];
+        const container = document.getElementById('floating-hearts');
+
+        for (let i = 0; i < 40; i++) {
+            setTimeout(() => {
+                const h = document.createElement('div');
+                h.className = 'fh';
+                h.textContent = emojis[Math.floor(Math.random() * emojis.length)];
+                h.style.left = (Math.random() * 100) + 'vw';
+                h.style.animationDuration = (3 + Math.random() * 3) + 's';
+                h.style.animationDelay = '0s';
+                h.style.fontSize = (1 + Math.random() * 1.5) + 'em';
+                container.appendChild(h);
+                setTimeout(() => h.remove(), 6000);
+            }, i * 120);
         }
-    </script>
+    }
+
+    function resetQuiz() {
+        location.reload();
+    }
+</script>
 </body>
 </html>
