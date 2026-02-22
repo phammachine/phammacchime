@@ -1,787 +1,871 @@
 <!DOCTYPE html>
 <html lang="th">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>แบบสอบถามเรื่องแมว 🐱</title>
-    <link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;600;700&family=Playfair+Display:ital,wght@0,700;1,400&display=swap" rel="stylesheet">
-    <style>
-        *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>🎂 Happy Birthday! 🐱</title>
+<link href="https://fonts.googleapis.com/css2?family=Mitr:wght@300;400;600;700&family=Itim&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --pink: #ff85b3;
+    --soft-pink: #ffd6e8;
+    --peach: #ffb3a7;
+    --cream: #fff8f0;
+    --lavender: #e8d5f5;
+    --gold: #ffd700;
+    --mint: #b8f0d8;
+    --text: #5a3060;
+  }
 
-        :root {
-            --cream: #fdf6ee;
-            --warm: #f5ede0;
-            --border: #e8d5c0;
-            --text: #3d2c1e;
-            --text-light: #7a5c45;
-            --accent: #c0714a;
-            --accent-light: #e8956d;
-            --pink: #e91e8c;
-            --pink-light: #f48fb1;
-        }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
 
-        body {
-            font-family: 'Sarabun', sans-serif;
-            background-color: var(--cream);
-            min-height: 100vh;
-            display: flex;
-            justify-content: center;
-            align-items: flex-start;
-            padding: 40px 20px;
-            background-image:
-                radial-gradient(circle at 10% 20%, rgba(192,113,74,0.06) 0%, transparent 50%),
-                radial-gradient(circle at 90% 80%, rgba(192,113,74,0.06) 0%, transparent 50%);
-        }
+  body {
+    font-family: 'Itim', cursive;
+    background: var(--cream);
+    color: var(--text);
+    min-height: 100vh;
+    overflow-x: hidden;
+    cursor: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='32' height='32' viewBox='0 0 32 32'%3E%3Ctext y='24' font-size='24'%3E🐾%3C/text%3E%3C/svg%3E"), auto;
+  }
 
-        /* ===== QUIZ SCREEN ===== */
-        .quiz-wrapper {
-            width: 100%;
-            max-width: 680px;
-            transition: opacity 0.5s, transform 0.5s;
-        }
+  /* Background floating elements */
+  .bg-float {
+    position: fixed;
+    pointer-events: none;
+    z-index: 0;
+    animation: floatBg 8s ease-in-out infinite;
+  }
+  @keyframes floatBg {
+    0%,100% { transform: translateY(0) rotate(0deg); }
+    50% { transform: translateY(-20px) rotate(10deg); }
+  }
 
-        .quiz-header {
-            text-align: center;
-            margin-bottom: 40px;
-        }
+  /* Confetti rain */
+  .confetti-container {
+    position: fixed;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    pointer-events: none;
+    z-index: 0;
+    overflow: hidden;
+  }
+  .confetti {
+    position: absolute;
+    width: 10px; height: 10px;
+    border-radius: 2px;
+    animation: fall linear infinite;
+    opacity: 0.7;
+  }
+  @keyframes fall {
+    0% { transform: translateY(-20px) rotate(0deg); opacity: 0.9; }
+    100% { transform: translateY(110vh) rotate(720deg); opacity: 0; }
+  }
 
-        .quiz-header .cat-icon {
-            font-size: 3.5em;
-            display: inline-block;
-            animation: sway 3s ease-in-out infinite;
-        }
+  /* Screens */
+  .screen {
+    display: none;
+    min-height: 100vh;
+    position: relative;
+    z-index: 1;
+  }
+  .screen.active { display: flex; flex-direction: column; align-items: center; justify-content: center; }
 
-        @keyframes sway {
-            0%, 100% { transform: rotate(-5deg); }
-            50% { transform: rotate(5deg); }
-        }
+  /* ===== SCREEN 1: SURPRISE - CUTE REDESIGN ===== */
+  #screen-surprise {
+    background: linear-gradient(135deg, #ffe0f0 0%, #ffd6e8 30%, #f0d5ff 70%, #d5e8ff 100%);
+    text-align: center;
+    padding: 40px 20px;
+    position: relative;
+    overflow: hidden;
+  }
 
-        .quiz-header h1 {
-            font-family: 'Playfair Display', serif;
-            font-size: 2.2em;
-            color: var(--text);
-            margin: 10px 0 8px;
-            letter-spacing: -0.5px;
-        }
+  /* Decorative paw prints scattered */
+  .paw-deco {
+    position: absolute;
+    font-size: 22px;
+    opacity: 0.15;
+    pointer-events: none;
+    animation: pawFloat 6s ease-in-out infinite;
+  }
+  @keyframes pawFloat {
+    0%,100% { transform: translateY(0) rotate(var(--r)); opacity: 0.15; }
+    50% { transform: translateY(-12px) rotate(calc(var(--r) + 8deg)); opacity: 0.25; }
+  }
 
-        .quiz-header p {
-            color: var(--text-light);
-            font-size: 1em;
-            font-weight: 300;
-        }
+  .surprise-card {
+    background: rgba(255,255,255,0.75);
+    backdrop-filter: blur(12px);
+    border-radius: 40px;
+    padding: 40px 35px 35px;
+    max-width: 420px;
+    width: 100%;
+    box-shadow: 0 20px 60px rgba(255,133,179,0.25), 0 0 0 4px rgba(255,133,179,0.2);
+    position: relative;
+  }
 
-        .progress-bar {
-            background: var(--border);
-            height: 4px;
-            border-radius: 2px;
-            margin-bottom: 30px;
-            overflow: hidden;
-        }
+  .surprise-cat-row {
+    display: flex;
+    justify-content: center;
+    gap: 6px;
+    margin-bottom: 14px;
+  }
+  .s-cat {
+    font-size: 32px;
+    animation: catDance 1.2s ease-in-out infinite alternate;
+  }
+  .s-cat:nth-child(1) { animation-delay: 0s; }
+  .s-cat:nth-child(2) { animation-delay: 0.2s; }
+  .s-cat:nth-child(3) { animation-delay: 0.4s; }
+  .s-cat:nth-child(4) { animation-delay: 0.2s; }
+  .s-cat:nth-child(5) { animation-delay: 0s; }
+  @keyframes catDance {
+    0% { transform: translateY(0) rotate(-5deg); }
+    100% { transform: translateY(-10px) rotate(5deg); }
+  }
 
-        .progress-fill {
-            height: 100%;
-            background: var(--accent);
-            border-radius: 2px;
-            transition: width 0.4s ease;
-            width: 0%;
-        }
+  .surprise-badge {
+    display: inline-block;
+    background: linear-gradient(135deg, var(--pink), #e060a0);
+    color: white;
+    border-radius: 30px;
+    padding: 5px 20px;
+    font-size: 14px;
+    letter-spacing: 2px;
+    margin-bottom: 12px;
+    box-shadow: 0 4px 12px rgba(255,133,179,0.4);
+  }
 
-        .question-card {
-            background: white;
-            border: 1px solid var(--border);
-            border-radius: 16px;
-            padding: 28px 32px;
-            margin-bottom: 16px;
-            box-shadow: 0 2px 12px rgba(61,44,30,0.06);
-            transition: box-shadow 0.2s;
-        }
+  .surprise-title {
+    font-family: 'Mitr', sans-serif;
+    font-size: 36px;
+    font-weight: 700;
+    color: var(--text);
+    margin-bottom: 6px;
+    text-shadow: 2px 2px 0px rgba(255,133,179,0.25);
+    line-height: 1.2;
+  }
+  .surprise-title span {
+    background: linear-gradient(135deg, var(--pink), #9b59b6);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+  .surprise-sub {
+    font-size: 17px;
+    color: #9a5db0;
+    margin-bottom: 28px;
+  }
 
-        .question-card:hover {
-            box-shadow: 0 4px 20px rgba(61,44,30,0.1);
-        }
+  .surprise-gift-wrap {
+    position: relative;
+    display: inline-block;
+    margin-bottom: 10px;
+  }
+  /* Glow ring around gift */
+  .surprise-gift-wrap::before {
+    content: '';
+    position: absolute;
+    top: 50%; left: 50%;
+    transform: translate(-50%,-50%);
+    width: 130px; height: 130px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(255,133,179,0.3) 0%, transparent 70%);
+    animation: glowPulse 2s ease-in-out infinite;
+  }
+  @keyframes glowPulse {
+    0%,100% { transform: translate(-50%,-50%) scale(1); opacity: 1; }
+    50% { transform: translate(-50%,-50%) scale(1.3); opacity: 0.5; }
+  }
 
-        .question-number {
-            font-size: 0.75em;
-            font-weight: 600;
-            color: var(--accent);
-            letter-spacing: 1.5px;
-            text-transform: uppercase;
-            margin-bottom: 8px;
-        }
+  .surprise-box {
+    position: relative;
+    cursor: pointer;
+    display: inline-block;
+    animation: wiggle 2s ease-in-out infinite;
+    z-index: 1;
+  }
+  @keyframes wiggle {
+    0%,100% { transform: rotate(-4deg) scale(1); }
+    50% { transform: rotate(4deg) scale(1.05); }
+  }
+  .gift-emoji {
+    font-size: 100px;
+    display: block;
+    filter: drop-shadow(0 10px 20px rgba(255,133,179,0.4));
+    transition: transform 0.2s;
+  }
+  .surprise-box:hover .gift-emoji { transform: scale(1.15) rotate(-5deg); }
+  .surprise-box:active .gift-emoji { transform: scale(0.9); }
 
-        .question-text {
-            font-size: 1.1em;
-            color: var(--text);
-            font-weight: 600;
-            line-height: 1.6;
-            margin-bottom: 18px;
-        }
+  .tap-text {
+    font-size: 20px;
+    color: var(--pink);
+    margin-top: 18px;
+    animation: pulse 1.5s ease-in-out infinite;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+  }
+  @keyframes pulse {
+    0%,100% { opacity: 1; transform: scale(1); }
+    50% { opacity: 0.5; transform: scale(0.95); }
+  }
 
-        .options {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 10px;
-        }
+  .hearts-row {
+    display: flex;
+    justify-content: center;
+    gap: 8px;
+    margin-top: 18px;
+    font-size: 20px;
+  }
+  .heart-float {
+    animation: heartBeat 1.5s ease-in-out infinite;
+  }
+  .heart-float:nth-child(1) { animation-delay: 0s; }
+  .heart-float:nth-child(2) { animation-delay: 0.3s; }
+  .heart-float:nth-child(3) { animation-delay: 0.6s; }
+  .heart-float:nth-child(4) { animation-delay: 0.3s; }
+  .heart-float:nth-child(5) { animation-delay: 0s; }
+  @keyframes heartBeat {
+    0%,100% { transform: scale(1); }
+    50% { transform: scale(1.3); }
+  }
 
-        .option-label {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            padding: 12px 16px;
-            border: 1.5px solid var(--border);
-            border-radius: 10px;
-            cursor: pointer;
-            transition: all 0.2s;
-            font-size: 0.95em;
-            color: var(--text-light);
-            background: var(--cream);
-        }
+  /* ===== SCREEN 2: CAT GAME ===== */
+  #screen-game {
+    background: linear-gradient(135deg, #f0e6ff 0%, #ffe8f4 50%, #e8f4ff 100%);
+    padding: 20px;
+    flex-direction: column;
+  }
 
-        .option-label:hover {
-            border-color: var(--accent-light);
-            background: #fef5ee;
-            color: var(--text);
-        }
+  .game-header {
+    text-align: center;
+    margin-bottom: 15px;
+  }
+  .game-title {
+    font-family: 'Mitr', sans-serif;
+    font-size: 28px;
+    color: var(--text);
+  }
+  .game-subtitle {
+    font-size: 16px;
+    color: #9a5db0;
+    margin-top: 4px;
+  }
 
-        .option-label input[type="radio"] {
-            display: none;
-        }
+  .stats-bar {
+    display: flex;
+    gap: 20px;
+    justify-content: center;
+    margin-bottom: 15px;
+    flex-wrap: wrap;
+  }
+  .stat-badge {
+    background: white;
+    border: 3px solid var(--pink);
+    border-radius: 30px;
+    padding: 8px 20px;
+    font-size: 18px;
+    color: var(--text);
+    box-shadow: 0 4px 10px rgba(255,133,179,0.2);
+  }
 
-        .option-label.selected {
-            border-color: var(--accent);
-            background: #fef0e6;
-            color: var(--text);
-            font-weight: 600;
-        }
+  .game-area {
+    position: relative;
+    width: 100%;
+    max-width: 480px;
+    height: 380px;
+    background: linear-gradient(180deg, #e8f4ff 0%, #fff0fa 100%);
+    border-radius: 30px;
+    border: 4px solid var(--pink);
+    overflow: hidden;
+    box-shadow: 0 10px 40px rgba(255,133,179,0.3), inset 0 0 40px rgba(255,255,255,0.5);
+    cursor: crosshair;
+  }
 
-        .option-dot {
-            width: 18px;
-            height: 18px;
-            border-radius: 50%;
-            border: 2px solid var(--border);
-            flex-shrink: 0;
-            transition: all 0.2s;
-        }
+  /* Decorative game bg */
+  .game-grass {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 60px;
+    background: linear-gradient(to top, #b8f0d8, #d8f8ec);
+    border-radius: 0 0 25px 25px;
+  }
+  .game-cloud {
+    position: absolute;
+    font-size: 28px;
+    opacity: 0.4;
+    animation: cloudMove 12s linear infinite;
+  }
+  @keyframes cloudMove {
+    0% { transform: translateX(-60px); }
+    100% { transform: translateX(500px); }
+  }
 
-        .option-label.selected .option-dot {
-            background: var(--accent);
-            border-color: var(--accent);
-        }
+  /* Cat targets */
+  .cat-target {
+    position: absolute;
+    font-size: 42px;
+    cursor: pointer;
+    transition: transform 0.1s;
+    animation: catBounce 0.5s ease-in-out infinite alternate;
+    user-select: none;
+    filter: drop-shadow(0 4px 8px rgba(0,0,0,0.1));
+    z-index: 5;
+  }
+  @keyframes catBounce {
+    0% { transform: translateY(0) scale(1); }
+    100% { transform: translateY(-8px) scale(1.05); }
+  }
+  .cat-target:hover { filter: drop-shadow(0 4px 8px rgba(255,133,179,0.5)) brightness(1.1); }
+  .cat-target.clicked {
+    animation: pop 0.3s ease-out forwards;
+  }
+  @keyframes pop {
+    0% { transform: scale(1); opacity: 1; }
+    50% { transform: scale(1.5); opacity: 0.8; }
+    100% { transform: scale(0); opacity: 0; }
+  }
 
-        .question-card.open-ended textarea {
-            width: 100%;
-            border: 1.5px solid var(--border);
-            border-radius: 10px;
-            padding: 14px;
-            font-family: 'Sarabun', sans-serif;
-            font-size: 0.95em;
-            color: var(--text);
-            resize: vertical;
-            min-height: 80px;
-            background: var(--cream);
-            outline: none;
-            transition: border-color 0.2s;
-        }
+  /* Hearts that float up on click */
+  .floating-heart {
+    position: absolute;
+    font-size: 24px;
+    pointer-events: none;
+    animation: floatHeart 1s ease-out forwards;
+    z-index: 10;
+  }
+  @keyframes floatHeart {
+    0% { transform: translateY(0) scale(1); opacity: 1; }
+    100% { transform: translateY(-80px) scale(0.5); opacity: 0; }
+  }
 
-        .question-card.open-ended textarea:focus {
-            border-color: var(--accent);
-        }
+  .score-popup {
+    position: absolute;
+    font-size: 26px;
+    font-weight: bold;
+    color: var(--pink);
+    pointer-events: none;
+    animation: popScore 0.8s ease-out forwards;
+    z-index: 10;
+    text-shadow: 2px 2px 0 white;
+  }
+  @keyframes popScore {
+    0% { transform: translateY(0) scale(1); opacity: 1; }
+    100% { transform: translateY(-60px) scale(1.3); opacity: 0; }
+  }
 
-        .submit-section {
-            text-align: center;
-            margin-top: 30px;
-            padding-bottom: 40px;
-        }
+  .game-btn {
+    margin-top: 15px;
+    background: linear-gradient(135deg, var(--pink), #e060a0);
+    color: white;
+    border: none;
+    border-radius: 50px;
+    padding: 14px 40px;
+    font-family: 'Itim', cursive;
+    font-size: 20px;
+    cursor: pointer;
+    box-shadow: 0 6px 20px rgba(255,133,179,0.4);
+    transition: transform 0.2s, box-shadow 0.2s;
+  }
+  .game-btn:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 10px 25px rgba(255,133,179,0.5);
+  }
 
-        .submit-btn {
-            background: var(--accent);
-            color: white;
-            border: none;
-            padding: 16px 56px;
-            font-size: 1.1em;
-            font-family: 'Sarabun', sans-serif;
-            font-weight: 700;
-            border-radius: 50px;
-            cursor: pointer;
-            letter-spacing: 0.5px;
-            box-shadow: 0 4px 20px rgba(192,113,74,0.35);
-            transition: all 0.25s;
-        }
+  .timer-bar-wrap {
+    width: 100%;
+    max-width: 480px;
+    height: 12px;
+    background: #ffd6e8;
+    border-radius: 10px;
+    margin-top: 12px;
+    overflow: hidden;
+    border: 2px solid var(--pink);
+  }
+  .timer-bar {
+    height: 100%;
+    background: linear-gradient(90deg, var(--pink), var(--peach));
+    border-radius: 10px;
+    transition: width 0.1s linear;
+  }
 
-        .submit-btn:hover {
-            background: var(--accent-light);
-            transform: translateY(-2px);
-            box-shadow: 0 6px 28px rgba(192,113,74,0.45);
-        }
+  /* ===== SCREEN 3: WISH ===== */
+  #screen-wish {
+    background: linear-gradient(135deg, #ffe8f7 0%, #f0d5ff 40%, #d5e8ff 100%);
+    text-align: center;
+    padding: 40px 20px;
+    min-height: 100vh;
+  }
 
-        .submit-btn:active {
-            transform: translateY(0);
-        }
+  .wish-card {
+    background: white;
+    border-radius: 40px;
+    padding: 40px 35px;
+    max-width: 500px;
+    width: 100%;
+    box-shadow: 0 20px 60px rgba(255,133,179,0.25), 0 0 0 4px var(--soft-pink);
+    position: relative;
+    overflow: hidden;
+  }
+  .wish-card::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: radial-gradient(circle at 30% 30%, rgba(255,133,179,0.05) 0%, transparent 60%),
+                radial-gradient(circle at 70% 70%, rgba(200,150,255,0.05) 0%, transparent 60%);
+    pointer-events: none;
+  }
 
-        /* ===== LOVE SCREEN ===== */
-        #love-screen {
-            display: none;
-            width: 100%;
-            max-width: 680px;
-        }
+  .wish-cat {
+    font-size: 80px;
+    animation: spinCat 3s ease-in-out infinite;
+    display: block;
+    margin-bottom: 10px;
+  }
+  @keyframes spinCat {
+    0%,100% { transform: rotate(-5deg) scale(1); }
+    50% { transform: rotate(5deg) scale(1.05); }
+  }
 
-        #love-screen.show {
-            display: block;
-            animation: fadeUp 0.8s ease forwards;
-        }
+  .wish-name {
+    font-family: 'Mitr', sans-serif;
+    font-size: 48px;
+    font-weight: 700;
+    background: linear-gradient(135deg, var(--pink), #9b59b6, #3498db);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    margin-bottom: 5px;
+  }
 
-        @keyframes fadeUp {
-            from { opacity: 0; transform: translateY(30px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
+  .wish-hbd {
+    font-size: 22px;
+    color: #9a5db0;
+    margin-bottom: 25px;
+    letter-spacing: 2px;
+  }
 
-        .love-card {
-            background: white;
-            border-radius: 24px;
-            overflow: hidden;
-            box-shadow: 0 8px 50px rgba(233,30,140,0.12);
-            position: relative;
-        }
+  .wish-message {
+    font-size: 19px;
+    color: var(--text);
+    line-height: 1.8;
+    margin-bottom: 25px;
+    position: relative;
+  }
 
-        .love-top {
-            background: linear-gradient(135deg, #f8bbd0, #fce4ec, #f48fb1);
-            padding: 50px 40px 40px;
-            text-align: center;
-            position: relative;
-            overflow: hidden;
-        }
+  .wish-stars {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    font-size: 28px;
+    margin: 20px 0;
+    animation: starTwinkle 2s ease-in-out infinite;
+  }
+  @keyframes starTwinkle {
+    0%,100% { transform: scale(1); }
+    50% { transform: scale(1.1); }
+  }
 
-        .love-top::before {
-            content: '';
-            position: absolute;
-            width: 300px; height: 300px;
-            background: rgba(255,255,255,0.2);
-            border-radius: 50%;
-            top: -100px; right: -80px;
-        }
+  .score-display {
+    background: linear-gradient(135deg, var(--soft-pink), var(--lavender));
+    border-radius: 20px;
+    padding: 15px 30px;
+    margin: 15px 0;
+    font-size: 20px;
+    color: var(--text);
+    border: 2px solid var(--pink);
+  }
+  .score-display span {
+    font-family: 'Mitr', sans-serif;
+    font-size: 36px;
+    color: var(--pink);
+    display: block;
+  }
 
-        .love-top::after {
-            content: '';
-            position: absolute;
-            width: 200px; height: 200px;
-            background: rgba(255,255,255,0.15);
-            border-radius: 50%;
-            bottom: -60px; left: -50px;
-        }
+  .replay-btn {
+    background: linear-gradient(135deg, #a29bfe, #6c5ce7);
+    color: white;
+    border: none;
+    border-radius: 50px;
+    padding: 14px 35px;
+    font-family: 'Itim', cursive;
+    font-size: 20px;
+    cursor: pointer;
+    box-shadow: 0 6px 20px rgba(108,92,231,0.3);
+    transition: transform 0.2s;
+    margin-top: 10px;
+  }
+  .replay-btn:hover { transform: translateY(-3px); }
 
-        .love-icon-big {
-            font-size: 5em;
-            display: block;
-            animation: heartbeat 1.2s ease-in-out infinite;
-            position: relative;
-            z-index: 1;
-        }
+  /* Fireworks on wish screen */
+  .firework {
+    position: fixed;
+    pointer-events: none;
+    font-size: 30px;
+    animation: firework 1.5s ease-out forwards;
+    z-index: 100;
+  }
+  @keyframes firework {
+    0% { transform: scale(0) translate(0,0); opacity: 1; }
+    100% { transform: scale(2) translate(var(--fx), var(--fy)); opacity: 0; }
+  }
 
-        @keyframes heartbeat {
-            0%, 100% { transform: scale(1); }
-            25% { transform: scale(1.15); }
-            50% { transform: scale(1); }
-            75% { transform: scale(1.08); }
-        }
+  /* Timer count */
+  #countdown {
+    font-size: 48px;
+    color: var(--pink);
+    font-family: 'Mitr', sans-serif;
+    animation: countBig 0.3s ease-out;
+  }
+  @keyframes countBig {
+    0% { transform: scale(1.5); }
+    100% { transform: scale(1); }
+  }
 
-        .love-top h1 {
-            font-family: 'Playfair Display', serif;
-            font-size: 2.4em;
-            color: #880e4f;
-            margin: 16px 0 8px;
-            position: relative;
-            z-index: 1;
-        }
+  .level-badge {
+    display: inline-block;
+    background: linear-gradient(135deg, var(--gold), #ffb347);
+    color: #5a3060;
+    border-radius: 20px;
+    padding: 4px 15px;
+    font-size: 16px;
+    margin-left: 8px;
+  }
 
-        .love-top .subtitle {
-            color: #c2185b;
-            font-size: 1.1em;
-            font-weight: 300;
-            position: relative;
-            z-index: 1;
-        }
-
-        .photo-frame {
-            position: relative;
-            z-index: 1;
-            margin-top: 24px;
-            display: inline-block;
-        }
-
-        .photo-frame img {
-            width: 180px;
-            height: 220px;
-            object-fit: cover;
-            border-radius: 16px;
-            border: 6px solid white;
-            box-shadow: 0 8px 30px rgba(136,14,79,0.25);
-            display: block;
-        }
-
-        .photo-frame .hearts-around {
-            position: absolute;
-            top: -10px; right: -10px;
-            font-size: 1.8em;
-            animation: float-heart 2s ease-in-out infinite;
-        }
-
-        @keyframes float-heart {
-            0%, 100% { transform: translateY(0) scale(1); }
-            50% { transform: translateY(-8px) scale(1.1); }
-        }
-
-        .love-body {
-            padding: 36px 40px;
-        }
-
-        .letter-header {
-            text-align: center;
-            margin-bottom: 24px;
-        }
-
-        .letter-header span {
-            display: inline-block;
-            background: linear-gradient(135deg, #fce4ec, #f8bbd0);
-            color: #880e4f;
-            padding: 6px 20px;
-            border-radius: 50px;
-            font-size: 0.85em;
-            font-weight: 600;
-            letter-spacing: 1px;
-        }
-
-        .love-letter {
-            background: #fffdf5;
-            border: 1px solid #f8d7e3;
-            border-radius: 16px;
-            padding: 28px 32px;
-            line-height: 2;
-            color: var(--text);
-            font-size: 1.05em;
-            position: relative;
-        }
-
-        .love-letter::before {
-            content: '"';
-            font-family: 'Playfair Display', serif;
-            font-size: 5em;
-            color: #f8bbd0;
-            position: absolute;
-            top: -10px; left: 12px;
-            line-height: 1;
-        }
-
-        .love-letter p {
-            padding-top: 8px;
-        }
-
-        .love-letter .signature {
-            text-align: right;
-            margin-top: 16px;
-            font-weight: 700;
-            color: var(--pink);
-        }
-
-        .floating-hearts {
-            position: fixed;
-            top: 0; left: 0;
-            width: 100%; height: 100%;
-            pointer-events: none;
-            z-index: 9999;
-        }
-
-        .fh {
-            position: absolute;
-            font-size: 1.5em;
-            animation: fh-rise linear forwards;
-            opacity: 0;
-        }
-
-        @keyframes fh-rise {
-            0% { transform: translateY(100vh) scale(0.5); opacity: 1; }
-            80% { opacity: 1; }
-            100% { transform: translateY(-10vh) scale(1); opacity: 0; }
-        }
-
-        .replay-btn {
-            display: block;
-            margin: 28px auto 0;
-            background: transparent;
-            border: 2px solid var(--pink);
-            color: var(--pink);
-            padding: 12px 40px;
-            border-radius: 50px;
-            font-family: 'Sarabun', sans-serif;
-            font-size: 1em;
-            cursor: pointer;
-            transition: all 0.25s;
-        }
-
-        .replay-btn:hover {
-            background: var(--pink);
-            color: white;
-            transform: scale(1.04);
-        }
-
-        /* ===== RESPONSIVE ===== */
-        @media (max-width: 500px) {
-            .options { grid-template-columns: 1fr; }
-            .love-body { padding: 28px 24px; }
-            .love-top { padding: 40px 24px 32px; }
-            .love-letter { padding: 20px 20px; }
-        }
-    </style>
+  @media (max-width: 480px) {
+    .game-area { height: 320px; }
+    .cat-target { font-size: 36px; }
+    .surprise-title { font-size: 32px; }
+    .wish-name { font-size: 38px; }
+  }
+</style>
 </head>
 <body>
 
-<!-- QUIZ SCREEN -->
-<div class="quiz-wrapper" id="quiz-screen">
-    <div class="quiz-header">
-        <div class="cat-icon">🐱</div>
-        <h1>แบบสอบถามเรื่องแมว</h1>
-        <p>ตอบคำถาม 10 ข้อเกี่ยวกับน้องแมวที่คุณรัก</p>
+<!-- Floating bg emojis -->
+<div class="bg-float" style="top:10%;left:5%;font-size:30px;animation-delay:0s">🌸</div>
+<div class="bg-float" style="top:20%;right:8%;font-size:24px;animation-delay:1s">🌷</div>
+<div class="bg-float" style="top:60%;left:3%;font-size:28px;animation-delay:2s">🎀</div>
+<div class="bg-float" style="bottom:15%;right:5%;font-size:32px;animation-delay:0.5s">✨</div>
+<div class="bg-float" style="top:80%;left:15%;font-size:22px;animation-delay:1.5s">🌺</div>
+
+<!-- Confetti -->
+<div class="confetti-container" id="confetti-container"></div>
+
+<!-- SCREEN 1: SURPRISE -->
+<div class="screen active" id="screen-surprise">
+
+  <!-- Scattered paw prints bg -->
+  <div class="paw-deco" style="top:8%;left:6%;--r:-20deg;animation-delay:0s">🐾</div>
+  <div class="paw-deco" style="top:15%;right:8%;--r:15deg;animation-delay:1s">🌸</div>
+  <div class="paw-deco" style="top:70%;left:4%;--r:10deg;animation-delay:0.5s">🐾</div>
+  <div class="paw-deco" style="top:75%;right:6%;--r:-15deg;animation-delay:1.5s">🌸</div>
+  <div class="paw-deco" style="top:40%;left:2%;--r:25deg;animation-delay:2s">✨</div>
+  <div class="paw-deco" style="top:35%;right:3%;--r:-10deg;animation-delay:0.7s">💕</div>
+  <div class="paw-deco" style="bottom:8%;left:20%;--r:5deg;animation-delay:1.2s">🎀</div>
+  <div class="paw-deco" style="bottom:10%;right:18%;--r:-5deg;animation-delay:0.3s">⭐</div>
+
+  <div class="surprise-card">
+    <div class="surprise-badge">✨ SURPRISE ✨</div>
+
+    <h1 class="surprise-title">🎀 ของขวัญ<br>สุดพิเศษ สำหรับ<br><span>ลูกบัว</span> 🎀</h1>
+    <p class="surprise-sub">🐾 น้องหอยเม่นซ่อนเซอไพรส์ไว้ให้ 🐾</p>
+
+    <div class="surprise-gift-wrap">
+      <div class="surprise-box" onclick="goToGame()">
+        <span class="gift-emoji">🎁</span>
+      </div>
     </div>
 
-    <div class="progress-bar">
-        <div class="progress-fill" id="progress-fill"></div>
+    <p class="tap-text">
+      <span>👆</span> แตะที่กล่องเลย! <span>👆</span>
+    </p>
+
+    <div class="hearts-row">
+      <span class="heart-float">💖</span>
+      <span class="heart-float">🐾</span>
+      <span class="heart-float">💕</span>
+      <span class="heart-float">🐾</span>
+      <span class="heart-float">💖</span>
     </div>
-
-    <form id="cat-form">
-
-        <!-- Q1 -->
-        <div class="question-card">
-            <div class="question-number">ข้อ 1</div>
-            <div class="question-text">คุณเลี้ยงแมวอยู่ที่บ้านหรือเปล่า?</div>
-            <div class="options">
-                <label class="option-label" onclick="selectOption(this)">
-                    <input type="radio" name="q1" value="a">
-                    <div class="option-dot"></div> เลี้ยงอยู่ค่ะ/ครับ
-                </label>
-                <label class="option-label" onclick="selectOption(this)">
-                    <input type="radio" name="q1" value="b">
-                    <div class="option-dot"></div> ยังไม่ได้เลี้ยง
-                </label>
-                <label class="option-label" onclick="selectOption(this)">
-                    <input type="radio" name="q1" value="c">
-                    <div class="option-dot"></div> เคยเลี้ยงแต่เลิกแล้ว
-                </label>
-                <label class="option-label" onclick="selectOption(this)">
-                    <input type="radio" name="q1" value="d">
-                    <div class="option-dot"></div> เลี้ยงหลายตัวเลย
-                </label>
-            </div>
-        </div>
-
-        <!-- Q2 -->
-        <div class="question-card">
-            <div class="question-number">ข้อ 2</div>
-            <div class="question-text">สายพันธุ์แมวที่คุณชื่นชอบมากที่สุดคือสายพันธุ์ใด?</div>
-            <div class="options">
-                <label class="option-label" onclick="selectOption(this)">
-                    <input type="radio" name="q2" value="a">
-                    <div class="option-dot"></div> เปอร์เซีย 🐈
-                </label>
-                <label class="option-label" onclick="selectOption(this)">
-                    <input type="radio" name="q2" value="b">
-                    <div class="option-dot"></div> สก็อตติชโฟลด์
-                </label>
-                <label class="option-label" onclick="selectOption(this)">
-                    <input type="radio" name="q2" value="c">
-                    <div class="option-dot"></div> แมวไทย / วิเชียรมาศ
-                </label>
-                <label class="option-label" onclick="selectOption(this)">
-                    <input type="radio" name="q2" value="d">
-                    <div class="option-dot"></div> แมวบ้านสายเลือดไม่ชัด 🐱
-                </label>
-            </div>
-        </div>
-
-        <!-- Q3 -->
-        <div class="question-card">
-            <div class="question-number">ข้อ 3</div>
-            <div class="question-text">แมวชอบกินอาหารประเภทใดมากกว่ากัน?</div>
-            <div class="options">
-                <label class="option-label" onclick="selectOption(this)">
-                    <input type="radio" name="q3" value="a">
-                    <div class="option-dot"></div> อาหารเม็ดแห้ง
-                </label>
-                <label class="option-label" onclick="selectOption(this)">
-                    <input type="radio" name="q3" value="b">
-                    <div class="option-dot"></div> อาหารเปียก / กระป๋อง
-                </label>
-                <label class="option-label" onclick="selectOption(this)">
-                    <input type="radio" name="q3" value="c">
-                    <div class="option-dot"></div> ชอบทั้งสองอย่าง
-                </label>
-                <label class="option-label" onclick="selectOption(this)">
-                    <input type="radio" name="q3" value="d">
-                    <div class="option-dot"></div> ชอบกินของคน 😅
-                </label>
-            </div>
-        </div>
-
-        <!-- Q4 -->
-        <div class="question-card">
-            <div class="question-number">ข้อ 4</div>
-            <div class="question-text">แมวมักจะนอนที่ไหนในบ้านบ่อยที่สุด?</div>
-            <div class="options">
-                <label class="option-label" onclick="selectOption(this)">
-                    <input type="radio" name="q4" value="a">
-                    <div class="option-dot"></div> บนเตียงนอน
-                </label>
-                <label class="option-label" onclick="selectOption(this)">
-                    <input type="radio" name="q4" value="b">
-                    <div class="option-dot"></div> บนโซฟา
-                </label>
-                <label class="option-label" onclick="selectOption(this)">
-                    <input type="radio" name="q4" value="c">
-                    <div class="option-dot"></div> ที่กล่องหรือมุมเฉพาะของมัน
-                </label>
-                <label class="option-label" onclick="selectOption(this)">
-                    <input type="radio" name="q4" value="d">
-                    <div class="option-dot"></div> บนตักเจ้าของเลย 🥰
-                </label>
-            </div>
-        </div>
-
-        <!-- Q5 -->
-        <div class="question-card">
-            <div class="question-number">ข้อ 5</div>
-            <div class="question-text">คุณคิดว่าแมวเป็นสัตว์ที่มีนิสัยอย่างไรมากกว่ากัน?</div>
-            <div class="options">
-                <label class="option-label" onclick="selectOption(this)">
-                    <input type="radio" name="q5" value="a">
-                    <div class="option-dot"></div> เป็นอิสระ ไม่พึ่งคนมาก
-                </label>
-                <label class="option-label" onclick="selectOption(this)">
-                    <input type="radio" name="q5" value="b">
-                    <div class="option-dot"></div> ขี้อ้อน ชอบให้โอ๋
-                </label>
-                <label class="option-label" onclick="selectOption(this)">
-                    <input type="radio" name="q5" value="c">
-                    <div class="option-dot"></div> ขี้อิจฉา ต้องการความสนใจ
-                </label>
-                <label class="option-label" onclick="selectOption(this)">
-                    <input type="radio" name="q5" value="d">
-                    <div class="option-dot"></div> ขึ้นอยู่กับตัวแมวเลย
-                </label>
-            </div>
-        </div>
-
-        <!-- Q6 -->
-        <div class="question-card">
-            <div class="question-number">ข้อ 6</div>
-            <div class="question-text">แมวส่งเสียงร้องมากน้อยแค่ไหนในชีวิตประจำวัน?</div>
-            <div class="options">
-                <label class="option-label" onclick="selectOption(this)">
-                    <input type="radio" name="q6" value="a">
-                    <div class="option-dot"></div> แทบไม่ร้องเลย เงียบมาก
-                </label>
-                <label class="option-label" onclick="selectOption(this)">
-                    <input type="radio" name="q6" value="b">
-                    <div class="option-dot"></div> ร้องบ้างพอเหมาะ
-                </label>
-                <label class="option-label" onclick="selectOption(this)">
-                    <input type="radio" name="q6" value="c">
-                    <div class="option-dot"></div> ร้องบ่อย ชอบคุยกับเจ้าของ
-                </label>
-                <label class="option-label" onclick="selectOption(this)">
-                    <input type="radio" name="q6" value="d">
-                    <div class="option-dot"></div> ร้องแบบไม่มีสาเหตุตอนดึก 😂
-                </label>
-            </div>
-        </div>
-
-        <!-- Q7 -->
-        <div class="question-card">
-            <div class="question-number">ข้อ 7</div>
-            <div class="question-text">คุณพาแมวไปตรวจสุขภาพกับสัตวแพทย์บ่อยแค่ไหน?</div>
-            <div class="options">
-                <label class="option-label" onclick="selectOption(this)">
-                    <input type="radio" name="q7" value="a">
-                    <div class="option-dot"></div> ทุก 6 เดือน – 1 ปี
-                </label>
-                <label class="option-label" onclick="selectOption(this)">
-                    <input type="radio" name="q7" value="b">
-                    <div class="option-dot"></div> เมื่อมีอาการเจ็บป่วยเท่านั้น
-                </label>
-                <label class="option-label" onclick="selectOption(this)">
-                    <input type="radio" name="q7" value="c">
-                    <div class="option-dot"></div> ยังไม่เคยพาไปเลย
-                </label>
-                <label class="option-label" onclick="selectOption(this)">
-                    <input type="radio" name="q7" value="d">
-                    <div class="option-dot"></div> พาบ่อยกว่าพาตัวเองไปหมอ
-                </label>
-            </div>
-        </div>
-
-        <!-- Q8 -->
-        <div class="question-card">
-            <div class="question-number">ข้อ 8</div>
-            <div class="question-text">ของเล่นประเภทใดที่แมวชอบเล่นมากที่สุดในความคิดของคุณ?</div>
-            <div class="options">
-                <label class="option-label" onclick="selectOption(this)">
-                    <input type="radio" name="q8" value="a">
-                    <div class="option-dot"></div> ไม้ตกแมว / เส้นไหม
-                </label>
-                <label class="option-label" onclick="selectOption(this)">
-                    <input type="radio" name="q8" value="b">
-                    <div class="option-dot"></div> ลูกบอล / ของกลิ้ง
-                </label>
-                <label class="option-label" onclick="selectOption(this)">
-                    <input type="radio" name="q8" value="c">
-                    <div class="option-dot"></div> ของเล่นมีเสียง / กริ๊งกร๊าง
-                </label>
-                <label class="option-label" onclick="selectOption(this)">
-                    <input type="radio" name="q8" value="d">
-                    <div class="option-dot"></div> กล่องกระดาษเปล่าเลย 📦
-                </label>
-            </div>
-        </div>
-
-        <!-- Q9 -->
-        <div class="question-card">
-            <div class="question-number">ข้อ 9</div>
-            <div class="question-text">คุณคิดว่าแมวเข้าใจคำพูดของเจ้าของได้มากน้อยแค่ไหน?</div>
-            <div class="options">
-                <label class="option-label" onclick="selectOption(this)">
-                    <input type="radio" name="q9" value="a">
-                    <div class="option-dot"></div> เข้าใจได้มาก รู้ทุกอย่าง
-                </label>
-                <label class="option-label" onclick="selectOption(this)">
-                    <input type="radio" name="q9" value="b">
-                    <div class="option-dot"></div> เข้าใจคำง่ายๆ บ้าง เช่น ชื่อตัวเอง
-                </label>
-                <label class="option-label" onclick="selectOption(this)">
-                    <input type="radio" name="q9" value="c">
-                    <div class="option-dot"></div> ได้ยินแต่ทำเป็นไม่สนใจ 😆
-                </label>
-                <label class="option-label" onclick="selectOption(this)">
-                    <input type="radio" name="q9" value="d">
-                    <div class="option-dot"></div> แมวไม่สนใจคนเลย
-                </label>
-            </div>
-        </div>
-
-        <!-- Q10 (open-ended) -->
-        <div class="question-card open-ended">
-            <div class="question-number">ข้อ 10</div>
-            <div class="question-text">ถ้าต้องอธิบายแมวของคุณในหนึ่งประโยค คุณจะพูดว่าอะไร?</div>
-            <textarea name="q10" placeholder="เช่น น้องขี้อ้อนมากแต่แกล้งทำเป็นหยิ่ง..." id="q10-input"></textarea>
-        </div>
-
-        <div class="submit-section">
-            <button type="button" class="submit-btn" onclick="submitForm()">ส่งคำตอบ 🐾</button>
-        </div>
-    </form>
+  </div>
 </div>
 
-<!-- LOVE SCREEN -->
-<div id="love-screen">
-    <div class="love-card">
-        <div class="love-top">
-            <span class="love-icon-big">💖</span>
-            <h1>รักนะค้าบเบบี๋ของเค้า</h1>
-            <p class="subtitle">รักนะครับน้องลูกบัวววว 🌸</p>
-            <div class="photo-frame">
-                <img src="https://i.ibb.co/Z6MJLRv4/IMG-20260212-000544-686.jpg" alt="รูปคู่">
-                <div class="hearts-around">💕</div>
-            </div>
-        </div>
+<!-- SCREEN 2: CAT GAME -->
+<div class="screen" id="screen-game">
+  <div class="game-header">
+    <h2 class="game-title">🐱 จับน้องหอยเม่น! 🐱 <span class="level-badge" id="level-badge">Level 1</span></h2>
+    <p class="game-subtitle">แตะแมวให้ได้เยอะๆ ก่อนหมดเวลา! ✨</p>
+  </div>
 
-        <div class="love-body">
-            <div class="letter-header">
-                <span>💌 จากแบงค์ถึงเบบี๋ที่รัก 💌</span>
-            </div>
+  <div class="stats-bar">
+    <div class="stat-badge">❤️ คะแนน: <strong id="score-display">0</strong></div>
+    <div class="stat-badge">⏱️ เวลา: <strong id="time-display">30</strong>s</div>
+  </div>
 
-            <div class="love-letter">
-                <p>
-                    เบบี๋ที่รักของเค้าเลย 🥺💕<br><br>
-                    จริงๆ แล้วไม่ใช่แบบสอบถามเรื่องแมวหรอกนะ...<br>
-                    เค้าแค่อยากให้เบบี๋หยุดสักครู่ แล้วรับรู้ว่าเค้ารู้สึกอะไรอยู่ 🌸<br><br>
-                    ทุกเช้าที่ตื่นขึ้นมา ความคิดแรกที่ผ่านหัวเสมอ...ก็คือเบบี๋ 💭<br>
-                    เบบี๋ทำให้วันธรรมดาของเค้ากลายเป็นวันพิเศษได้โดยไม่ต้องทำอะไรเลย<br>
-                    แค่มีอยู่ แค่ยิ้ม แค่เป็นตัวเอง ก็ทำให้หัวใจเค้าอุ่นแล้ว 🤍<br><br>
-                    รู้มั้ยว่าทุกครั้งที่เบบี๋ส่งข้อความมา เค้ายิ้มโดยไม่รู้ตัวเลย 😊<br>
-                    ทุกครั้งที่ได้อยู่ด้วยกัน เค้าแอบอยากให้เวลามันหยุดนิ่งสักพัก...<br>
-                    เพราะช่วงเวลาพวกนั้นมันดีงามเกินไปเลยจริงๆ ✨<br><br>
-                    เค้าอาจจะไม่ได้พูดบ่อยนัก แต่เค้าอยากให้เบบี๋รู้ว่า...<br>
-                    เค้าใส่ใจทุกสิ่งเล็กๆ น้อยๆ ของเบบี๋เสมอ ทั้งความสุข ความเศร้า<br>
-                    และทุกความรู้สึกที่เบบี๋ไม่ได้พูดออกมา เค้ารับรู้ได้หมดเลยนะ 🫶<br><br>
-                    เบบี๋คือคนที่ทำให้เค้าอยากเป็นคนที่ดีขึ้นทุกวัน<br>
-                    และเค้าจะดูแลเบบี๋ด้วยหัวใจที่เต็มเปี่ยมนี้ตลอดไปเลยนะ 💖<br><br>
-                    รักเบบี๋มากที่สุดในโลกเลยค้าบบบ 💕💕💕
-                </p>
-                <div class="signature">รักนะคับน้องลูกบัว 🥰 — แบงค์</div>
-            </div>
+  <div class="game-area" id="game-area">
+    <div class="game-cloud" style="top:10%;animation-delay:0s">☁️</div>
+    <div class="game-cloud" style="top:25%;animation-delay:-5s">☁️</div>
+    <div class="game-grass"></div>
+  </div>
 
-            <button class="replay-btn" onclick="resetQuiz()">🔄 ทำแบบสอบถามอีกครั้ง</button>
-        </div>
-    </div>
+  <div class="timer-bar-wrap">
+    <div class="timer-bar" id="timer-bar"></div>
+  </div>
+
+  <button class="game-btn" id="start-btn" onclick="startGame()">🐾 เริ่มเล่นเลย! 🐾</button>
 </div>
 
-<!-- Floating Hearts Layer -->
-<div class="floating-hearts" id="floating-hearts"></div>
+<!-- SCREEN 3: WISH -->
+<div class="screen" id="screen-wish">
+  <div class="wish-card">
+    <div class="wish-hbd">🎂 HAPPY BIRTHDAY 🎂</div>
+    <div class="wish-name">ลูกบัว</div>
+
+    <div class="wish-stars">🌟⭐🌟⭐🌟</div>
+
+
+    <div class="score-display" id="final-score-card">
+      ลูกบัว จับน้องหอยเม่นได้
+      <span id="final-score">0</span>
+      ตัว! เก่งมากเลย 🐾💕
+    </div>
+
+    <p class="wish-message">
+      ขอให้วันเกิดนี้เต็มไปด้วย<br>
+      ความสุข ความอบอุ่น<br>
+      และน้องหอยเม่นคอยอยู่เป็นเพื่อน 🐈‍⬛💕<br><br>
+      <strong>สุขสันต์วันเกิดนะ! 🎉💕</strong>
+    </p>
+
+    <div class="wish-stars">🌸🎀🌸🎀🌸</div>
+
+    <button class="replay-btn" onclick="replay()">🔄 เล่นอีกรอบ!</button>
+  </div>
+</div>
 
 <script>
-    function selectOption(label) {
-        const name = label.querySelector('input').getAttribute('name');
-        document.querySelectorAll(`input[name="${name}"]`).forEach(inp => {
-            inp.parentElement.classList.remove('selected');
-        });
-        label.classList.add('selected');
-        label.querySelector('input').checked = true;
-        updateProgress();
+// Confetti
+const confettiColors = ['#ff85b3','#ffd700','#a29bfe','#74b9ff','#55efc4','#fd79a8','#fdcb6e'];
+const confettiEmojis = ['🌸','⭐','🎀','💕','✨','🌺'];
+function createConfetti() {
+  const container = document.getElementById('confetti-container');
+  container.innerHTML = '';
+  for(let i = 0; i < 30; i++) {
+    const el = document.createElement('div');
+    el.className = 'confetti';
+    el.style.left = Math.random() * 100 + '%';
+    el.style.animationDuration = (Math.random() * 4 + 3) + 's';
+    el.style.animationDelay = (Math.random() * 5) + 's';
+    el.style.background = confettiColors[Math.floor(Math.random() * confettiColors.length)];
+    el.style.width = el.style.height = (Math.random() * 8 + 6) + 'px';
+    el.style.borderRadius = Math.random() > 0.5 ? '50%' : '2px';
+    container.appendChild(el);
+  }
+}
+createConfetti();
+
+// GAME STATE
+let score = 0;
+let timeLeft = 30;
+let gameInterval = null;
+let spawnInterval = null;
+let cats = [];
+let gameActive = false;
+let totalTime = 30;
+
+const CAT_IMG = 'https://i.ibb.co/FbJdHJZZ/Screenshot-20260222-214201-Instagram-removebg-preview.png';
+const heartEmojis = ['💕','💖','💗','💓','🩷','✨','🌸'];
+
+function goToGame() {
+  document.getElementById('screen-surprise').classList.remove('active');
+  document.getElementById('screen-game').classList.add('active');
+  // fun animation
+  const gift = document.querySelector('.gift-emoji');
+  if(gift) gift.style.transform = 'scale(0)';
+}
+
+function showScreen(id) {
+  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+}
+
+function startGame() {
+  score = 0;
+  timeLeft = 30;
+  totalTime = 30;
+  gameActive = true;
+  document.getElementById('score-display').textContent = '0';
+  document.getElementById('time-display').textContent = '30';
+  document.getElementById('timer-bar').style.width = '100%';
+  document.getElementById('start-btn').disabled = true;
+  document.getElementById('start-btn').textContent = '🐾 กำลังเล่น...';
+  document.getElementById('level-badge').textContent = 'Level 1';
+
+  // Clear old cats
+  document.querySelectorAll('.cat-target').forEach(c => c.remove());
+  cats = [];
+
+  // Game timer
+  gameInterval = setInterval(() => {
+    timeLeft--;
+    document.getElementById('time-display').textContent = timeLeft;
+    document.getElementById('timer-bar').style.width = (timeLeft / totalTime * 100) + '%';
+
+    // Speed up at intervals
+    if(timeLeft === 20) {
+      document.getElementById('level-badge').textContent = 'Level 2 🔥';
+    }
+    if(timeLeft === 10) {
+      document.getElementById('level-badge').textContent = 'Level 3 ⚡';
     }
 
-    function updateProgress() {
-        const total = 9; // radio questions
-        let answered = 0;
-        ['q1','q2','q3','q4','q5','q6','q7','q8','q9'].forEach(name => {
-            if (document.querySelector(`input[name="${name}"]:checked`)) answered++;
-        });
-        const pct = (answered / total) * 100;
-        document.getElementById('progress-fill').style.width = pct + '%';
+    if(timeLeft <= 0) {
+      endGame();
     }
+  }, 1000);
 
-    function submitForm() {
-        // Just show the love screen regardless
-        document.getElementById('quiz-screen').style.opacity = '0';
-        document.getElementById('quiz-screen').style.transform = 'translateY(-20px)';
-        document.getElementById('quiz-screen').style.transition = 'all 0.5s ease';
+  // Spawn cats
+  let spawnRate = 1200;
+  spawnCats(spawnRate);
+}
 
-        setTimeout(() => {
-            document.getElementById('quiz-screen').style.display = 'none';
-            const loveScreen = document.getElementById('love-screen');
-            loveScreen.classList.add('show');
-            launchHearts();
-        }, 500);
+function spawnCats(rate) {
+  if(spawnInterval) clearInterval(spawnInterval);
+  spawnInterval = setInterval(() => {
+    if(!gameActive) return;
+    spawnCat();
+
+    // Increase speed dynamically
+    let newRate = timeLeft > 20 ? 1200 : timeLeft > 10 ? 900 : 650;
+    if(newRate !== rate) {
+      rate = newRate;
+      spawnCats(rate);
     }
+  }, rate);
+}
 
-    function launchHearts() {
-        const emojis = ['💕','💖','💗','💓','💝','🌸','✨','💌'];
-        const container = document.getElementById('floating-hearts');
+function spawnCat() {
+  const area = document.getElementById('game-area');
+  const areaW = area.clientWidth - 70;
+  const areaH = area.clientHeight - 90;
 
-        for (let i = 0; i < 40; i++) {
-            setTimeout(() => {
-                const h = document.createElement('div');
-                h.className = 'fh';
-                h.textContent = emojis[Math.floor(Math.random() * emojis.length)];
-                h.style.left = (Math.random() * 100) + 'vw';
-                h.style.animationDuration = (3 + Math.random() * 3) + 's';
-                h.style.animationDelay = '0s';
-                h.style.fontSize = (1 + Math.random() * 1.5) + 'em';
-                container.appendChild(h);
-                setTimeout(() => h.remove(), 6000);
-            }, i * 120);
-        }
-    }
+  const cat = document.createElement('div');
+  cat.className = 'cat-target';
 
-    function resetQuiz() {
-        location.reload();
-    }
+  const img = document.createElement('img');
+  img.src = CAT_IMG;
+  img.style.width = '60px';
+  img.style.height = '60px';
+  img.style.objectFit = 'contain';
+  img.style.display = 'block';
+  img.draggable = false;
+  cat.appendChild(img);
+
+  cat.style.left = (Math.random() * areaW + 10) + 'px';
+  cat.style.top = (Math.random() * areaH + 10) + 'px';
+  cat.style.animationDelay = (Math.random() * 0.5) + 's';
+  cat.style.fontSize = 'unset';
+
+  cat.addEventListener('click', (e) => catchCat(e, cat));
+  cat.addEventListener('touchstart', (e) => { e.preventDefault(); catchCat(e, cat); }, {passive: false});
+
+  area.appendChild(cat);
+  cats.push(cat);
+
+  setTimeout(() => {
+    if(cat.parentNode) cat.remove();
+    cats = cats.filter(c => c !== cat);
+  }, 2200 + Math.random() * 1000);
+}
+
+function catchCat(e, cat) {
+  if(!gameActive || cat.classList.contains('clicked')) return;
+  cat.classList.add('clicked');
+  score += 10;
+  document.getElementById('score-display').textContent = score;
+
+  const area = document.getElementById('game-area');
+  const rect = cat.getBoundingClientRect();
+  const areaRect = area.getBoundingClientRect();
+  const x = rect.left - areaRect.left + rect.width/2;
+  const y = rect.top - areaRect.top;
+
+  // Float hearts
+  for(let i = 0; i < 3; i++) {
+    const h = document.createElement('div');
+    h.className = 'floating-heart';
+    h.textContent = heartEmojis[Math.floor(Math.random() * heartEmojis.length)];
+    h.style.left = (x + (Math.random()-0.5)*40) + 'px';
+    h.style.top = y + 'px';
+    h.style.animationDelay = (i * 0.1) + 's';
+    area.appendChild(h);
+    setTimeout(() => h.remove(), 1100);
+  }
+
+  // Score popup
+  const sp = document.createElement('div');
+  sp.className = 'score-popup';
+  sp.textContent = '+10';
+  sp.style.left = x + 'px';
+  sp.style.top = (y - 20) + 'px';
+  area.appendChild(sp);
+  setTimeout(() => sp.remove(), 900);
+
+  setTimeout(() => {
+    if(cat.parentNode) cat.remove();
+    cats = cats.filter(c => c !== cat);
+  }, 300);
+}
+
+function endGame() {
+  gameActive = false;
+  clearInterval(gameInterval);
+  clearInterval(spawnInterval);
+  document.querySelectorAll('.cat-target').forEach(c => c.remove());
+  cats = [];
+
+  // Show wish screen
+  document.getElementById('final-score').textContent = score / 10;
+  showScreen('screen-wish');
+  launchFireworks();
+  createConfetti();
+}
+
+function launchFireworks() {
+  const fws = ['🎆','🎇','✨','🌟','💥','🎉','🎊'];
+  for(let i = 0; i < 20; i++) {
+    setTimeout(() => {
+      const fw = document.createElement('div');
+      fw.className = 'firework';
+      fw.textContent = fws[Math.floor(Math.random() * fws.length)];
+      fw.style.left = (Math.random() * 90 + 5) + '%';
+      fw.style.top = (Math.random() * 60 + 5) + '%';
+      fw.style.setProperty('--fx', (Math.random()-0.5)*100 + 'px');
+      fw.style.setProperty('--fy', (Math.random()-0.5)*100 + 'px');
+      document.body.appendChild(fw);
+      setTimeout(() => fw.remove(), 1600);
+    }, i * 150);
+  }
+}
+
+function replay() {
+  score = 0;
+  showScreen('screen-game');
+  document.getElementById('start-btn').disabled = false;
+  document.getElementById('start-btn').textContent = '🐾 เริ่มเล่นเลย! 🐾';
+  document.getElementById('score-display').textContent = '0';
+  document.getElementById('time-display').textContent = '30';
+  document.getElementById('timer-bar').style.width = '100%';
+  document.getElementById('level-badge').textContent = 'Level 1';
+}
 </script>
 </body>
 </html>
-
