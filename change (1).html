@@ -3,511 +3,692 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>จับหมา</title>
+<title>รับหมา!</title>
 <style>
-  @import url('https://fonts.googleapis.com/css2?family=Kanit:wght@400;700;900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Kanit:wght@400;700;900&display=swap');
 
-  * { margin: 0; padding: 0; box-sizing: border-box; }
+:root {
+  --sky: #87ceeb;
+  --ground: #5d4037;
+  --grass: #66bb6a;
+  --basket: #ff8f00;
+  --accent: #ff5722;
+}
 
-  body {
-    background: #0a0a1a;
-    font-family: 'Kanit', sans-serif;
-    overflow: hidden;
-    height: 100vh;
-    width: 100vw;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    color: white;
-  }
+* { margin: 0; padding: 0; box-sizing: border-box; }
 
-  #stars {
-    position: fixed;
-    top: 0; left: 0;
-    width: 100%; height: 100%;
-    pointer-events: none;
-    z-index: 0;
-  }
+body {
+  background: var(--sky);
+  font-family: 'Kanit', sans-serif;
+  overflow: hidden;
+  height: 100vh;
+  width: 100vw;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  user-select: none;
+}
 
-  .star {
-    position: absolute;
-    width: 2px; height: 2px;
-    background: white;
-    border-radius: 50%;
-    animation: twinkle var(--d) infinite;
-    opacity: var(--o);
-  }
+/* === SKY BG === */
+#bg {
+  position: fixed;
+  inset: 0;
+  background: linear-gradient(180deg, #1a237e 0%, #283593 20%, #1976d2 50%, #64b5f6 80%, #b3e5fc 100%);
+  z-index: 0;
+}
 
-  @keyframes twinkle {
-    0%, 100% { opacity: var(--o); }
-    50% { opacity: 0.1; }
-  }
+.cloud {
+  position: absolute;
+  font-size: 3rem;
+  opacity: 0.6;
+  animation: driftCloud linear infinite;
+}
 
-  #game-container {
-    position: relative;
-    z-index: 1;
-    text-align: center;
-  }
+@keyframes driftCloud {
+  from { transform: translateX(-120px); }
+  to { transform: translateX(calc(100vw + 120px)); }
+}
 
-  h1 {
-    font-size: 2.5rem;
-    font-weight: 900;
-    color: #f9d71c;
-    text-shadow: 0 0 20px #f9d71c88;
-    margin-bottom: 8px;
-    letter-spacing: 2px;
-  }
+/* === UI === */
+#ui {
+  position: relative;
+  z-index: 10;
+  width: 100%;
+  max-width: 480px;
+  padding: 10px 16px 0;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
 
-  #subtitle {
-    color: #aaa;
-    font-size: 1rem;
-    margin-bottom: 20px;
-  }
+.ui-box {
+  background: rgba(0,0,0,0.35);
+  backdrop-filter: blur(6px);
+  border-radius: 12px;
+  padding: 6px 16px;
+  color: white;
+  font-size: 1rem;
+  font-weight: 700;
+  border: 1px solid rgba(255,255,255,0.2);
+  text-shadow: 0 1px 3px #0008;
+}
 
-  #score-bar {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 12px;
-    padding: 8px 20px;
-    background: rgba(255,255,255,0.05);
-    border-radius: 50px;
-    border: 1px solid rgba(255,255,255,0.1);
-  }
+.ui-box .val {
+  color: #ffd740;
+  font-size: 1.3rem;
+}
 
-  .score-item {
-    font-size: 1rem;
-    color: #ccc;
-  }
+/* lives */
+#lives-display { font-size: 1.4rem; letter-spacing: 2px; }
 
-  .score-item span {
-    color: #f9d71c;
-    font-weight: 700;
-    font-size: 1.2rem;
-  }
+/* === CANVAS AREA === */
+#game-wrap {
+  position: relative;
+  z-index: 5;
+  width: 100%;
+  max-width: 480px;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
 
-  #arena {
-    width: 500px;
-    height: 400px;
-    background: linear-gradient(135deg, #0d1b2a 0%, #1a2a3a 100%);
-    border: 2px solid #f9d71c44;
-    border-radius: 16px;
-    position: relative;
-    overflow: hidden;
-    cursor: crosshair;
-    box-shadow: 0 0 40px #f9d71c22, inset 0 0 60px #00000044;
-  }
+canvas {
+  width: 100%;
+  flex: 1;
+  display: block;
+  cursor: none;
+}
 
-  #arena::before {
-    content: '';
-    position: absolute;
-    inset: 0;
-    background: repeating-linear-gradient(
-      0deg, transparent, transparent 39px, rgba(255,255,255,0.02) 40px
-    ), repeating-linear-gradient(
-      90deg, transparent, transparent 39px, rgba(255,255,255,0.02) 40px
-    );
-    pointer-events: none;
-  }
+/* === GROUND BAR === */
+#ground-bar {
+  position: relative;
+  z-index: 6;
+  width: 100%;
+  max-width: 480px;
+  height: 48px;
+  background: linear-gradient(180deg, #4caf50 0%, #388e3c 40%, #5d4037 100%);
+  border-top: 3px solid #81c784;
+  box-shadow: 0 -4px 20px #00000044;
+}
 
-  .target {
-    position: absolute;
-    font-size: 2.4rem;
-    cursor: pointer;
-    user-select: none;
-    transition: transform 0.1s;
-    filter: drop-shadow(0 0 8px rgba(255,200,0,0.4));
-    animation: bobbing 1.5s ease-in-out infinite;
-  }
+/* === SCREENS === */
+.screen {
+  position: fixed;
+  inset: 0;
+  z-index: 200;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 20px;
+}
 
-  .target:hover {
-    transform: scale(1.2);
-    filter: drop-shadow(0 0 16px rgba(255,200,0,0.8));
-  }
+#start-screen {
+  background: linear-gradient(135deg, #0d47a1 0%, #1565c0 40%, #1976d2 100%);
+}
 
-  .target.hit {
-    animation: hitAnim 0.3s forwards;
-    pointer-events: none;
-  }
+#start-screen .game-title {
+  font-size: clamp(2.5rem, 10vw, 4rem);
+  font-weight: 900;
+  color: #fff;
+  text-shadow: 0 4px 20px #0008, 0 0 40px #ffd74088;
+  line-height: 1.1;
+  margin-bottom: 6px;
+}
 
-  @keyframes bobbing {
-    0%, 100% { transform: translateY(0); }
-    50% { transform: translateY(-6px); }
-  }
+#start-screen .sub {
+  color: #90caf9;
+  font-size: 1rem;
+  margin-bottom: 28px;
+  line-height: 1.6;
+}
 
-  @keyframes hitAnim {
-    0% { transform: scale(1); opacity: 1; }
-    50% { transform: scale(1.5) rotate(20deg); opacity: 0.6; }
-    100% { transform: scale(0) rotate(40deg); opacity: 0; }
-  }
+.dog-rain-preview {
+  font-size: 3rem;
+  margin-bottom: 20px;
+  animation: wiggle 0.8s ease-in-out infinite;
+}
 
-  .miss-flash {
-    position: absolute;
-    font-size: 1.2rem;
-    color: #ff4444;
-    font-weight: 700;
-    animation: floatUp 0.8s forwards;
-    pointer-events: none;
-    z-index: 10;
-  }
+@keyframes wiggle {
+  0%,100% { transform: rotate(-8deg); }
+  50% { transform: rotate(8deg); }
+}
 
-  .hit-score {
-    position: absolute;
-    font-size: 1.5rem;
-    color: #f9d71c;
-    font-weight: 900;
-    animation: floatUp 0.8s forwards;
-    pointer-events: none;
-    z-index: 10;
-  }
+.btn-start {
+  background: #ffd740;
+  color: #0d47a1;
+  font-family: 'Kanit', sans-serif;
+  font-weight: 900;
+  font-size: 1.4rem;
+  border: none;
+  border-radius: 50px;
+  padding: 14px 52px;
+  cursor: pointer;
+  box-shadow: 0 6px 24px #ffd74066;
+  transition: transform 0.15s, box-shadow 0.15s;
+}
 
-  @keyframes floatUp {
-    0% { opacity: 1; transform: translateY(0); }
-    100% { opacity: 0; transform: translateY(-60px); }
-  }
+.btn-start:hover { transform: scale(1.07); box-shadow: 0 10px 36px #ffd740aa; }
 
-  #timer-bar-wrap {
-    width: 500px;
-    height: 8px;
-    background: rgba(255,255,255,0.1);
-    border-radius: 4px;
-    margin-top: 12px;
-    overflow: hidden;
-  }
+/* COMBO popup */
+#combo-popup {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%) scale(0);
+  z-index: 50;
+  font-family: 'Kanit', sans-serif;
+  font-weight: 900;
+  font-size: 3rem;
+  color: #ffd740;
+  text-shadow: 0 0 20px #ffd74088, 2px 2px 0 #b8860b;
+  pointer-events: none;
+  transition: transform 0.1s;
+}
 
-  #timer-bar {
-    height: 100%;
-    width: 100%;
-    background: linear-gradient(90deg, #f9d71c, #ff6b35);
-    border-radius: 4px;
-    transition: width 0.1s linear, background 0.5s;
-  }
+/* === FINAL SCREEN === */
+#final-screen {
+  display: none;
+  position: fixed;
+  inset: 0;
+  z-index: 999;
+  background: #000;
+  overflow: hidden;
+  cursor: pointer;
+}
 
-  #start-screen, #end-screen {
-    position: fixed;
-    inset: 0;
-    background: rgba(0,0,0,0.92);
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    z-index: 100;
-  }
+.ae-bg-word {
+  position: absolute;
+  font-family: 'Kanit', sans-serif;
+  font-weight: 900;
+  color: #ff1111;
+  pointer-events: none;
+  animation: popIn 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+  opacity: 0;
+  text-shadow: 0 0 16px #ff0000aa;
+}
 
-  #end-screen { display: none; }
+@keyframes popIn {
+  0% { opacity: 0; transform: scale(0.3) rotate(var(--r)); }
+  100% { opacity: var(--op); transform: scale(1) rotate(var(--r)); }
+}
 
-  .big-btn {
-    margin-top: 24px;
-    padding: 14px 48px;
-    font-family: 'Kanit', sans-serif;
-    font-size: 1.3rem;
-    font-weight: 700;
-    background: #f9d71c;
-    color: #0a0a1a;
-    border: none;
-    border-radius: 50px;
-    cursor: pointer;
-    transition: transform 0.15s, box-shadow 0.15s;
-    box-shadow: 0 4px 20px #f9d71c44;
-  }
+#ae-main {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  text-align: center;
+  z-index: 10;
+  pointer-events: none;
+  animation: shakeIn 0.5s 0.2s cubic-bezier(0.36, 0.07, 0.19, 0.97) both;
+}
 
-  .big-btn:hover {
-    transform: scale(1.06);
-    box-shadow: 0 8px 32px #f9d71c88;
-  }
+@keyframes shakeIn {
+  0% { transform: translate(-50%, -50%) scale(0); }
+  30% { transform: translate(-50%, -50%) scale(1.3) rotate(-3deg); }
+  60% { transform: translate(-50%, -50%) scale(0.9) rotate(2deg); }
+  100% { transform: translate(-50%, -50%) scale(1) rotate(0deg); }
+}
 
-  .start-emoji { font-size: 5rem; margin-bottom: 12px; }
-  .start-title { font-size: 2rem; font-weight: 900; color: #f9d71c; }
-  .start-desc { color: #aaa; margin-top: 8px; font-size: 1rem; }
+#ae-text {
+  font-family: 'Kanit', sans-serif;
+  font-weight: 900;
+  font-size: clamp(5rem, 20vw, 15rem);
+  color: #ff0000;
+  text-shadow:
+    0 0 40px #ff0000,
+    0 0 80px #ff000066,
+    6px 6px 0 #660000,
+    -2px -2px 0 #ff4444;
+  line-height: 1;
+  animation: pulsate 0.5s ease-in-out infinite alternate;
+}
 
-  /* ===== FINAL SCREEN ===== */
-  #final-screen {
-    display: none;
-    position: fixed;
-    inset: 0;
-    z-index: 999;
-    background: #000;
-    overflow: hidden;
-    cursor: pointer;
-  }
+@keyframes pulsate {
+  from { text-shadow: 0 0 40px #ff0000, 0 0 80px #ff000066, 6px 6px 0 #660000; }
+  to   { text-shadow: 0 0 80px #ff3333, 0 0 150px #ff333388, 6px 6px 0 #880000; }
+}
 
-  .ae-word {
-    position: absolute;
-    font-family: 'Kanit', sans-serif;
-    font-weight: 900;
-    color: #ff2222;
-    line-height: 1;
-    white-space: nowrap;
-    animation: wordIn 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
-    opacity: 0;
-    text-shadow: 0 0 20px #ff0000, 0 0 40px #ff000088;
-  }
+#ae-score {
+  font-family: 'Kanit', sans-serif;
+  font-size: 1.3rem;
+  color: #ff9999;
+  margin-top: 10px;
+  animation: fadeUp 0.5s 0.8s both;
+}
 
-  @keyframes wordIn {
-    0% { opacity: 0; transform: scale(0.5) rotate(var(--rot)); filter: blur(8px); }
-    100% { opacity: 1; transform: scale(1) rotate(var(--rot)); filter: blur(0); }
-  }
+#ae-restart {
+  font-family: 'Kanit', sans-serif;
+  font-size: 1rem;
+  color: #ff6666;
+  margin-top: 8px;
+  animation: fadeUp 0.5s 1.2s both;
+}
 
-  #final-center {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    text-align: center;
-    z-index: 10;
-  }
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(16px); }
+  to { opacity: 1; transform: translateY(0); }
+}
 
-  #final-big {
-    font-family: 'Kanit', sans-serif;
-    font-weight: 900;
-    font-size: clamp(5rem, 18vw, 16rem);
-    color: #ff0000;
-    text-shadow: 
-      0 0 30px #ff0000,
-      0 0 60px #ff000088,
-      0 0 100px #ff000044,
-      4px 4px 0 #880000;
-    animation: pulseRed 0.6s ease-in-out infinite alternate, zoomIn 0.5s 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275) both;
-    letter-spacing: -4px;
-  }
+.screen-flash {
+  animation: screenFlash 0.12s ease-out;
+}
 
-  @keyframes pulseRed {
-    from { text-shadow: 0 0 30px #ff0000, 0 0 60px #ff000088, 4px 4px 0 #880000; }
-    to   { text-shadow: 0 0 60px #ff4444, 0 0 120px #ff4444aa, 4px 4px 0 #aa0000; }
-  }
-
-  @keyframes zoomIn {
-    from { transform: scale(0) rotate(-5deg); opacity: 0; }
-    to   { transform: scale(1) rotate(0deg); opacity: 1; }
-  }
-
-  #final-sub {
-    font-family: 'Kanit', sans-serif;
-    font-size: 1.4rem;
-    color: #ff8888;
-    margin-top: 12px;
-    animation: fadeInUp 0.5s 1s both;
-  }
-
-  @keyframes fadeInUp {
-    from { opacity: 0; transform: translateY(20px); }
-    to   { opacity: 1; transform: translateY(0); }
-  }
-
-  .bg-flash {
-    animation: bgFlash 0.15s ease-out;
-  }
-
-  @keyframes bgFlash {
-    0% { background: #550000; }
-    100% { background: #000; }
-  }
+@keyframes screenFlash {
+  0% { background: #440000; }
+  100% { background: #000; }
+}
 </style>
 </head>
 <body>
 
-<div id="stars"></div>
+<div id="bg">
+  <!-- clouds injected by JS -->
+</div>
 
 <!-- START SCREEN -->
-<div id="start-screen">
-  <div class="start-emoji">🐕</div>
-  <div class="start-title">จับหมาให้ได้!</div>
-  <div class="start-desc">คลิกหมาให้ได้มากที่สุดใน 20 วินาที<br>ระวัง! อย่าพลาดนะ 😏</div>
-  <button class="big-btn" onclick="startGame()">เริ่มเลย!</button>
+<div class="screen" id="start-screen">
+  <div class="dog-rain-preview">🐕🐶🦮</div>
+  <div class="game-title">หมาตกฟ้า!</div>
+  <div class="sub">รับหมาให้ได้มากที่สุด 🧺<br>ถ้าพลาด 3 ครั้ง เกมจบ!</div>
+  <button class="btn-start" onclick="startGame()">เริ่มเลย!</button>
 </div>
 
-<!-- GAME UI -->
-<div id="game-container">
-  <h1>🐕 จับหมา!</h1>
-  <div id="subtitle">คลิกหมาให้เร็วที่สุด!</div>
-  <div id="score-bar">
-    <div class="score-item">คะแนน: <span id="score">0</span></div>
-    <div class="score-item">พลาด: <span id="misses">0</span></div>
-    <div class="score-item">เวลา: <span id="timer">20</span>s</div>
-  </div>
-  <div id="arena" onclick="handleMiss(event)"></div>
-  <div id="timer-bar-wrap">
-    <div id="timer-bar"></div>
-  </div>
+<!-- HUD -->
+<div id="ui">
+  <div class="ui-box">คะแนน <span class="val" id="score-val">0</span></div>
+  <div class="ui-box" id="lives-display">❤️❤️❤️</div>
+  <div class="ui-box">LV <span class="val" id="lv-val">1</span></div>
 </div>
 
-<!-- FINAL SCREEN (อีแก่!) -->
-<div id="final-screen" onclick="restartFinal()">
-  <div id="final-center">
-    <div id="final-big">อีแก่!</div>
-    <div id="final-sub">แค่นี้ก็เล่นไม่ได้ 🤣 คลิกเพื่อเล่นใหม่</div>
+<!-- GAME CANVAS -->
+<div id="game-wrap">
+  <canvas id="c"></canvas>
+</div>
+<div id="ground-bar"></div>
+
+<!-- COMBO -->
+<div id="combo-popup"></div>
+
+<!-- FINAL -->
+<div id="final-screen" onclick="doRestart()">
+  <div id="ae-main">
+    <div id="ae-text">อีแก่!</div>
+    <div id="ae-score" id="ae-score-val"></div>
+    <div id="ae-restart">👆 แตะเพื่อเล่นใหม่</div>
   </div>
 </div>
 
 <script>
-  // Stars
-  const starsEl = document.getElementById('stars');
-  for (let i = 0; i < 80; i++) {
-    const s = document.createElement('div');
-    s.className = 'star';
-    s.style.cssText = `left:${Math.random()*100}%;top:${Math.random()*100}%;--d:${2+Math.random()*4}s;--o:${0.3+Math.random()*0.7}`;
-    starsEl.appendChild(s);
+// ===================== SETUP =====================
+const canvas = document.getElementById('c');
+const ctx = canvas.getContext('2d');
+const wrap = document.getElementById('game-wrap');
+
+function resize() {
+  canvas.width = wrap.clientWidth;
+  canvas.height = wrap.clientHeight;
+  if (basket) basket.y = canvas.height - 10;
+}
+
+window.addEventListener('resize', resize);
+
+// clouds
+const bgEl = document.getElementById('bg');
+['☁️','🌥️','⛅'].forEach((e, i) => {
+  const c = document.createElement('div');
+  c.className = 'cloud';
+  c.textContent = e;
+  c.style.top = (5 + i * 10) + '%';
+  c.style.animationDuration = (18 + i * 8) + 's';
+  c.style.animationDelay = (-i * 5) + 's';
+  bgEl.appendChild(c);
+});
+
+// ===================== STATE =====================
+const DOGS = ['🐕','🐶','🦮','🐩','🐕‍🦺'];
+const BADS = ['💩','🐈','🦴']; // avoid
+let gameRunning = false;
+let score = 0;
+let lives = 3;
+let level = 1;
+let combo = 0;
+let comboTimer = null;
+let fallers = [];
+let basket = null;
+let spawnTimer = 0;
+let spawnRate = 90; // frames
+let frameCount = 0;
+let particles = [];
+let floaters = [];
+
+// ===================== BASKET =====================
+class Basket {
+  constructor() {
+    this.w = 90;
+    this.h = 36;
+    this.x = canvas.width / 2;
+    this.y = canvas.height - 10;
+    this.targetX = this.x;
+    this.speed = 0;
+  }
+  setTarget(x) { this.targetX = Math.max(this.w/2, Math.min(canvas.width - this.w/2, x)); }
+  update() {
+    const dx = this.targetX - this.x;
+    this.x += dx * 0.25;
+  }
+  draw() {
+    ctx.save();
+    ctx.font = `${this.w}px serif`;
+    ctx.textAlign = 'center';
+    ctx.textBaseline = 'bottom';
+    ctx.fillText('🧺', this.x, this.y);
+    ctx.restore();
+  }
+  getRect() {
+    return { x: this.x - this.w*0.42, y: this.y - this.h*0.9, w: this.w*0.84, h: this.h*0.7 };
+  }
+}
+
+// ===================== FALLER =====================
+class Faller {
+  constructor() {
+    const isBad = Math.random() < 0.15;
+    this.emoji = isBad
+      ? BADS[Math.floor(Math.random() * BADS.length)]
+      : DOGS[Math.floor(Math.random() * DOGS.length)];
+    this.isBad = isBad;
+    this.size = 38 + Math.random() * 18;
+    this.x = this.size/2 + Math.random() * (canvas.width - this.size);
+    this.y = -this.size;
+    this.vy = 2.5 + Math.random() * 2 + level * 0.4;
+    this.wobble = Math.random() * Math.PI * 2;
+    this.wobbleSpeed = 0.05 + Math.random() * 0.03;
+    this.wobbleAmp = 1.5 + Math.random() * 2;
+    this.alive = true;
+    this.alpha = 1;
+  }
+  update() {
+    this.y += this.vy;
+    this.wobble += this.wobbleSpeed;
+    this.x += Math.sin(this.wobble) * this.wobbleAmp;
+    this.x = Math.max(this.size/2, Math.min(canvas.width - this.size/2, this.x));
+  }
+  draw() {
+    ctx.save();
+    ctx.globalAlpha = this.alpha;
+    ctx.font = `${this.size}px serif`;
+    ctx.textAlign = 'center';
+    ctx.textBaseline = 'middle';
+    // shadow
+    ctx.shadowColor = this.isBad ? '#ff000066' : '#00000044';
+    ctx.shadowBlur = 10;
+    ctx.fillText(this.emoji, this.x, this.y);
+    ctx.restore();
+  }
+  getRect() {
+    const r = this.size * 0.38;
+    return { x: this.x - r, y: this.y - r, w: r*2, h: r*2 };
+  }
+}
+
+// ===================== PARTICLE =====================
+class Particle {
+  constructor(x, y, good) {
+    this.x = x; this.y = y;
+    this.vx = (Math.random()-0.5) * 6;
+    this.vy = -3 - Math.random() * 4;
+    this.alpha = 1;
+    this.size = 16 + Math.random() * 14;
+    this.emoji = good ? ['✨','⭐','💛','🌟'][Math.floor(Math.random()*4)] : ['💥','😤'][Math.floor(Math.random()*2)];
+    this.life = 1;
+  }
+  update() {
+    this.x += this.vx; this.y += this.vy;
+    this.vy += 0.15;
+    this.life -= 0.03;
+    this.alpha = this.life;
+  }
+  draw() {
+    ctx.save();
+    ctx.globalAlpha = Math.max(0, this.alpha);
+    ctx.font = `${this.size}px serif`;
+    ctx.textAlign = 'center';
+    ctx.textBaseline = 'middle';
+    ctx.fillText(this.emoji, this.x, this.y);
+    ctx.restore();
+  }
+  dead() { return this.life <= 0; }
+}
+
+// ===================== FLOATER =====================
+class Floater {
+  constructor(x, y, text, color) {
+    this.x = x; this.y = y;
+    this.text = text; this.color = color;
+    this.vy = -1.5;
+    this.alpha = 1;
+    this.life = 1;
+  }
+  update() {
+    this.y += this.vy;
+    this.life -= 0.025;
+    this.alpha = this.life;
+  }
+  draw() {
+    ctx.save();
+    ctx.globalAlpha = Math.max(0, this.alpha);
+    ctx.font = 'bold 22px Kanit, sans-serif';
+    ctx.fillStyle = this.color;
+    ctx.strokeStyle = '#0006';
+    ctx.lineWidth = 3;
+    ctx.textAlign = 'center';
+    ctx.strokeText(this.text, this.x, this.y);
+    ctx.fillText(this.text, this.x, this.y);
+    ctx.restore();
+  }
+  dead() { return this.life <= 0; }
+}
+
+// ===================== INIT =====================
+function startGame() {
+  document.getElementById('start-screen').style.display = 'none';
+  resize();
+  basket = new Basket();
+  fallers = [];
+  particles = [];
+  floaters = [];
+  score = 0; lives = 3; level = 1; combo = 0;
+  frameCount = 0;
+  spawnRate = 90;
+  gameRunning = true;
+  updateHUD();
+  requestAnimationFrame(loop);
+}
+
+// ===================== INPUT =====================
+document.addEventListener('mousemove', e => {
+  if (!basket || !gameRunning) return;
+  const rect = canvas.getBoundingClientRect();
+  const scaleX = canvas.width / rect.width;
+  basket.setTarget((e.clientX - rect.left) * scaleX);
+});
+document.addEventListener('touchmove', e => {
+  if (!basket || !gameRunning) return;
+  e.preventDefault();
+  const rect = canvas.getBoundingClientRect();
+  const scaleX = canvas.width / rect.width;
+  basket.setTarget((e.touches[0].clientX - rect.left) * scaleX);
+}, { passive: false });
+
+// ===================== GAME LOOP =====================
+function loop() {
+  if (!gameRunning) return;
+  frameCount++;
+
+  // level up
+  level = 1 + Math.floor(score / 15);
+  spawnRate = Math.max(28, 90 - level * 7);
+  document.getElementById('lv-val').textContent = level;
+
+  // spawn
+  spawnTimer++;
+  if (spawnTimer >= spawnRate) {
+    spawnTimer = 0;
+    fallers.push(new Faller());
+    if (level >= 3 && Math.random() < 0.3) fallers.push(new Faller());
   }
 
-  const arena = document.getElementById('arena');
-  const scoreEl = document.getElementById('score');
-  const missEl = document.getElementById('misses');
-  const timerEl = document.getElementById('timer');
-  const timerBar = document.getElementById('timer-bar');
+  // draw sky
+  const grad = ctx.createLinearGradient(0, 0, 0, canvas.height);
+  grad.addColorStop(0, '#1a237e');
+  grad.addColorStop(0.4, '#1976d2');
+  grad.addColorStop(1, '#64b5f6');
+  ctx.fillStyle = grad;
+  ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-  let score = 0, misses = 0, timeLeft = 20;
-  let gameActive = false;
-  let targets = [];
-  let spawnInterval, gameInterval;
+  // update & draw fallers
+  for (let i = fallers.length - 1; i >= 0; i--) {
+    const f = fallers[i];
+    f.update();
 
-  const emojis = ['🐕', '🐶', '🦮', '🐩', '🐕‍🦺'];
-
-  function startGame() {
-    document.getElementById('start-screen').style.display = 'none';
-    gameActive = true;
-    score = 0; misses = 0; timeLeft = 20;
-    scoreEl.textContent = 0;
-    missEl.textContent = 0;
-    timerEl.textContent = 20;
-    timerBar.style.width = '100%';
-    timerBar.style.background = 'linear-gradient(90deg, #f9d71c, #ff6b35)';
-    arena.innerHTML = '';
-
-    spawnInterval = setInterval(spawnTarget, 800);
-    spawnTarget();
-
-    gameInterval = setInterval(() => {
-      timeLeft -= 0.1;
-      timerEl.textContent = Math.ceil(timeLeft);
-      const pct = (timeLeft / 20) * 100;
-      timerBar.style.width = pct + '%';
-      if (pct < 30) timerBar.style.background = 'linear-gradient(90deg, #ff3333, #ff6600)';
-      if (timeLeft <= 0) endGame();
-    }, 100);
-  }
-
-  function spawnTarget() {
-    if (!gameActive) return;
-    const t = document.createElement('div');
-    t.className = 'target';
-    t.textContent = emojis[Math.floor(Math.random() * emojis.length)];
-    const maxX = arena.offsetWidth - 60;
-    const maxY = arena.offsetHeight - 60;
-    t.style.left = (10 + Math.random() * (maxX - 10)) + 'px';
-    t.style.top = (10 + Math.random() * (maxY - 10)) + 'px';
-    t.style.animationDuration = (1 + Math.random()) + 's';
-    t.style.animationDelay = '-' + (Math.random() * 1.5) + 's';
-
-    const lifeTime = 1500 + Math.random() * 1000;
-    const removeTimer = setTimeout(() => {
-      if (t.parentNode) {
-        t.remove();
-        if (gameActive) {
-          misses++;
-          missEl.textContent = misses;
-        }
+    // hit basket
+    const br = basket.getRect();
+    const fr = f.getRect();
+    if (
+      fr.x < br.x + br.w && fr.x + fr.w > br.x &&
+      fr.y < br.y + br.h && fr.y + fr.h > br.y
+    ) {
+      fallers.splice(i, 1);
+      if (f.isBad) {
+        loseLife(f.x, f.y);
+      } else {
+        catchDog(f.x, f.y);
       }
-    }, lifeTime);
+      continue;
+    }
 
-    t.addEventListener('click', (e) => {
-      e.stopPropagation();
-      if (!gameActive || t.classList.contains('hit')) return;
-      clearTimeout(removeTimer);
-      t.classList.add('hit');
+    // fell off
+    if (f.y > canvas.height + 60) {
+      fallers.splice(i, 1);
+      if (!f.isBad) {
+        loseLife(f.x, canvas.height - 40);
+      }
+      continue;
+    }
 
-      score++;
-      scoreEl.textContent = score;
-
-      const bonus = document.createElement('div');
-      bonus.className = 'hit-score';
-      bonus.textContent = '+1';
-      bonus.style.left = t.style.left;
-      bonus.style.top = (parseInt(t.style.top) - 10) + 'px';
-      arena.appendChild(bonus);
-      setTimeout(() => bonus.remove(), 800);
-
-      setTimeout(() => t.remove(), 300);
-    });
-
-    arena.appendChild(t);
+    f.draw();
   }
 
-  function handleMiss(e) {
-    if (!gameActive) return;
-    if (e.target !== arena) return;
-    const flash = document.createElement('div');
-    flash.className = 'miss-flash';
-    flash.textContent = 'พลาด!';
-    flash.style.left = (e.offsetX - 20) + 'px';
-    flash.style.top = (e.offsetY - 10) + 'px';
-    arena.appendChild(flash);
-    setTimeout(() => flash.remove(), 800);
+  // particles
+  for (let i = particles.length - 1; i >= 0; i--) {
+    particles[i].update();
+    particles[i].draw();
+    if (particles[i].dead()) particles.splice(i, 1);
   }
 
-  function endGame() {
-    gameActive = false;
-    clearInterval(spawnInterval);
-    clearInterval(gameInterval);
-    arena.innerHTML = '';
-    showFinal();
+  // floaters
+  for (let i = floaters.length - 1; i >= 0; i--) {
+    floaters[i].update();
+    floaters[i].draw();
+    if (floaters[i].dead()) floaters.splice(i, 1);
   }
 
-  function showFinal() {
-    const fs = document.getElementById('final-screen');
-    fs.style.display = 'block';
-    fs.innerHTML = '<div id="final-center"><div id="final-big">อีแก่!</div><div id="final-sub">แค่นี้ก็เล่นไม่ได้ 🤣 คลิกเพื่อเล่นใหม่</div></div>';
+  basket.update();
+  basket.draw();
 
-    // Scatter อีแก่ รอบๆ
-    const words = ['อีแก่', 'อีแก่', 'อีแก่', 'อีแก่', 'อีแก่', 'อีแก่', 'อีแก่', 'อีแก่', 'อีแก่', 'อีแก่', 'อีแก่', 'อีแก่', 'อีแก่', 'อีแก่', 'อีแก่', 'อีแก่', 'อีแก่', 'อีแก่', 'อีแก่', 'อีแก่'];
-    const sizes = [1.5, 2, 2.5, 3, 1.2, 1.8, 2.2, 1.4, 2.8, 1.6, 2.1, 1.3, 2.4, 1.7, 2.6, 1.1, 1.9, 2.3, 1.5, 2.7];
-    const colors = ['#ff0000','#ff2222','#ff4444','#ff6666','#cc0000','#ee1111','#ff3333','#dd0000'];
+  requestAnimationFrame(loop);
+}
 
-    words.forEach((w, i) => {
-      const el = document.createElement('div');
-      el.className = 'ae-word';
-      el.textContent = w;
-      el.style.left = (Math.random() * 90) + '%';
-      el.style.top = (Math.random() * 90) + '%';
-      el.style.fontSize = sizes[i % sizes.length] + 'rem';
-      el.style.color = colors[Math.floor(Math.random() * colors.length)];
-      el.style.setProperty('--rot', (Math.random() * 30 - 15) + 'deg');
-      el.style.animationDelay = (i * 0.05) + 's';
-      el.style.opacity = (0.3 + Math.random() * 0.5).toString();
-      fs.insertBefore(el, fs.firstChild);
-    });
+function catchDog(x, y) {
+  score++;
+  combo++;
+  document.getElementById('score-val').textContent = score;
+  for (let i = 0; i < 5; i++) particles.push(new Particle(x, y, true));
+  let txt = '+1';
+  let color = '#ffd740';
+  if (combo >= 5) { txt = `COMBO x${combo}!! 🔥`; color = '#ff5722'; score += Math.floor(combo/5); }
+  else if (combo >= 3) { txt = `x${combo} COMBO! ⚡`; color = '#ff9800'; }
+  floaters.push(new Floater(x, y - 20, txt, color));
+  showCombo(combo);
+}
 
-    // Flash effect
-    let flashCount = 0;
-    const flashInterval = setInterval(() => {
-      fs.classList.toggle('bg-flash');
-      flashCount++;
-      if (flashCount > 5) clearInterval(flashInterval);
-    }, 150);
+function loseLife(x, y) {
+  lives--;
+  combo = 0;
+  for (let i = 0; i < 4; i++) particles.push(new Particle(x, y, false));
+  floaters.push(new Floater(x, y - 20, 'พลาด! 💔', '#ff4444'));
+  updateHUD();
+  if (lives <= 0) {
+    gameRunning = false;
+    setTimeout(showFinal, 400);
+  }
+}
+
+function updateHUD() {
+  const h = ['❤️','❤️','❤️'].slice(0, lives).join('') + ['🖤','🖤','🖤'].slice(0, 3 - lives).join('');
+  document.getElementById('lives-display').textContent = h;
+}
+
+function showCombo(c) {
+  if (c < 3) return;
+  const el = document.getElementById('combo-popup');
+  el.textContent = c >= 5 ? `🔥 COMBO x${c}!` : `⚡ x${c}!`;
+  el.style.transform = 'translate(-50%, -50%) scale(1.2)';
+  clearTimeout(comboTimer);
+  comboTimer = setTimeout(() => {
+    el.style.transform = 'translate(-50%, -50%) scale(0)';
+  }, 600);
+}
+
+// ===================== FINAL =====================
+function showFinal() {
+  const fs = document.getElementById('final-screen');
+  fs.style.display = 'block';
+  document.getElementById('ae-score').textContent = `คะแนนของแก: ${score} แต้ม 🐕`;
+
+  // scatter
+  const count = 28;
+  for (let i = 0; i < count; i++) {
+    const el = document.createElement('div');
+    el.className = 'ae-bg-word';
+    el.textContent = 'อีแก่';
+    el.style.left = (Math.random() * 92) + '%';
+    el.style.top = (Math.random() * 92) + '%';
+    const sz = 1.2 + Math.random() * 3;
+    el.style.fontSize = sz + 'rem';
+    el.style.setProperty('--r', (Math.random() * 40 - 20) + 'deg');
+    el.style.setProperty('--op', (0.2 + Math.random() * 0.5).toString());
+    el.style.animationDelay = (i * 0.04) + 's';
+    fs.insertBefore(el, fs.firstChild);
   }
 
-  function restartFinal() {
-    const fs = document.getElementById('final-screen');
-    fs.style.display = 'none';
-    score = 0; misses = 0; timeLeft = 20;
-    scoreEl.textContent = 0;
-    missEl.textContent = 0;
-    timerEl.textContent = 20;
-    timerBar.style.width = '100%';
-    timerBar.style.background = 'linear-gradient(90deg, #f9d71c, #ff6b35)';
-    arena.innerHTML = '';
-    gameActive = true;
-    spawnInterval = setInterval(spawnTarget, 800);
-    spawnTarget();
-    gameInterval = setInterval(() => {
-      timeLeft -= 0.1;
-      timerEl.textContent = Math.ceil(timeLeft);
-      const pct = (timeLeft / 20) * 100;
-      timerBar.style.width = pct + '%';
-      if (pct < 30) timerBar.style.background = 'linear-gradient(90deg, #ff3333, #ff6600)';
-      if (timeLeft <= 0) endGame();
-    }, 100);
-  }
+  // flash
+  let f = 0;
+  const fi = setInterval(() => {
+    fs.classList.toggle('screen-flash');
+    if (++f > 6) clearInterval(fi);
+  }, 120);
+}
+
+function doRestart() {
+  const fs = document.getElementById('final-screen');
+  // remove bg words
+  fs.querySelectorAll('.ae-bg-word').forEach(e => e.remove());
+  fs.style.display = 'none';
+  fallers = []; particles = []; floaters = [];
+  score = 0; lives = 3; level = 1; combo = 0;
+  frameCount = 0; spawnTimer = 0; spawnRate = 90;
+  document.getElementById('score-val').textContent = 0;
+  document.getElementById('lv-val').textContent = 1;
+  updateHUD();
+  basket = new Basket();
+  gameRunning = true;
+  requestAnimationFrame(loop);
+}
 </script>
 </body>
 </html>
