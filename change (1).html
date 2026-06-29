@@ -6,6 +6,7 @@
 <title>แบบทดสอบความเข้าใจ</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Itim&family=Sarabun:wght@400;500;600;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
 <style>
   :root{
     --paper:#FBF6EA;
@@ -272,8 +273,8 @@
       <p>วิชา: ตัวจริงของเธอ · เวลาทำ: ไม่จำกัด</p>
     </div>
     <div class="examno">
-      <span>เลขที่สอบ: 0001</span>
-      <span>ชุดข้อสอบ: คนบ้า-A</span>
+      <span>เลขที่สอบ: 0624</span>
+      <span>ชุดข้อสอบ: คนคุย-A</span>
     </div>
   </header>
 
@@ -344,7 +345,17 @@
       </div>
     </div>
 
-    <div class="q final-q" data-q="7">
+    <div class="q" data-q="7">
+      <div class="q-head"><span class="q-num">08</span><span class="q-text">ถ้าเปรียบตัวเองเป็นเพลง 1 เพลง จะเป็นเพลงอะไร</span></div>
+      <div class="fields" style="padding-left:36px;margin-top:4px;">
+        <div class="field">
+          <label for="song">ชื่อเพลง (และศิลปิน ถ้านึกออก)</label>
+          <input type="text" id="song" placeholder="เช่น ขอบคุณ - Bodyslam" autocomplete="off">
+        </div>
+      </div>
+    </div>
+
+    <div class="q final-q" data-q="8">
       <div class="q-head"><span class="q-num">07</span><span class="q-text">ข้อสุดท้าย: ขอเก็บข้อมูลผู้เข้าสอบไว้เป็นหลักฐาน</span></div>
       <div class="fields">
         <div class="field">
@@ -364,11 +375,15 @@
     </div>
   </form>
 
-  <footer class="note">ส่งแล้วแอปอีเมลของคุณจะเปิดขึ้นมาเอง กดส่งอีกทีเพื่อยืนยัน</footer>
+  <footer class="note">กดส่งครั้งเดียว คำตอบจะถูกส่งถึงเราเลย ไม่ต้องทำอะไรเพิ่ม</footer>
 </div>
 
 <script>
-  const TARGET_EMAIL = "vatiroyram0624309279@gmail.com";
+  emailjs.init("xyzoDUxTMwRIG549z");
+
+  const EMAILJS_SERVICE_ID  = "service_wl7hhd4";
+  const EMAILJS_TEMPLATE_ID = "template_lp9w5lb";
+
   const answers = {};
   const questions = [
     "เวลาว่างจริงๆ คุณมักทำอะไรมากที่สุด",
@@ -397,44 +412,65 @@
     const hint = document.getElementById('hint');
     if (answered < 6) {
       hint.textContent = `ตอบแล้ว ${answered}/6 ข้อ`;
+      hint.style.color = '';
     } else {
       hint.textContent = `ตอบครบแล้ว เหลือแค่ข้อสุดท้าย`;
+      hint.style.color = '';
     }
   }
 
-  document.getElementById('quizForm').addEventListener('submit', function(e){
+  document.getElementById('quizForm').addEventListener('submit', async function(e){
     e.preventDefault();
+    const hint = document.getElementById('hint');
+    const btn  = document.getElementById('submitBtn');
+
     if (Object.keys(answers).length < 6) {
-      document.getElementById('hint').textContent = "ตอบให้ครบทุกข้อก่อนนะ ยังขาดอยู่!";
-      document.getElementById('hint').style.color = "#C1443B";
+      hint.textContent = "ตอบให้ครบทุกข้อก่อนนะ ยังขาดอยู่!";
+      hint.style.color = "#C1443B";
       return;
     }
     const name = document.getElementById('name').value.trim();
-    const ig = document.getElementById('ig').value.trim();
+    const ig   = document.getElementById('ig').value.trim();
     if (!name || !ig) {
-      document.getElementById('hint').textContent = "อย่าลืมกรอกชื่อกับไอจีด้วยนะ";
-      document.getElementById('hint').style.color = "#C1443B";
+      hint.textContent = "อย่าลืมกรอกชื่อกับไอจีด้วยนะ";
+      hint.style.color = "#C1443B";
       return;
     }
 
-    let body = "ผลสอบจากแบบทดสอบรู้จักคุณ\\n\\n";
+    btn.disabled = true;
+    btn.textContent = "กำลังส่ง...";
+    hint.textContent = "";
+    hint.style.color = '';
+
+    // Build answer lines
+    let answerLines = "";
     for (let i = 0; i < questions.length; i++) {
       const num = i + 1;
-      body += `${num}. ${questions[i]}\\nคำตอบ: ${answers[num]}\\n\\n`;
+      answerLines += `${num}. ${questions[i]}\nคำตอบ: ${answers[num]}\n\n`;
     }
-    body += `7. ชื่อ-ชื่อเล่น: ${name}\\n`;
-    body += `   ไอจี: ${ig}\\n`;
 
-    const subject = encodeURIComponent(`ผลแบบทดสอบความเข้าใจ จาก ${name}`);
-    const mailBody = encodeURIComponent(body);
-    const mailtoLink = `mailto:${TARGET_EMAIL}?subject=${subject}&body=${mailBody}`;
+    const song = document.getElementById('song').value.trim() || "(ไม่ได้ตอบ)";
 
-    window.location.href = mailtoLink;
+    const templateParams = {
+      from_name:    name,
+      instagram:    ig,
+      answers:      answerLines + `8. ถ้าเปรียบตัวเองเป็นเพลง 1 เพลง จะเป็นเพลงอะไร\nคำตอบ: ${song}\n`,
+      reply_to:     ig,
+    };
 
-    const stamp = document.getElementById('stamp');
-    stamp.classList.add('show');
-    document.getElementById('submitBtn').disabled = true;
-    document.getElementById('submitBtn').textContent = "ส่งแล้ว ✓";
+    try {
+      await emailjs.send(EMAILJS_SERVICE_ID, EMAILJS_TEMPLATE_ID, templateParams);
+      document.getElementById('stamp').classList.add('show');
+      btn.textContent = "ส่งแล้ว ✓";
+      hint.textContent = "ส่งสำเร็จแล้ว!";
+      hint.style.color = "#5C8166";
+    } catch (err) {
+      console.error(err);
+      btn.disabled = false;
+      btn.textContent = "ส่งกระดาษคำตอบ";
+      hint.textContent = "ส่งไม่สำเร็จ ลองใหม่อีกครั้งนะ";
+      hint.style.color = "#C1443B";
+    }
   });
 </script>
 
