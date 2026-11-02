@@ -1,478 +1,151 @@
 <!DOCTYPE html>
 <html lang="th">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>แบบทดสอบความเข้าใจ</title>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>กลับบ้าน — หนังสั้นสยองขวัญ</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Itim&family=Sarabun:wght@400;500;600;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
-<script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
+<link href="https://fonts.googleapis.com/css2?family=Mitr:wght@400;500&family=Sarabun:wght@400;600&display=swap" rel="stylesheet">
 <style>
-  :root{
-    --paper:#FBF6EA;
-    --paper-line:#E4D9C2;
-    --ink:#2B2A33;
-    --ink-soft:#6b6a74;
-    --red:#C1443B;
-    --red-soft:#e7c9c6;
-    --yellow:#F0C94A;
-    --green:#5C8166;
-  }
-  *{box-sizing:border-box;}
-  body{
-    margin:0;
-    background:
-      repeating-linear-gradient(
-        to bottom,
-        transparent 0px, transparent 35px,
-        var(--paper-line) 35px, var(--paper-line) 36px
-      ),
-      var(--paper);
-    font-family:'Sarabun',sans-serif;
-    color:var(--ink);
-    min-height:100vh;
-    display:flex;
-    justify-content:center;
-    padding:28px 16px 80px;
-  }
-  .sheet{
-    width:100%;
-    max-width:640px;
-    background:transparent;
-    position:relative;
-    padding-left:34px;
-    border-left:2px solid var(--red-soft);
-  }
-  .sheet::before{
-    content:"";
-    position:absolute;
-    left:-2px; top:0; bottom:0;
-    width:2px;
-    background:var(--red);
-    opacity:.55;
-  }
-  header.top{
-    display:flex;
-    justify-content:space-between;
-    align-items:flex-start;
-    border-bottom:2px dashed var(--ink);
-    padding-bottom:14px;
-    margin-bottom:6px;
-  }
-  .title-block h1{
-    font-family:'Itim',cursive;
-    font-size:30px;
-    margin:0 0 2px;
-    line-height:1.2;
-  }
-  .title-block p{
-    margin:0;
-    font-size:13px;
-    color:var(--ink-soft);
-  }
-  .examno{
-    font-family:'Space Mono',monospace;
-    font-size:11px;
-    text-align:right;
-    color:var(--ink-soft);
-    white-space:nowrap;
-    padding-top:4px;
-  }
-  .examno span{display:block;}
-
-  .instructions{
-    font-size:13px;
-    color:var(--ink-soft);
-    margin:14px 0 22px;
-    line-height:1.6;
-  }
-  .instructions b{color:var(--ink);}
-
-  .q{
-    margin-bottom:30px;
-  }
-  .q-head{
-    display:flex;
-    gap:10px;
-    align-items:baseline;
-    margin-bottom:12px;
-  }
-  .q-num{
-    font-family:'Space Mono',monospace;
-    font-weight:700;
-    color:var(--red);
-    font-size:15px;
-    min-width:26px;
-  }
-  .q-text{
-    font-size:16px;
-    font-weight:600;
-    line-height:1.5;
-  }
-  .opts{
-    display:flex;
-    flex-direction:column;
-    gap:8px;
-    padding-left:36px;
-  }
-  .opt{
-    display:flex;
-    align-items:center;
-    gap:10px;
-    cursor:pointer;
-    padding:7px 10px;
-    border-radius:8px;
-    transition:background .15s ease;
-  }
-  .opt:hover{background:rgba(193,68,59,0.06);}
-  .bubble{
-    width:22px;height:22px;
-    border:2px solid var(--ink);
-    border-radius:50%;
-    flex:0 0 auto;
-    position:relative;
-    font-family:'Space Mono',monospace;
-    font-size:11px;
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    color:var(--ink);
-  }
-  .opt.selected .bubble{
-    background:var(--red);
-    border-color:var(--red);
-    color:var(--paper);
-  }
-  .opt.selected .opt-label{
-    font-weight:700;
-  }
-  .opt-label{font-size:14.5px;}
-
-  .final-q{
-    border-top:2px dashed var(--ink);
-    padding-top:22px;
-    margin-top:8px;
-  }
-  .final-q .q-text{font-size:17px;}
-  .fields{
-    padding-left:36px;
-    display:flex;
-    flex-direction:column;
-    gap:16px;
-    margin-top:14px;
-  }
-  .field label{
-    display:block;
-    font-size:12.5px;
-    color:var(--ink-soft);
-    margin-bottom:4px;
-    font-family:'Space Mono',monospace;
-  }
-  .field input{
-    width:100%;
-    border:none;
-    border-bottom:2px solid var(--ink);
-    background:transparent;
-    font-family:'Sarabun',sans-serif;
-    font-size:16px;
-    padding:6px 2px;
-    color:var(--ink);
-    outline:none;
-  }
-  .field input:focus{
-    border-bottom-color:var(--red);
-  }
-  .field input::placeholder{color:#b9b6ad;}
-
-  .submit-row{
-    margin-top:34px;
-    display:flex;
-    justify-content:flex-end;
-    align-items:center;
-    gap:14px;
-  }
-  .hint{
-    font-size:12px;
-    color:var(--ink-soft);
-  }
-  button.submit{
-    background:var(--red);
-    color:var(--paper);
-    border:none;
-    padding:13px 26px;
-    border-radius:999px;
-    font-family:'Sarabun',sans-serif;
-    font-weight:700;
-    font-size:15px;
-    cursor:pointer;
-    letter-spacing:.3px;
-    box-shadow:0 3px 0 #8d2f28;
-    transition:transform .08s ease, box-shadow .08s ease;
-  }
-  button.submit:active{
-    transform:translateY(3px);
-    box-shadow:0 0 0 #8d2f28;
-  }
-  button.submit:disabled{
-    background:#cfc8b8;
-    box-shadow:none;
-    cursor:not-allowed;
-    color:#8b8676;
-  }
-
-  .stamp{
-    position:fixed;
-    top:90px;
-    right:max(18px, calc(50% - 360px));
-    width:108px; height:108px;
-    border:3px solid var(--green);
-    border-radius:50%;
-    color:var(--green);
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    text-align:center;
-    font-family:'Itim',cursive;
-    font-size:17px;
-    line-height:1.25;
-    transform:rotate(-14deg) scale(0);
-    opacity:0;
-    pointer-events:none;
-    transition:transform .45s cubic-bezier(.2,1.6,.4,1), opacity .3s ease;
-    background:rgba(251,246,234,0.6);
-  }
-  .stamp.show{
-    transform:rotate(-14deg) scale(1);
-    opacity:1;
-  }
-  @media (max-width:720px){
-    .stamp{display:none;}
-  }
-
-  footer.note{
-    margin-top:10px;
-    font-size:11.5px;
-    color:var(--ink-soft);
-    text-align:center;
-  }
-
-  @media (max-width:480px){
-    .opts,.fields{padding-left:0;}
-    .title-block h1{font-size:25px;}
-  }
+:root{--ink:#e9efe9;--bg:#050708;--blood:#8c1414;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+html{height:100%;scroll-padding-top:env(safe-area-inset-top,0px)}
+body{height:100%;margin:0;background:var(--bg);color:var(--ink);font-family:'Sarabun',sans-serif}
+#wrap{height:100%;display:flex;align-items:center;justify-content:center}
+#screen{position:relative;width:min(100%,calc(100vh*16/9));aspect-ratio:16/9;overflow:hidden;background:#000}
+svg{width:100%;height:100%;display:block}
+#stage{position:absolute;inset:0}
+#vig{position:absolute;inset:0;pointer-events:none;background:radial-gradient(ellipse at center,transparent 45%,rgba(0,0,0,.88))}
+#grain{position:absolute;inset:0;pointer-events:none;opacity:.14;mix-blend-mode:overlay;animation:gr .5s steps(4) infinite;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='n'%3E%3CfeTurbulence baseFrequency='.9' numOctaves='2'/%3E%3C/filter%3E%3Crect width='200' height='200' filter='url(%23n)'/%3E%3C/svg%3E")}
+@keyframes gr{25%{background-position:40px 20px}50%{background-position:-30px 60px}75%{background-position:70px -40px}}
+#black,#flash{position:absolute;inset:0;pointer-events:none;opacity:1;transition:opacity 1s}
+#black{background:#000}#flash{background:#fff;opacity:0;transition:none}
+#cap{position:absolute;left:6%;right:6%;bottom:7%;text-align:center;font-size:clamp(14px,2.7vw,28px);line-height:1.5;text-shadow:0 2px 10px #000,0 0 3px #000;opacity:0}
+#cap.on{animation:cin .9s forwards}@keyframes cin{to{opacity:1}}
+#nar{position:absolute;left:8%;right:8%;top:6%;text-align:center;font-size:clamp(12px,2.2vw,22px);line-height:1.5;color:#b9c4bb;text-shadow:0 2px 8px #000}
+#bar{position:absolute;left:0;bottom:0;height:3px;width:0;background:var(--blood)}
+.ov{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:1.2em;text-align:center;background:var(--bg);padding:6%}
+.ov[hidden]{display:none}
+h1{font-family:'Mitr',sans-serif;font-weight:500;font-size:clamp(34px,9vw,96px);margin:0;letter-spacing:.04em;color:#dfe8df}
+p{margin:0;max-width:34em;color:#9aa89c;font-size:clamp(13px,2vw,18px);line-height:1.6}
+button{font:600 clamp(14px,2.2vw,20px) 'Sarabun',sans-serif;padding:.7em 2em;color:var(--ink);background:var(--blood);border:0;border-radius:3px;cursor:pointer}
+button:focus-visible{outline:2px solid #fff;outline-offset:3px}
+#end{background:transparent}
+#end h1{color:#b32020;animation:cin 2s forwards;opacity:0}
+.bob{animation:bob .5s ease-in-out infinite alternate}.bob.fast{animation-duration:.2s}.bob.slow{animation-duration:1.4s}
+@keyframes bob{to{transform:translateY(-.9px)}}
+.sway{animation:sway 1.6s ease-in-out infinite alternate;transform-box:fill-box;transform-origin:50% 100%}
+@keyframes sway{from{transform:rotate(-3deg)}to{transform:rotate(3deg)}}
+.flick{animation:fl 3s steps(1) infinite}.flick2{animation:fl 5s steps(1) infinite}
+@keyframes fl{0%{opacity:1}6%{opacity:.1}8%{opacity:1}30%{opacity:.9}32%{opacity:.05}34%{opacity:1}70%{opacity:1}72%{opacity:.2}75%{opacity:1}}
+.approach{transform-box:view-box;transform-origin:80px 62px;animation:ap 15s ease-in forwards}
+@keyframes ap{from{transform:scale(.3)}to{transform:scale(1.7) translateY(4px)}}
+.redp{animation:rp 1.4s ease-in-out infinite;opacity:0}@keyframes rp{50%{opacity:.2}}
+.scroll{animation:sc 1.2s linear infinite}@keyframes sc{to{transform:translateX(-60px)}}
+.dash{animation:ds .4s linear infinite}@keyframes ds{to{stroke-dashoffset:-12}}
+.steam circle{animation:st 3s linear infinite}@keyframes st{from{transform:translateY(0);opacity:.5}to{transform:translateY(-14px);opacity:0}}
+.glow{animation:gl 4s ease-in-out infinite alternate}@keyframes gl{to{opacity:.7}}
+#mf{opacity:0;transition:opacity .12s}
+@media (prefers-reduced-motion:reduce){.flick,.flick2,#grain,.redp{animation:none}}
 </style>
 </head>
 <body>
-
-<div class="stamp" id="stamp">ตรวจแล้ว<br>ส่งคำตอบ<br>สำเร็จ</div>
-
-<div class="sheet">
-  <header class="top">
-    <div class="title-block">
-      <h1>แบบทดสอบรู้จักคุณ</h1>
-      <p>วิชา: ตัวจริงของเธอ · เวลาทำ: ไม่จำกัด</p>
-    </div>
-    <div class="examno">
-      <span>เลขที่สอบ: 0624</span>
-      <span>ชุดข้อสอบ: คนคุย-A</span>
-    </div>
-  </header>
-
-  <p class="instructions">
-    <b>คำชี้แจง:</b> ตอบให้ตรงกับตัวคุณจริงๆ ไม่มีคำตอบถูก-ผิด<br>
-    มีแค่คำตอบที่ <b>"ใช่คุณ"</b> เท่านั้น ทำให้ครบทุกข้อก่อนส่งกระดาษคำตอบ
-  </p>
-
-  <form id="quizForm">
-
-    <div class="q" data-q="1">
-      <div class="q-head"><span class="q-num">01</span><span class="q-text">เวลาว่างจริงๆ คุณมักทำอะไรมากที่สุด</span></div>
-      <div class="opts">
-        <div class="opt" data-v="นอนเล่นมือถือเฉยๆ">(ก) <span class="opt-label">นอนเล่นมือถือเฉยๆ</span></div>
-        <div class="opt" data-v="ออกไปหาเพื่อน เที่ยวข้างนอก">(ข) <span class="opt-label">ออกไปหาเพื่อน เที่ยวข้างนอก</span></div>
-        <div class="opt" data-v="ดูซีรีส์ หนัง หรือฟังเพลง">(ค) <span class="opt-label">ดูซีรีส์ หนัง หรือฟังเพลง</span></div>
-        <div class="opt" data-v="ทำงาน/ทำธุระส่วนตัวให้เสร็จ">(ง) <span class="opt-label">ทำงาน/ทำธุระส่วนตัวให้เสร็จ</span></div>
-      </div>
-    </div>
-
-    <div class="q" data-q="2">
-      <div class="q-head"><span class="q-num">02</span><span class="q-text">เพื่อนๆ มักบอกว่าคุณเป็นคนแบบไหน</span></div>
-      <div class="opts">
-        <div class="opt" data-v="ตลก พูดเก่ง คุยได้ทุกเรื่อง">(ก) <span class="opt-label">ตลก พูดเก่ง คุยได้ทุกเรื่อง</span></div>
-        <div class="opt" data-v="เงียบ ขี้อาย ต้องสนิทก่อนถึงเปิดใจ">(ข) <span class="opt-label">เงียบ ขี้อาย ต้องสนิทก่อนถึงเปิดใจ</span></div>
-        <div class="opt" data-v="จริงจัง มีเหตุผล วางแผนเก่ง">(ค) <span class="opt-label">จริงจัง มีเหตุผล วางแผนเก่ง</span></div>
-        <div class="opt" data-v="อบอุ่น ใส่ใจคนรอบตัวเสมอ">(ง) <span class="opt-label">อบอุ่น ใส่ใจคนรอบตัวเสมอ</span></div>
-      </div>
-    </div>
-
-    <div class="q" data-q="3">
-      <div class="q-head"><span class="q-num">03</span><span class="q-text">เดตในฝันของคุณเป็นแบบไหน</span></div>
-      <div class="opts">
-        <div class="opt" data-v="กินข้าวร้านเงียบๆ คุยกันยาวๆ">(ก) <span class="opt-label">กินข้าวร้านเงียบๆ คุยกันยาวๆ</span></div>
-        <div class="opt" data-v="ออกไปทำกิจกรรม เช่น ดูหนัง เที่ยวสวนสนุก">(ข) <span class="opt-label">ออกไปทำกิจกรรม เช่น ดูหนัง เที่ยวสวนสนุก</span></div>
-        <div class="opt" data-v="นอนดูซีรีส์ด้วยกันที่บ้าน">(ค) <span class="opt-label">นอนดูซีรีส์ด้วยกันที่บ้าน</span></div>
-        <div class="opt" data-v="ยังไม่เคยคิดเรื่องนี้จริงจัง">(ง) <span class="opt-label">ยังไม่เคยคิดเรื่องนี้จริงจัง</span></div>
-      </div>
-    </div>
-
-    <div class="q" data-q="4">
-      <div class="q-head"><span class="q-num">04</span><span class="q-text">นิยามความสัมพันธ์ที่คุณอยากได้จริงๆ คือแบบไหน</span></div>
-      <div class="opts">
-        <div class="opt" data-v="จริงจัง คุยกันชัดเจนตั้งแต่แรก">(ก) <span class="opt-label">จริงจัง คุยกันชัดเจนตั้งแต่แรก</span></div>
-        <div class="opt" data-v="ค่อยๆรู้จักกันไปก่อน ไม่เร่ง">(ข) <span class="opt-label">ค่อยๆรู้จักกันไปก่อน ไม่เร่ง</span></div>
-        <div class="opt" data-v="เป็นเพื่อนสนิทที่คุยกันได้ทุกเรื่องก่อน">(ค) <span class="opt-label">เป็นเพื่อนสนิทที่คุยกันได้ทุกเรื่องก่อน</span></div>
-        <div class="opt" data-v="ยังไม่ได้คิดเรื่องนี้ตอนนี้">(ง) <span class="opt-label">ยังไม่ได้คิดเรื่องนี้ตอนนี้</span></div>
-      </div>
-    </div>
-
-    <div class="q" data-q="5">
-      <div class="q-head"><span class="q-num">05</span><span class="q-text">ลักษณะคนที่คุณมักจะถูกใจที่สุดคือ</span></div>
-      <div class="opts">
-        <div class="opt" data-v="คุยเก่ง มีมุกตลอด">(ก) <span class="opt-label">คุยเก่ง มีมุกตลอด</span></div>
-        <div class="opt" data-v="ใจดี เข้าใจ ฟังเป็น">(ข) <span class="opt-label">ใจดี เข้าใจ ฟังเป็น</span></div>
-        <div class="opt" data-v="มั่นใจ มีเป้าหมายชัดเจน">(ค) <span class="opt-label">มั่นใจ มีเป้าหมายชัดเจน</span></div>
-        <div class="opt" data-v="ยังไม่มีสเปกชัดเจน">(ง) <span class="opt-label">ยังไม่มีสเปกชัดเจน</span></div>
-      </div>
-    </div>
-
-    <div class="q" data-q="6">
-      <div class="q-head"><span class="q-num">06</span><span class="q-text">ถ้าให้เปรียบตัวเองเป็นอะไร จะเลือกข้อไหน</span></div>
-      <div class="opts">
-        <div class="opt" data-v="เพลงสนุกที่ฟังแล้วอารมณ์ดีตลอด">(ก) <span class="opt-label">เพลงสนุกที่ฟังแล้วอารมณ์ดีตลอด</span></div>
-        <div class="opt" data-v="หนังสือที่ต้องค่อยๆอ่านถึงจะเข้าใจ">(ข) <span class="opt-label">หนังสือที่ต้องค่อยๆอ่านถึงจะเข้าใจ</span></div>
-        <div class="opt" data-v="หนังดราม่าที่มีหลายมุมให้คิด">(ค) <span class="opt-label">หนังดราม่าที่มีหลายมุมให้คิด</span></div>
-        <div class="opt" data-v="ยังนึกไม่ออก">(ง) <span class="opt-label">ยังนึกไม่ออก</span></div>
-      </div>
-    </div>
-
-    <div class="q" data-q="7">
-      <div class="q-head"><span class="q-num">08</span><span class="q-text">ถ้าเปรียบตัวเองเป็นเพลง 1 เพลง จะเป็นเพลงอะไร</span></div>
-      <div class="fields" style="padding-left:36px;margin-top:4px;">
-        <div class="field">
-          <label for="song">ชื่อเพลง (และศิลปิน ถ้านึกออก)</label>
-          <input type="text" id="song" placeholder="เช่น ขอบคุณ - Bodyslam" autocomplete="off">
-        </div>
-      </div>
-    </div>
-
-    <div class="q final-q" data-q="8">
-      <div class="q-head"><span class="q-num">07</span><span class="q-text">ข้อสุดท้าย: ขอเก็บข้อมูลผู้เข้าสอบไว้เป็นหลักฐาน</span></div>
-      <div class="fields">
-        <div class="field">
-          <label for="name">ชื่อ-ชื่อเล่น</label>
-          <input type="text" id="name" placeholder="พิมพ์ชื่อของคุณ" required>
-        </div>
-        <div class="field">
-          <label for="ig">ไอจี (Instagram)</label>
-          <input type="text" id="ig" placeholder="@yourusername" required>
-        </div>
-      </div>
-    </div>
-
-    <div class="submit-row">
-      <span class="hint" id="hint">ตอบให้ครบทุกข้อก่อนส่ง</span>
-      <button type="submit" class="submit" id="submitBtn">ส่งกระดาษคำตอบ</button>
-    </div>
-  </form>
-
-  <footer class="note">กดส่งครั้งเดียว คำตอบจะถูกส่งถึงเราเลย ไม่ต้องทำอะไรเพิ่ม</footer>
-</div>
-
+<div id="wrap"><div id="screen">
+  <div id="stage"></div>
+  <div id="vig"></div><div id="grain"></div>
+  <div id="nar" aria-live="polite"></div>
+  <div id="cap" aria-live="polite"></div>
+  <div id="black"></div><div id="flash"></div>
+  <div id="bar"></div>
+  <div id="end" class="ov" hidden><h1>ข้าวเย็นรออยู่</h1><button id="again" hidden>ดูอีกครั้ง</button></div>
+  <div id="intro" class="ov">
+    <h1>กลับบ้าน</h1>
+    <p>มายมิ้นแค่อยากกลับไปหาแม่ แต่โรงเรียนไม่เหมือนเดิมแล้ว<br>หนังสั้นสยองขวัญ ความยาวประมาณ 2 นาที — แนะนำให้ใส่หูฟังและเปิดเสียง</p>
+    <label style="font-size:clamp(13px,2vw,17px);color:#9aa89c"><input type="checkbox" id="vo" checked> เปิดเสียงพูด (ใช้เสียงภาษาไทยของอุปกรณ์)</label>
+    <p id="vs"></p><button id="test" type="button" style="background:#2a3330">ทดสอบเสียง</button>
+    <button id="go">เล่น</button>
+  </div>
+</div></div>
 <script>
-  emailjs.init("xyzoDUxTMwRIG549z");
+const $=id=>document.getElementById(id);
+const M=(x,y,s=1,c='bob')=>`<g transform="translate(${x} ${y}) scale(${s})"><g class="${c}"><rect x="-3.4" y="-12" width="2.4" height="12" fill="#20242a"/><rect x="1" y="-12" width="2.4" height="12" fill="#20242a"/><path d="M-5.5-12L5.5-12L7-21L-7-21Z" fill="#1d2b4d"/><rect x="-4.6" y="-28" width="9.2" height="8" fill="#dbe3e7"/><rect x="-7.4" y="-27" width="3.2" height="9" fill="#7a2c2c"/><circle cy="-32" r="4.2" fill="#c3a58f"/><path d="M-4.4-32Q0-38.5 4.4-32L4.4-31Q0-35-4.4-30Z" fill="#0b0b0b"/><path d="M-4-33Q-11-31-8-22" stroke="#0b0b0b" stroke-width="2.2" fill="none"/></g></g>`;
+const Z=(x,y,s=1,d=0)=>`<g transform="translate(${x} ${y}) scale(${s})"><g class="sway" style="animation-delay:-${d}s"><rect x="-3.4" y="-12" width="2.4" height="12" fill="#121816"/><rect x="1" y="-12" width="2.4" height="12" fill="#121816"/><path d="M-5-11L5-11L6-27L-4-28Z" fill="#26322c"/><circle cx="2" cy="-31" r="4.2" fill="#6e8a72" transform="rotate(14 2 -31)"/><circle cx="3.2" cy="-31.5" r=".7" fill="#e03232"/><path d="M4-26L14-25M4-23L13-22" stroke="#6e8a72" stroke-width="1.6"/></g></g>`;
 
-  const EMAILJS_SERVICE_ID  = "service_wl7hhd4";
-  const EMAILJS_TEMPLATE_ID = "template_lp9w5lb";
+const corr=z=>`<rect width="160" height="90" fill="#0b1115"/><polygon points="0,0 160,0 110,22 50,22" fill="#121a1f"/><polygon points="0,90 160,90 110,62 50,62" fill="#1c262c"/><polygon points="0,0 50,22 50,62 0,90" fill="#16222a"/><polygon points="160,0 110,22 110,62 160,90" fill="#16222a"/><rect x="50" y="22" width="60" height="40" fill="#080c0f"/><rect x="74" y="30" width="12" height="32" fill="#0d1a14"/><rect x="76" y="25" width="8" height="3" fill="#59d37c" class="flick"/><path stroke="#0a1013" stroke-width=".6" fill="none" d="M10 10V80M20 14V74M30 17V69M40 20V65M150 10V80M140 14V74M130 17V69M120 20V65"/><rect x="66" y="14" width="28" height="2.5" fill="#d3ecd9" class="flick"/><rect x="72" y="19" width="16" height="1.6" fill="#d3ecd9" class="flick" style="animation-delay:-1.3s"/>${z||''}${M(34,88,1.25)}`;
 
-  const answers = {};
-  const questions = [
-    "เวลาว่างจริงๆ คุณมักทำอะไรมากที่สุด",
-    "เพื่อนๆ มักบอกว่าคุณเป็นคนแบบไหน",
-    "เดตในฝันของคุณเป็นแบบไหน",
-    "นิยามความสัมพันธ์ที่คุณอยากได้จริงๆ คือแบบไหน",
-    "ลักษณะคนที่คุณมักจะถูกใจที่สุดคือ",
-    "ถ้าให้เปรียบตัวเองเป็นอะไร จะเลือกข้อไหน"
-  ];
+const yard=()=>{const zs=[[30,74,.8,0],[48,78,.9,.4],[62,72,.7,1],[80,80,1,.8],[96,75,.85,1.2],[112,82,1.05,.2],[70,70,.6,.6],[126,77,.9,1.4]];
+let w='';for(let i=0;i<8;i++)w+=`<rect x="${6+i*13}" y="42" width="7" height="8" fill="#e08a3c" opacity="${i%3?0.15:0.45}"/>`;
+return `<defs><linearGradient id="sk" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#1a0d12"/><stop offset=".6" stop-color="#6b2417"/><stop offset="1" stop-color="#c0612b"/></linearGradient></defs><rect width="160" height="90" fill="url(#sk)"/><circle cx="125" cy="50" r="10" fill="#e9904a" opacity=".5"/><rect y="34" width="110" height="30" fill="#140c0e"/>${w}<rect y="64" width="160" height="26" fill="#0d0a0a"/><path d="M138 48V70M146 48V70M154 48V70M136 54H160M136 64H160" stroke="#050404" stroke-width="1.4"/>${zs.map(a=>Z(...a)).join('')}<rect x="0" y="68" width="11" height="22" fill="#090707"/>${M(17,88,1.3,'bob slow')}`};
 
-  document.querySelectorAll('.q[data-q]').forEach(qEl => {
-    const qNum = qEl.getAttribute('data-q');
-    if (qEl.classList.contains('final-q')) return;
-    qEl.querySelectorAll('.opt').forEach(opt => {
-      opt.addEventListener('click', () => {
-        qEl.querySelectorAll('.opt').forEach(o => o.classList.remove('selected'));
-        opt.classList.add('selected');
-        answers[qNum] = opt.getAttribute('data-v');
-        updateHint();
-      });
-    });
-  });
+const road=()=>{let l='';for(let k=0;k<5;k++)l+=`<g transform="translate(${k*60} 0)"><path d="M4 74V34H10" stroke="#2a3138" stroke-width="1.2" fill="none"/><circle cx="10" cy="35" r="2" fill="#f6d58a"/><ellipse cx="10" cy="76" rx="16" ry="3" fill="#f6d58a" opacity=".12"/></g>`;
+return `<rect width="160" height="90" fill="#070b14"/><ellipse cx="14" cy="62" rx="40" ry="8" fill="#c24a1c" opacity=".3"/><rect y="72" width="160" height="18" fill="#10151b"/><path d="M0 81H160" stroke="#3a4048" stroke-dasharray="6 6" class="dash"/><g class="scroll">${l}</g>${Z(8,84,1.4,.3)}${Z(22,86,1.2,.9)}${Z(34,84,1,.5)}${M(104,88,1.45,'bob fast')}<rect width="160" height="90" fill="#a01010" class="redp"/>`};
 
-  function updateHint(){
-    const answered = Object.keys(answers).length;
-    const hint = document.getElementById('hint');
-    if (answered < 6) {
-      hint.textContent = `ตอบแล้ว ${answered}/6 ข้อ`;
-      hint.style.color = '';
-    } else {
-      hint.textContent = `ตอบครบแล้ว เหลือแค่ข้อสุดท้าย`;
-      hint.style.color = '';
-    }
-  }
+const phone=()=>`<rect width="160" height="90" fill="#05080a"/><ellipse cx="80" cy="45" rx="55" ry="40" fill="#3aa" opacity=".06"/><rect x="58" y="8" width="44" height="74" rx="5" fill="#0a0f12" stroke="#2c3b43"/><rect x="61" y="13" width="38" height="64" rx="2" fill="#0f3040" class="flick2"/><text x="80" y="35" fill="#e8f3f0" font-size="8" text-anchor="middle" font-family="Sarabun,sans-serif">แม่</text><text x="80" y="45" fill="#9bc" font-size="3.4" text-anchor="middle" font-family="Sarabun,sans-serif">กำลังโทร…</text><circle cx="80" cy="62" r="5" fill="#b33"/><text x="96" y="19" fill="#e55" font-size="3.2" text-anchor="end" font-family="Sarabun,sans-serif">3%</text><rect id="pd" x="61" y="13" width="38" height="64" rx="2" fill="#000" opacity="0" style="transition:opacity .4s"/>`;
 
-  document.getElementById('quizForm').addEventListener('submit', async function(e){
-    e.preventDefault();
-    const hint = document.getElementById('hint');
-    const btn  = document.getElementById('submitBtn');
+const house=()=>`<rect width="160" height="90" fill="#04070c"/><circle cx="26" cy="16" r="5" fill="#cfd8e0" opacity=".8"/><ellipse cx="150" cy="66" rx="40" ry="7" fill="#c24a1c" opacity=".22"/><rect y="76" width="160" height="14" fill="#06080b"/><rect x="70" y="36" width="60" height="40" fill="#0c1015"/><polygon points="64,38 100,16 136,38" fill="#070a0d"/><rect x="78" y="46" width="16" height="12" fill="#f2b45a" class="glow"/><rect id="dr" x="108" y="52" width="10" height="24" fill="#141922" style="transition:fill 1.5s"/><path d="M0 74H66M0 80H66M10 70V84M30 70V84M50 70V84" stroke="#10151b" stroke-width="1"/>${M(46,90,1.5,'bob slow')}`;
 
-    if (Object.keys(answers).length < 6) {
-      hint.textContent = "ตอบให้ครบทุกข้อก่อนนะ ยังขาดอยู่!";
-      hint.style.color = "#C1443B";
-      return;
-    }
-    const name = document.getElementById('name').value.trim();
-    const ig   = document.getElementById('ig').value.trim();
-    if (!name || !ig) {
-      hint.textContent = "อย่าลืมกรอกชื่อกับไอจีด้วยนะ";
-      hint.style.color = "#C1443B";
-      return;
-    }
+const kitchen=()=>`<defs><radialGradient id="lg"><stop offset="0" stop-color="#f2b45a" stop-opacity=".55"/><stop offset="1" stop-color="#f2b45a" stop-opacity="0"/></radialGradient></defs><rect width="160" height="90" fill="#1a1410"/><rect y="68" width="160" height="22" fill="#0f0b09"/><rect x="14" y="14" width="26" height="22" fill="#1b2a3a"/><circle cx="80" cy="30" r="38" fill="url(#lg)" class="glow"/><path d="M80 0V16" stroke="#000"/><circle cx="80" cy="18" r="3" fill="#ffd89a"/><rect x="84" y="46" width="60" height="26" fill="#241b15"/><rect x="108" y="40" width="14" height="8" fill="#3a3430"/><g class="steam" fill="#cfc9c0"><circle cx="112" cy="38" r="2"/><circle cx="116" cy="38" r="2.4" style="animation-delay:-1s"/><circle cx="114" cy="38" r="1.8" style="animation-delay:-2s"/></g><rect x="52" y="62" width="30" height="3" fill="#2b211a"/><rect x="58" y="58" width="8" height="4" fill="#0a0a0a"/><path d="M59 58L62 61L65 58M62 58V62" stroke="#bbb" stroke-width=".3" fill="none"/><g transform="translate(100 82) scale(1.9)"><g class="sway" style="animation-duration:5s"><rect x="-3.4" y="-12" width="2.4" height="12" fill="#17110e"/><rect x="1" y="-12" width="2.4" height="12" fill="#17110e"/><path d="M-6-12L6-12L7-27L-7-27Z" fill="#4b3f58"/><path d="M-5-14L5-14L5-26L-5-26Z" fill="#b9ab94"/><rect x="-8" y="-27" width="2.4" height="12" fill="#4b3f58"/><rect x="5.6" y="-27" width="2.4" height="12" fill="#4b3f58"/><circle cy="-32" r="4.6" fill="#0a0807"/><rect x="-4.6" y="-33" width="9.2" height="15" rx="3" fill="#0a0807"/><g id="mf"><circle cy="-32" r="4.2" fill="#cfd6c8"/><circle cx="-1.6" cy="-32.6" r=".8" fill="#e01818"/><circle cx="1.6" cy="-32.6" r=".8" fill="#e01818"/><ellipse cy="-29.6" rx="1.3" ry="1.8" fill="#300"/></g></g></g>${M(34,88,1.7,'bob slow')}`;
 
-    btn.disabled = true;
-    btn.textContent = "กำลังส่ง...";
-    hint.textContent = "";
-    hint.style.color = '';
+/* audio */
+let ac,dg,nb,running=false,timers=[],bt,st,ht,ni=0,mood={};
+const out=n=>n.connect(ac.destination);
+function audioInit(){if(ac){dg.gain.value=.06;return}
+ac=new (window.AudioContext||window.webkitAudioContext)();
+nb=ac.createBuffer(1,ac.sampleRate*2,ac.sampleRate);const d=nb.getChannelData(0);for(let i=0;i<d.length;i++)d[i]=Math.random()*2-1;
+dg=ac.createGain();dg.gain.value=.06;const f=ac.createBiquadFilter();f.type='lowpass';f.frequency.value=180;
+[55,55.8].forEach(fr=>{const o=ac.createOscillator();o.type='sawtooth';o.frequency.value=fr;o.connect(f);o.start()});
+f.connect(dg);out(dg);
+const w=ac.createBufferSource();w.buffer=nb;w.loop=true;const bp=ac.createBiquadFilter();bp.type='bandpass';bp.frequency.value=300;const wg=ac.createGain();wg.gain.value=.04;w.connect(bp).connect(wg);out(wg);w.start()}
+function env(g,t,a,dur,peak){g.gain.setValueAtTime(0,t);g.gain.linearRampToValueAtTime(peak,t+a);g.gain.exponentialRampToValueAtTime(.001,t+dur)}
+function thump(){const t=ac.currentTime;[0,.18].forEach((dl,i)=>{const o=ac.createOscillator(),g=ac.createGain();o.frequency.setValueAtTime(70,t+dl);o.frequency.exponentialRampToValueAtTime(35,t+dl+.15);env(g,t+dl,.01,.2,i?.25:.4);o.connect(g);out(g);o.start(t+dl);o.stop(t+dl+.25)})}
+function tick(){const t=ac.currentTime,s=ac.createBufferSource(),f=ac.createBiquadFilter(),g=ac.createGain();s.buffer=nb;f.type='lowpass';f.frequency.value=420;env(g,t,.02,.3,.18);s.connect(f).connect(g);out(g);s.start(t,Math.random(),.35)}
+function buzz(){if(!ac)return;const t=ac.currentTime;[0,.35,.7].forEach(d=>{const o=ac.createOscillator(),g=ac.createGain();o.type='square';o.frequency.value=140;g.gain.setValueAtTime(.08,t+d);g.gain.setValueAtTime(0,t+d+.2);o.connect(g);out(g);o.start(t+d);o.stop(t+d+.25)})}
+const notes=[392,440,392,330,349,330,294,330];
+function note(){const t=ac.currentTime,o=ac.createOscillator(),l=ac.createOscillator(),lg=ac.createGain(),g=ac.createGain();o.frequency.value=notes[ni++%notes.length]*(ni%5?1:.99);l.frequency.value=5;lg.gain.value=4;l.connect(lg).connect(o.frequency);env(g,t,.1,.9,.05);o.connect(g);out(g);o.start(t);l.start(t);o.stop(t+1);l.stop(t+1)}
+function scare(){if(!ac)return;const t=ac.currentTime;dg.gain.value=0;
+const s=ac.createBufferSource(),h=ac.createBiquadFilter(),g=ac.createGain();s.buffer=nb;h.type='highpass';h.frequency.value=900;g.gain.setValueAtTime(.9,t);g.gain.exponentialRampToValueAtTime(.001,t+1.4);s.connect(h).connect(g);out(g);s.start(t);
+const o=ac.createOscillator(),og=ac.createGain();o.type='sawtooth';o.frequency.setValueAtTime(600,t);o.frequency.exponentialRampToValueAtTime(2200,t+1);og.gain.setValueAtTime(.35,t);og.gain.exponentialRampToValueAtTime(.001,t+1.2);o.connect(og);out(og);o.start(t);o.stop(t+1.3)}
+function loops(){if(!running)return;
+(function b(){if(!running)return;if(mood.bpm)thump();bt=setTimeout(b,60000/(mood.bpm||60))})();
+(function s(){if(!running)return;if(mood.shuf)tick();st=setTimeout(s,500+Math.random()*700)})();
+(function h(){if(!running)return;if(mood.hum)note();ht=setTimeout(h,750)})()}
 
-    // Build answer lines
-    let answerLines = "";
-    for (let i = 0; i < questions.length; i++) {
-      const num = i + 1;
-      answerLines += `${num}. ${questions[i]}\nคำตอบ: ${answers[num]}\n\n`;
-    }
-
-    const song = document.getElementById('song').value.trim() || "(ไม่ได้ตอบ)";
-
-    const templateParams = {
-      from_name:    name,
-      instagram:    ig,
-      answers:      answerLines + `8. ถ้าเปรียบตัวเองเป็นเพลง 1 เพลง จะเป็นเพลงอะไร\nคำตอบ: ${song}\n`,
-      reply_to:     ig,
-    };
-
-    try {
-      await emailjs.send(EMAILJS_SERVICE_ID, EMAILJS_TEMPLATE_ID, templateParams);
-      document.getElementById('stamp').classList.add('show');
-      btn.textContent = "ส่งแล้ว ✓";
-      hint.textContent = "ส่งสำเร็จแล้ว!";
-      hint.style.color = "#5C8166";
-    } catch (err) {
-      console.error(err);
-      btn.disabled = false;
-      btn.textContent = "ส่งกระดาษคำตอบ";
-      hint.textContent = "ส่งไม่สำเร็จ ลองใหม่อีกครั้งนะ";
-      hint.style.color = "#C1443B";
-    }
-  });
+/* film */
+const cap=t=>{const c=$('cap');c.classList.remove('on');if(!t)return;c.textContent=t;void c.offsetWidth;c.classList.add('on')};
+const nar=t=>{$('nar').textContent=t};let voice=null;const hasTTS='speechSynthesis' in window;
+function vstat(){const e=$('vs');if(!e)return;e.textContent=!hasTTS?'เบราว์เซอร์นี้ไม่รองรับเสียงพูด':voice?'พบเสียงภาษาไทย: '+voice.name:'ยังไม่พบเสียงภาษาไทยในอุปกรณ์นี้ ถ้ากดทดสอบแล้วไม่มีเสียง จะเห็นเฉพาะซับไตเติล'}
+function pickVoice(){voice=(speechSynthesis.getVoices()||[]).find(x=>/^th/i.test(x.lang))||null;vstat()}
+if(hasTTS){pickVoice();speechSynthesis.onvoiceschanged=pickVoice}
+function say(t,v){if(!hasTTS||!$('vo').checked)return;
+const u=new SpeechSynthesisUtterance(t.replace(/[“”]/g,'').replace(/—/g,' ').replace(/…/g,' ... '));u.lang='th-TH';if(voice)u.voice=voice;
+const p={m:[1.5,1],o:[1,.8],v:[.6,.8]}[v||'v'];u.pitch=p[0];u.rate=p[1];speechSynthesis.speak(u)}
+const fadeIn=()=>{const b=$('black');b.style.transition='none';b.style.opacity=1;void b.offsetWidth;b.style.transition='opacity 1s';b.style.opacity=0};
+const fadeOut=()=>{const b=$('black');b.style.transition='opacity .8s';b.style.opacity=1};
+const scenes=[
+{d:16,bpm:55,nar:[[2,'ฉันจำได้ วันนั้นเป็นวันศุกร์ธรรมดา'],[6,'ฉันแค่อยากกลับบ้านไปหาแม่']],svg:()=>corr(),caps:[[1,'วันศุกร์ 16:47 น. โรงเรียนเซนต์เทเรซา'],[5,'มายมิ้นเพิ่งเลิกเรียนพิเศษ'],[9.5,'มือถือสั่น — ข้อความจากแม่'],[12.5,'“กลับบ้านเร็วๆ นะลูก แม่ทำต้มจืดไว้รอ”','o']],ev:[[9,buzz]]},
+{d:15,bpm:72,shuf:1,nar:[[2,'ไม่มีใครรู้ว่าทุกอย่างเริ่มตอนไหน'],[6.5,'แล้วฉันก็ได้ยินเสียงที่ไม่ใช่เสียงคน']],svg:()=>corr(`<g class="approach">${Z(80,62,1)}</g><rect width="160" height="90" fill="#a01010" class="redp"/>`),caps:[[1,'เสียงประกาศของโรงเรียนขาดหายไปกลางประโยค'],[5,'ไฟดับ แล้วติด แล้วดับ'],[9,'มีเสียงลากเท้าอยู่ปลายทางเดิน'],[12,'มายมิ้นกลั้นหายใจ']]},
+{d:16,bpm:82,nar:[[2,'คนที่เคยนั่งข้างฉันในห้องเรียน ยืนอยู่ตรงนั้น'],[7,'แววตาของพวกเขาว่างเปล่า']],svg:yard,caps:[[1,'สนามโรงเรียน — คนที่เคยเป็นเพื่อนยืนอยู่เต็มลาน'],[6,'ทุกคนหันหน้าไปทางเดียวกัน'],[10,'ประตูโรงเรียนอยู่อีกฝั่งของสนาม'],[13,'มายมิ้นถอดรองเท้า แล้ววิ่ง']]},
+{d:16,bpm:135,shuf:1,nar:[[2,'ฉันไม่กล้าหยุดวิ่ง'],[6,'แม่รออยู่ ฉันต้องไปให้ถึง']],svg:road,caps:[[1,'เธอวิ่งตามถนนที่ไม่มีรถสักคัน'],[5,'เสียงเท้าข้างหลังเริ่มมากขึ้น'],[9,'ไม่หันกลับไปมอง'],[12.5,'ชั่วโมงก่อน ยังเป็นวันศุกร์ธรรมดา']]},
+{d:16,bpm:92,svg:phone,caps:[[1,'แบตเตอรี่ 3%'],[4,'โทรออก: แม่'],[7,'“มิ้น… ลูกอยู่ไหน”','o'],[10,'“กำลังกลับค่ะแม่ แม่อย่าเปิดประตูให้ใครนะ”','m'],[13,'“แม่รออยู่ในครัวนะลูก”','o']],ev:[[15,()=>{const p=$('pd');if(p)p.setAttribute('opacity',1)}]]},
+{d:14,bpm:62,nar:[[2,'บ้านเงียบกว่าที่ควรจะเป็น'],[5.5,'แต่ไฟในครัวยังเปิดอยู่ ฉันเลยโล่งใจ']],svg:house,caps:[[1,'บ้านเลขที่ 27 ไฟในครัวยังเปิดอยู่'],[5,'ประตูไม่ได้ล็อก'],[9,'“แม่… หนูกลับมาแล้ว”','m'],[12,'ไม่มีเสียงตอบ']],ev:[[8,()=>{const d=$('dr');if(d)d.style.fill='#f2b45a'}]]},
+{d:27,bpm:58,hum:1,nar:[[2.5,'ทุกอย่างเหมือนเดิม'],[5.5,'ยกเว้นบางอย่างที่ฉันยังไม่ทันสังเกต']],svg:kitchen,caps:[[1,'กลิ่นต้มจืดลอยอยู่ทั่วห้อง'],[5,'แม่ยืนหันหลังอยู่หน้าเตา'],[8.5,'ฮัมเพลงเบาๆ เหมือนทุกวัน'],[12,'บนโต๊ะ มีโทรศัพท์ของแม่ จอแตก แบตหมดเกลี้ยง'],[14.5,'แล้วใครรับสายเมื่อกี้…'],[17,'“แม่…?”','m']],
+ ev:[[17.5,()=>{$('mf').style.opacity=1;mood.hum=0}],[19.4,()=>{mood.bpm=0;scare();const f=$('flash');f.style.opacity=1;setTimeout(()=>f.style.opacity=0,120)}],[19.9,()=>{cap('');const b=$('black');b.style.transition='none';b.style.opacity=1}],[22,()=>{$('end').hidden=false}],[26,()=>{$('again').hidden=false}]]}
+];
+const total=scenes.reduce((a,s)=>a+s.d,0);
+function at(ms,f){timers.push(setTimeout(f,ms))}
+function stop(){if(hasTTS)speechSynthesis.cancel();running=false;timers.forEach(clearTimeout);clearTimeout(bt);clearTimeout(st);clearTimeout(ht);timers=[]}
+function start(){stop();audioInit();if(ac.state==='suspended')ac.resume();
+$('intro').hidden=true;$('end').hidden=true;$('again').hidden=true;$('stage').innerHTML='';cap('');nar('');
+running=true;mood={};loops();const t0=performance.now();
+(function p(){if(!running)return;$('bar').style.width=Math.min(100,(performance.now()-t0)/total/10)+'%';requestAnimationFrame(p)})();
+let c=0;scenes.forEach((s,i)=>{
+ at(c*1000,()=>{$('stage').innerHTML=`<svg viewBox="0 0 160 90" preserveAspectRatio="xMidYMid slice" role="img" aria-label="ฉากที่ ${i+1}">${s.svg()}</svg>`;mood.bpm=s.bpm;mood.shuf=!!s.shuf;mood.hum=!!s.hum;if(i===scenes.length-1)dg.gain.value=.04;fadeIn()});
+ s.caps.forEach(([t,x,v])=>at((c+t)*1000,()=>{cap(x);if(v)say(x,v)}));
+ (s.nar||[]).forEach(([t,x])=>{at((c+t)*1000,()=>{nar(x);say(x,'v')});at((c+t+3.8)*1000,()=>nar(''))});
+ if(i<scenes.length-1){at((c+s.d-1.4)*1000,()=>cap(''));at((c+s.d-.8)*1000,fadeOut)}
+ (s.ev||[]).forEach(([t,f])=>at((c+t)*1000,f));
+ c+=s.d});
+}
+vstat();$('test').onclick=()=>say('สวัสดี มายมิ้นกลับมาแล้ว','m');$('go').onclick=start;$('again').onclick=start;
 </script>
-
 </body>
 </html>
