@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>จับสลากบัดดี้ลับ</title>
+<link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=Prompt:wght@500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{--sky:#79b8ff;--sky2:#bfe0ff;--panel:#c6c6c6;--hi:#ffffff;--lo:#555555;--ptext:#373737;--slot:#8b8b8b;--slot-lo:#373737;--slot-hi:#ffffff;--bar:#1a1a1a;
+box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--sky:#0d1830;--sky2:#1d2f55;--panel:#3b3b3f;--hi:#6a6a70;--lo:#111113;--ptext:#f1f1f1;--slot:#2a2a2d;--slot-lo:#0c0c0d;--slot-hi:#5a5a60;color-scheme:dark}}
+:root[data-theme="dark"]{--sky:#0d1830;--sky2:#1d2f55;--panel:#3b3b3f;--hi:#6a6a70;--lo:#111113;--ptext:#f1f1f1;--slot:#2a2a2d;--slot-lo:#0c0c0d;--slot-hi:#5a5a60;color-scheme:dark}
+*{box-sizing:border-box}
+body{margin:0;min-height:100vh;background:linear-gradient(var(--sky),var(--sky2));color:var(--ptext);font-family:"Prompt",system-ui,sans-serif;font-weight:500;line-height:1.5}
+.px{font-family:"Press Start 2P",monospace;font-weight:400}
+/* hero: grass block */
+.hero{text-align:center;padding:34px 16px 30px;background:conic-gradient(#8a6544 25%,#7a5638 0 50%,#8a6544 0 75%,#7a5638 0) 0 0/32px 32px;border-top:18px solid #5fae37;border-bottom:4px solid #000;box-shadow:inset 0 6px 0 #7ac94b,inset 0 -8px 0 rgba(0,0,0,.25);margin-top:0}
+h1{margin:0 0 6px;font-size:2rem;font-weight:700;color:#fff;text-shadow:4px 4px 0 #3f3f3f,-1px -1px 0 #000}
+.hero p{margin:0;color:#ffe9b0;text-shadow:2px 2px 0 #3f2a14}
+main{max-width:560px;margin:0 auto;padding:22px 14px 56px}
+/* inventory panel */
+.card{background:var(--panel);color:var(--ptext);border:3px solid #000;box-shadow:inset 4px 4px 0 var(--hi),inset -4px -4px 0 var(--lo);padding:20px 18px;margin-bottom:18px}
+.head{display:flex;align-items:center;gap:10px;margin-bottom:14px}
+h2{font-size:1.05rem;margin:0;font-weight:700}
+.badge{margin-left:auto;background:#000;color:#7fff3a;padding:6px 8px;font-size:.62rem}
+/* buttons */
+button{font:inherit;font-weight:700;cursor:pointer;color:#fff;text-shadow:2px 2px 0 #3f3f3f;background:#7d7d7d;border:3px solid #000;padding:11px 16px;box-shadow:inset 3px 3px 0 #b9b9b9,inset -3px -3px 0 #4a4a4a}
+button:hover:not(:disabled){background:#6f80c4;box-shadow:inset 3px 3px 0 #a9b6ee,inset -3px -3px 0 #3a4784}
+button:active:not(:disabled){transform:translateY(2px)}
+button.go{background:#5d9b3a;box-shadow:inset 3px 3px 0 #94d86a,inset -3px -3px 0 #2f5a1b}
+button.go:hover:not(:disabled){background:#6db446;box-shadow:inset 3px 3px 0 #aaf07d,inset -3px -3px 0 #38691f}
+button.red{background:#a83a32;box-shadow:inset 3px 3px 0 #e07a70,inset -3px -3px 0 #5e1b16}
+button.red:hover:not(:disabled){background:#c4463d}
+button:disabled{background:#575757;color:#9a9a9a;text-shadow:none;cursor:not-allowed;box-shadow:inset 3px 3px 0 #707070,inset -3px -3px 0 #3a3a3a}
+button.full{width:100%;padding:14px;font-size:1.05rem}
+.add{display:flex;gap:8px}.add button{white-space:nowrap}
+input{flex:1;min-width:0;font:inherit;color:#fff;background:#000;border:3px solid #a0a0a0;padding:11px 12px;outline:0}
+input:focus{border-color:#fff}
+input::placeholder{color:#8a8a8a}
+.msg{min-height:1.3em;font-size:.88rem;color:#b3261e;margin:6px 0 0 2px;font-weight:600}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]) .msg{color:#ff8a80}}
+:root[data-theme="dark"] .msg{color:#ff8a80}
+/* list */
+ul{list-style:none;padding:0;margin:10px 0 0}
+li{display:flex;align-items:center;gap:12px;padding:6px;margin-bottom:6px;background:var(--slot);border:2px solid #000;box-shadow:inset 2px 2px 0 var(--slot-lo),inset -2px -2px 0 var(--slot-hi);animation:in .25s steps(4)}
+@keyframes in{from{transform:translateY(8px);opacity:0}}
+li .nm{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;color:#fff;text-shadow:2px 2px 0 #3f3f3f}
+li .nm{color:#fff}
+li button{padding:4px 12px;font-size:1.1rem}
+.face{width:40px;height:40px;flex:none;image-rendering:pixelated;border:2px solid #000;background:#000}
+.note{font-size:.84rem;margin:12px 0 0;text-align:center;opacity:.85}
+.empty{text-align:center;padding:14px 0 6px;opacity:.8}
+/* xp bar */
+.xp{height:14px;background:var(--bar);border:2px solid #000;margin:0 0 14px;position:relative}
+.xp i{display:block;height:100%;background:repeating-linear-gradient(90deg,#7fff3a 0 8px,#58c418 8px 10px);transition:width .4s steps(8)}
+/* player grid */
+.grid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}
+@media (min-width:480px){.grid{grid-template-columns:repeat(3,1fr)}}
+.chip{display:flex;flex-direction:column;align-items:center;gap:8px;padding:12px 6px;background:var(--slot);text-shadow:2px 2px 0 #3f3f3f;box-shadow:inset 3px 3px 0 var(--slot-lo),inset -3px -3px 0 var(--slot-hi);word-break:break-word;position:relative}
+.chip:hover:not(:disabled){background:#6f80c4;box-shadow:inset 3px 3px 0 #3a4784,inset -3px -3px 0 #a9b6ee}
+.chip .face{width:56px;height:56px}
+.chip.seen .face{opacity:.55}
+.chip .tick{position:absolute;top:4px;right:6px;color:#7fff3a;font-size:.9rem}
+/* modal */
+.ov{position:fixed;inset:0;background:rgba(0,0,0,.7);display:grid;place-items:center;padding:16px;z-index:20}
+.modal{width:100%;max-width:360px;background:var(--panel);color:var(--ptext);border:3px solid #000;box-shadow:inset 4px 4px 0 var(--hi),inset -4px -4px 0 var(--lo);padding:24px 18px;text-align:center;animation:pop .2s steps(4)}
+@keyframes pop{from{transform:scale(.9);opacity:0}}
+.modal .face{width:76px;height:76px;margin:0 auto 10px;display:block}
+.modal h3{margin:0 0 4px;font-size:1.25rem}
+.row{display:flex;gap:8px;margin-top:14px}.row button{flex:1}
+.reveal{margin:16px 0 4px;padding:18px 10px;background:#0b0710;border:3px solid #000;outline:3px solid #8a4fff;cursor:pointer;user-select:none;color:#cfcfcf}
+.reveal b{display:block;font-size:2rem;margin:6px 0;color:#ffaa00;text-shadow:3px 3px 0 #3f2a00;transition:filter .15s;word-break:break-word}
+.reveal.hide b{filter:blur(14px)}
+.reveal small{display:block;font-size:.8rem}
+[hidden]{display:none!important}
+</style>
+</head>
+<body>
+<div class="hero"><h1>⛏ จับสลากบัดดี้ลับ</h1><p>ใส่ชื่อ จับสลาก แล้วกดชื่อตัวเองเพื่อดูบัดดี้</p></div>
+<main>
+<section class="card" id="setup">
+  <div class="head"><h2>🧱 รายชื่อผู้เล่น</h2><span class="badge px" id="cnt">0</span></div>
+  <div class="add"><input id="n" placeholder="พิมพ์ชื่อผู้เล่น" maxlength="30" autocomplete="off"><button class="go" id="add">เพิ่ม</button></div>
+  <p class="msg" id="msg"></p>
+  <ul id="list"></ul>
+  <button class="go full" id="draw" disabled style="margin-top:12px">🎲 จับสลากเลย!</button>
+  <p class="note" id="hint"></p>
+</section>
+
+<section class="card" id="play" hidden>
+  <div class="head"><h2>🗡 กดชื่อตัวเองเพื่อดูบัดดี้</h2><span class="badge px" id="seen">0/0</span></div>
+  <div class="xp"><i id="xp" style="width:0"></i></div>
+  <div class="grid" id="grid"></div>
+  <p class="note">ส่งเครื่องต่อกัน ให้แต่ละคนกดชื่อตัวเองเท่านั้น ดูเสร็จกดซ่อนก่อนส่งต่อ</p>
+  <button class="red full" id="reset" style="margin-top:14px">เริ่มใหม่ทั้งหมด</button>
+</section>
+</main>
+<div class="ov" id="ov" hidden><div class="modal" id="modal"></div></div>
+
+<script>
+(function(){
+var KEY='buddy-mc-v1',S={people:[],pairs:null,seen:{}};
+var $=function(i){return document.getElementById(i)};
+function load(){try{var r=localStorage.getItem(KEY);if(r){var o=JSON.parse(r);if(o&&Array.isArray(o.people))S=o}}catch(e){}}
+function save(){try{localStorage.setItem(KEY,JSON.stringify(S))}catch(e){}}
+
+/* pixel head generated from the name */
+function hash(s){var h=2166136261;for(var i=0;i<s.length;i++){h^=s.charCodeAt(i);h=Math.imul(h,16777619)}return h>>>0}
+var skins=['#f1c9a5','#e0a97c','#c68642','#8d5524','#ffdbac'],hairs=['#2b1b10','#5a3825','#d8a73a','#b5412c','#222','#7b4fd1','#2fa1a1'],eyes=['#3b6fd1','#2e8b57','#5b3a1f','#444'];
+function face(name,cls){
+  var h=hash(name),sk=skins[h%5],hr=hairs[(h>>3)%hairs.length],ey=eyes[(h>>6)%4];
+  var ns='http://www.w3.org/2000/svg',s=document.createElementNS(ns,'svg');
+  s.setAttribute('viewBox','0 0 8 8');s.setAttribute('shape-rendering','crispEdges');s.setAttribute('class','face '+(cls||''));
+  function r(x,y,w,c){var e=document.createElementNS(ns,'rect');e.setAttribute('x',x);e.setAttribute('y',y);e.setAttribute('width',w);e.setAttribute('height',1);e.setAttribute('fill',c);s.append(e)}
+  r(0,0,8,sk);r(0,1,8,sk);r(0,2,8,sk);r(0,3,8,sk);r(0,4,8,sk);r(0,5,8,sk);r(0,6,8,sk);r(0,7,8,sk);
+  r(0,0,8,hr);r(0,1,8,hr);
+  var f=(h>>9)&3;               /* fringe variation */
+  if(f&1){r(0,2,1,hr);r(7,2,1,hr)}
+  if(f&2){r(1,2,2,hr);r(5,2,2,hr)}
+  r(1,4,2,'#fff');r(5,4,2,'#fff');r(2,4,1,ey);r(5,4,1,ey);
+  r(3,5,2,'rgba(0,0,0,.12)');
+  r(2,6,4,'#8a4b3a');r(3,6,2,'#5c2b20');
+  return s;
+}
+
+function renderSetup(){
+  var ul=$('list');ul.innerHTML='';
+  if(!S.people.length){var e=document.createElement('div');e.className='empty';e.textContent='ยังไม่มีผู้เล่น เริ่มเพิ่มได้เลย';ul.append(e)}
+  S.people.forEach(function(n,i){
+    var li=document.createElement('li'),nm=document.createElement('div'),x=document.createElement('button');
+    nm.className='nm';nm.textContent=n;x.className='red';x.textContent='×';x.setAttribute('aria-label','ลบ');
+    x.onclick=function(){S.people.splice(i,1);save();renderSetup()};
+    li.append(face(n),nm,x);ul.append(li);
+  });
+  $('cnt').textContent=S.people.length;
+  $('draw').disabled=S.people.length<3;
+  $('hint').textContent=S.people.length<3?'ต้องมีอย่างน้อย 3 คน (ตอนนี้ '+S.people.length+')':'พร้อมจับสลากแล้ว';
+}
+function addName(){
+  var v=$('n').value.trim();$('msg').textContent='';
+  if(!v)return;
+  if(S.people.some(function(p){return p.toLowerCase()===v.toLowerCase()})){$('msg').textContent='มีชื่อนี้แล้ว ลองเพิ่มนามสกุลหรือชื่อเล่น';return}
+  if(S.people.length>=50){$('msg').textContent='เพิ่มได้สูงสุด 50 คน';return}
+  S.people.push(v);save();$('n').value='';$('n').focus();renderSetup();
+}
+$('add').onclick=addName;
+$('n').onkeydown=function(e){if(e.key==='Enter')addName()};
+
+function draw(){
+  var a=S.people.slice();
+  for(var i=a.length-1;i>0;i--){var j=Math.floor(Math.random()*(i+1));var t=a[i];a[i]=a[j];a[j]=t}
+  var m={};a.forEach(function(g,i){m[g]=a[(i+1)%a.length]});
+  S.pairs=m;S.seen={};save();showPlay();
+}
+$('draw').onclick=draw;
+
+function showPlay(){
+  $('setup').hidden=!!S.pairs;$('play').hidden=!S.pairs;
+  if(!S.pairs)return;
+  var g=$('grid');g.innerHTML='';var c=0;
+  S.people.forEach(function(n){
+    var b=document.createElement('button');b.className='chip'+(S.seen[n]?' seen':'');
+    if(S.seen[n]){c++;var t=document.createElement('span');t.className='tick';t.textContent='✔';b.append(t)}
+    var s=document.createElement('span');s.textContent=n;
+    b.append(face(n),s);b.onclick=function(){confirmView(n)};g.append(b);
+  });
+  $('seen').textContent=c+'/'+S.people.length;
+  $('xp').style.width=(S.people.length?c/S.people.length*100:0)+'%';
+}
+
+function closeModal(){$('ov').hidden=true;$('modal').innerHTML=''}
+function confirmView(n){
+  var m=$('modal');m.innerHTML='';
+  var h=document.createElement('h3');h.textContent='คุณคือ '+n+' ใช่ไหม?';
+  var p=document.createElement('p');p.className='note';p.textContent='ให้เจ้าของชื่อนี้ดูคนเดียวเท่านั้น';
+  var r=document.createElement('div');r.className='row';
+  var no=document.createElement('button');no.textContent='ไม่ใช่';no.onclick=closeModal;
+  var ok=document.createElement('button');ok.className='go';ok.textContent='ใช่ ดูเลย';ok.onclick=function(){reveal(n)};
+  r.append(no,ok);m.append(face(n),h,p,r);$('ov').hidden=false;
+}
+function reveal(n){
+  var m=$('modal');m.innerHTML='';
+  var h=document.createElement('h3');h.textContent='สวัสดี '+n;
+  var rv=document.createElement('div');rv.className='reveal hide';
+  var sm=document.createElement('small');sm.textContent='บัดดี้ของคุณคือ';
+  var b=document.createElement('b');b.textContent=S.pairs[n];
+  var tip=document.createElement('small');tip.textContent='แตะเพื่อเปิด/ซ่อน';
+  rv.append(sm,b,tip);rv.onclick=function(){rv.classList.toggle('hide')};
+  var done=document.createElement('button');done.className='go full';done.style.marginTop='14px';done.textContent='จำได้แล้ว ซ่อนและปิด';
+  done.onclick=function(){S.seen[n]=true;save();closeModal();showPlay()};
+  m.append(face(n),h,rv,done);
+}
+$('ov').onclick=function(e){if(e.target===$('ov')&&!$('modal').querySelector('.reveal'))closeModal()};
+
+$('reset').onclick=function(){
+  if(!confirm('เริ่มใหม่ทั้งหมดใช่ไหม? ผลจับสลากเดิมจะหายไป'))return;
+  S={people:S.people,pairs:null,seen:{}};save();showPlay();renderSetup();
+};
+load();renderSetup();showPlay();
+})();
+</script>
+</body>
+</html>
