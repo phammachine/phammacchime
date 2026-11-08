@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>จับสลากบัดดี้ลับ</title>
+<link href="https://fonts.googleapis.com/css2?family=Prompt:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#fff4ec;--card:#fff;--ink:#2a1f2d;--mute:#85768a;--a1:#ff6b6b;--a2:#ff9f43;--a3:#7c5cff;--line:#f3e3e6;--field:#fff9f5;--ok:#1f9d55;--bad:#e03131;--shadow:0 10px 30px rgba(124,92,255,.12)}
+@media (prefers-color-scheme:dark){:root{--bg:#17121c;--card:#221a2a;--ink:#f7eefa;--mute:#b3a3ba;--line:#3a2d45;--field:#1b1522;--ok:#69db7c;--bad:#ff8787;--shadow:0 10px 30px rgba(0,0,0,.4);color-scheme:dark}}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:"Prompt","Noto Sans Thai",system-ui,sans-serif;line-height:1.55}
+.hero{background:linear-gradient(135deg,var(--a1),var(--a2) 55%,var(--a3));color:#fff;text-align:center;padding:44px 20px 80px;position:relative;overflow:hidden}
+.hero::before,.hero::after{content:"";position:absolute;border-radius:50%;background:rgba(255,255,255,.14)}
+.hero::before{width:200px;height:200px;top:-70px;left:-50px}.hero::after{width:150px;height:150px;bottom:-40px;right:-30px}
+.gift{font-size:3.2rem;display:inline-block;animation:bob 2.4s ease-in-out infinite}
+@keyframes bob{50%{transform:translateY(-8px) rotate(-6deg)}}
+h1{margin:6px 0;font-size:1.9rem;font-weight:700;position:relative}
+.hero p{margin:0;opacity:.95;position:relative}
+main{max-width:560px;margin:-52px auto 0;padding:0 16px 48px;position:relative}
+.card{background:var(--card);border-radius:20px;padding:20px;margin-bottom:16px;box-shadow:var(--shadow);border:1px solid var(--line)}
+.head{display:flex;align-items:center;gap:10px;margin-bottom:14px}
+.num{width:30px;height:30px;border-radius:50%;background:linear-gradient(135deg,var(--a1),var(--a3));color:#fff;display:grid;place-items:center;font-weight:600;font-size:.9rem;flex:none}
+h2{font-size:1.1rem;margin:0;font-weight:600}
+label{display:block;font-size:.82rem;color:var(--mute);margin:0 0 4px 2px}
+input{width:100%;padding:12px 14px;border:1.5px solid var(--line);border-radius:12px;background:var(--field);color:var(--ink);font:inherit;margin-bottom:12px;outline:0}
+input:focus{border-color:var(--a3);box-shadow:0 0 0 4px rgba(124,92,255,.15)}
+button{font:inherit;border:0;border-radius:12px;padding:12px 18px;background:linear-gradient(135deg,var(--a1),var(--a2));color:#fff;cursor:pointer;font-weight:600;box-shadow:0 6px 16px rgba(255,107,107,.3)}
+button:disabled{opacity:.45;cursor:not-allowed;box-shadow:none}
+button.full{width:100%;padding:14px;font-size:1.05rem}
+button.ghost{background:transparent;color:var(--a3);border:1.5px solid var(--a3);box-shadow:none}
+ul{list-style:none;padding:0;margin:0}
+li{display:flex;align-items:center;gap:12px;padding:9px 0;border-top:1px dashed var(--line)}li:first-child{border-top:0}
+.av{width:38px;height:38px;border-radius:50%;display:grid;place-items:center;color:#fff;font-weight:600;flex:none}
+.msg{min-height:1.3em;font-size:.88rem;margin:-4px 0 8px 2px;color:var(--bad)}.msg.ok{color:var(--ok)}
+.note{font-size:.84rem;color:var(--mute);margin:10px 0 0;text-align:center}
+.pill{margin-left:auto;background:var(--field);border:1px solid var(--line);color:var(--mute);border-radius:99px;padding:2px 10px;font-size:.8rem}
+.empty{text-align:center;color:var(--mute);padding:6px 0;font-size:.92rem}
+.share{display:flex;gap:8px}.share input{margin:0}.share button{white-space:nowrap}
+[hidden]{display:none!important}
+</style>
+</head>
+<body>
+<div class="hero"><div class="gift">🎁</div><h1>จับสลากบัดดี้ลับ</h1><p>ยืนยันอีเมล จับสลาก แล้วรับผลทางเมล</p></div>
+<main>
+
+<section class="card" id="home" hidden>
+  <div class="head"><div class="num">✦</div><h2>เริ่มต้น</h2></div>
+  <p class="note" style="margin:0 0 14px;text-align:left">สร้างห้อง แล้วส่งลิงก์ให้เพื่อนๆ เข้ามากรอกชื่อและยืนยันอีเมลเอง</p>
+  <button class="full" id="create">สร้างห้องจับสลาก</button>
+  <p class="msg" id="hmsg" style="margin-top:10px"></p>
+</section>
+
+<div id="roomView" hidden>
+  <section class="card">
+    <div class="head"><div class="num">1</div><h2>ผู้เข้าร่วมที่ยืนยันแล้ว</h2><span class="pill" id="cnt">0 คน</span></div>
+    <ul id="list"></ul>
+    <label style="margin-top:14px">ลิงก์ห้อง (ส่งให้เพื่อน)</label>
+    <div class="share"><input id="link" readonly><button class="ghost" id="copy">คัดลอก</button></div>
+  </section>
+
+  <section class="card" id="joinCard">
+    <div class="head"><div class="num">2</div><h2>เข้าร่วมกิจกรรม</h2></div>
+    <div id="s1">
+      <label for="n">ชื่อ</label><input id="n" placeholder="เช่น สมชาย" autocomplete="off">
+      <label for="e">อีเมล</label><input id="e" type="email" placeholder="somchai@email.com" autocomplete="email">
+      <p class="msg" id="m1"></p>
+      <button class="full" id="send">ส่งรหัสยืนยันไปที่อีเมล</button>
+    </div>
+    <div id="s2" hidden>
+      <p class="note" style="margin:0 0 12px;text-align:left" id="sentTo"></p>
+      <label for="c">รหัส 6 หลัก</label><input id="c" inputmode="numeric" maxlength="6" placeholder="••••••" autocomplete="one-time-code">
+      <p class="msg" id="m2"></p>
+      <button class="full" id="verify">ยืนยันและเข้าร่วม</button>
+      <p class="note"><a href="#" id="back" style="color:var(--a3)">เปลี่ยนอีเมล / ขอรหัสใหม่</a></p>
+    </div>
+    <div id="s3" hidden><p style="text-align:center;margin:8px 0;color:var(--ok);font-weight:600">✓ ยืนยันแล้ว คุณอยู่ในรายชื่อเรียบร้อย<br><span class="note">รอผู้จัดกดจับสลาก ผลจะส่งเข้าอีเมลของคุณ</span></p></div>
+  </section>
+
+  <section class="card" id="adminCard" hidden>
+    <div class="head"><div class="num">3</div><h2>สำหรับผู้จัด</h2></div>
+    <button class="full" id="draw" disabled>🎲 จับสลากและส่งอีเมล</button>
+    <p class="msg" id="m3" style="margin-top:10px"></p>
+    <p class="note" id="hint"></p>
+  </section>
+</div>
+</main>
+<script>
+const $=id=>document.getElementById(id);
+const room=new URLSearchParams(location.search).get('room');
+const cols=['#ff6b6b','#ff9f43','#7c5cff','#20c997','#339af0','#e64980','#94d82d'];
+const say=(id,t,ok)=>{const e=$(id);e.textContent=t||'';e.className='msg'+(ok?' ok':'')};
+async function api(path,body){
+  const r=await fetch(path,body?{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(body)}:undefined);
+  const j=await r.json().catch(()=>({}));
+  if(!r.ok)throw new Error(j.error||'เกิดข้อผิดพลาด');
+  return j;
+}
+function busy(btn,txt,fn){
+  const old=btn.textContent;btn.disabled=true;btn.textContent=txt;
+  return fn().finally(()=>{btn.disabled=false;btn.textContent=old});
+}
+
+if(!room){
+  $('home').hidden=false;
+  $('create').onclick=()=>busy($('create'),'กำลังสร้าง...',async()=>{
+    try{
+      const j=await api('/api/room',{});
+      localStorage.setItem('adm:'+j.id,j.adminToken);
+      location.href='/?room='+j.id+'#a='+j.adminToken;
+    }catch(e){say('hmsg',e.message)}
+  });
+}else{
+  $('roomView').hidden=false;
+  const m=location.hash.match(/a=([0-9a-f]+)/);
+  if(m){localStorage.setItem('adm:'+room,m[1]);history.replaceState(null,'','/?room='+room)}
+  const adm=localStorage.getItem('adm:'+room);
+  $('link').value=location.origin+'/?room='+room;
+  $('adminCard').hidden=!adm;
+  let drawn=false;
+
+  async function refresh(){
+    try{
+      const j=await api('/api/room?id='+room);
+      drawn=j.drawn;
+      $('cnt').textContent=j.names.length+' คน';
+      $('list').innerHTML=j.names.length?'':'<div class="empty">ยังไม่มีใครยืนยัน</div>';
+      j.names.forEach((n,i)=>{
+        const li=document.createElement('li'),a=document.createElement('div'),s=document.createElement('span');
+        a.className='av';a.style.background=cols[i%cols.length];a.textContent=Array.from(n)[0]||'?';
+        s.textContent=n;li.append(a,s);$('list').append(li);
+      });
+      $('draw').disabled=j.names.length<3&&!drawn;
+      $('hint').textContent=drawn?'จับสลากแล้ว กดอีกครั้งเพื่อส่งซ้ำให้คนที่ยังไม่ได้รับ':(j.names.length<3?'ต้องมีคนยืนยันอย่างน้อย 3 คน':'พร้อมจับสลาก');
+      if(drawn){$('joinCard').hidden=true;$('draw').textContent='ส่งอีเมลซ้ำให้คนที่ยังไม่ได้รับ'}
+    }catch(e){document.querySelector('.hero p').textContent=e.message}
+  }
+  refresh();setInterval(refresh,6000);
+
+  $('copy').onclick=()=>{$('link').select();try{document.execCommand('copy')}catch(e){}$('copy').textContent='คัดลอกแล้ว ✓'};
+
+  $('send').onclick=()=>busy($('send'),'กำลังส่งรหัส...',async()=>{
+    say('m1','');
+    try{
+      await api('/api/join',{room,name:$('n').value,email:$('e').value});
+      $('sentTo').textContent='ส่งรหัสไปที่ '+$('e').value.trim()+' แล้ว (ดูในกล่องจดหมายขยะด้วย)';
+      $('s1').hidden=true;$('s2').hidden=false;$('c').focus();
+    }catch(e){say('m1',e.message)}
+  });
+  $('back').onclick=ev=>{ev.preventDefault();$('s2').hidden=true;$('s1').hidden=false};
+  $('verify').onclick=()=>busy($('verify'),'กำลังตรวจสอบ...',async()=>{
+    say('m2','');
+    try{
+      await api('/api/verify',{room,email:$('e').value,code:$('c').value});
+      $('s2').hidden=true;$('s3').hidden=false;refresh();
+    }catch(e){say('m2',e.message)}
+  });
+  $('draw').onclick=()=>{
+    if(!drawn&&!confirm('จับสลากเลยไหม? หลังจับแล้วจะรับสมาชิกเพิ่มไม่ได้'))return;
+    return busy($('draw'),'กำลังส่งอีเมล...',async()=>{
+      say('m3','');
+      try{
+        const j=await api('/api/draw',{room,adminToken:adm});
+        say('m3',j.ok?'✓ ส่งผลให้ทั้ง '+j.total+' คนเรียบร้อย':'ยังส่งไม่สำเร็จ '+j.pending+' คน กดปุ่มอีกครั้งเพื่อส่งซ้ำ',j.ok);
+        refresh();
+      }catch(e){say('m3',e.message)}
+    });
+  };
+}
+</script>
+</body>
+</html>
